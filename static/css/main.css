@@ -17,7 +17,21 @@ body {
     background-color: #c3c6ca;
 }
 
+.navbar-light .navbar-nav .nav-link {
+    color: #080d84c7;
+}
 
+.navbar-nav .nav-link:hover {
+    color: #21254e;
+    font-weight: 400;
+    font-size: 1.1em;
+}
+
+.navbar-nav .nav-link.active {
+    font-weight: 500;
+}
+
+/* background for templates */
 .template-container {
     background-color: #eaeaea;
 }
