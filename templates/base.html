@@ -15,7 +15,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
 
+    {% if title %}
+    <title>CodeFlow - {{ title }}</title>
+    {% else %}
     <title>CodeFlow</title>
+    {% endif %}
 
 </head>
 
@@ -39,7 +43,7 @@
                     <!-- Navbar Right Side -->
                     <div class="navbar-nav">
                         <a class="nav-item nav-link" href="#">Login</a>
-                        <a class="nav-item nav-link" href="#">Register</a>
+                        <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
                     </div>
                 </div>
             </div>
