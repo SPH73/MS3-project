@@ -8,6 +8,16 @@ body {
     color: #444444;
 }
 
+/* BASE */
+
+/* navbar */
+
+.navbar {
+    border-bottom: #070bc0 0.05rem solid;
+    background-color: #c3c6ca;
+}
+
+
 .template-container {
     background-color: #eaeaea;
 }
