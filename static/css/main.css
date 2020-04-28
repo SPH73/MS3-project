@@ -36,3 +36,20 @@ body {
 .template-container {
     background-color: #eaeaea;
 }
+
+/* section styling */
+.section-content {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.neu {
+    border-radius: 43px;
+    background: linear-gradient(145deg, #d3d3d3, #fafafa);
+    box-shadow: 41px 41px 82px #c5c5c5,
+        -41px -41px 82px #ffffff;
+}
