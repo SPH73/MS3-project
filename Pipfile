@@ -13,6 +13,9 @@ dnspython = "*"
 pylint = "*"
 autopep8 = "*"
 python-dotenv = "*"
+flask-wtf = "*"
+wtforms = "*"
+email-validator = "*"
 
 [requires]
 python_version = "3.7"
