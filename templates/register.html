@@ -3,12 +3,12 @@
 
 
 
-<div class="container mt-2">
+<div class="container mt-5">
     <section class="register-form section-content neu">
         <form action="" method="post">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="text-center border-bottom mb-4">Register for access to projects and profiles
+                <legend class="text-center border-bottom mb-4">Register to upload a project or profile
                 </legend>
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}
@@ -36,7 +36,7 @@
         </form>
         <div class="border-top pt-3 text-center">
             <small class="text-muted">
-                <i>Already Have An Account? <a class="ml-2" href="{{ url_for('login') }}">Sign In</a></i>
+                <i>Already Have An Account?<a class="ml-2" href="{{ url_for('login') }}">Sign In</a></i>
             </small>
         </div>
     </section>
