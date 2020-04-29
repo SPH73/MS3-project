@@ -50,14 +50,15 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarToggle">
                     <div class="navbar-nav mr-auto">
-                        <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                        <a class="nav-item nav-link" href="git ad">Home</a>
                         <a class="nav-item nav-link" href="{{ url_for('project') }}">Projects</a>
-                        <a class="nav-item nav-link" href="/profiles">Profiles</a>
+                        <a class="nav-item nav-link" href="{{ url_for('profile') }}">Profiles</a>
+                        <a class="nav-item nav-link" href="{{ url_for('blog') }}">Blog</a>
                     </div>
                     <!-- Navbar Right Side -->
                     <div class="navbar-nav">
-                        <a class="nav-item nav-link" href="/post">Post</a>
-                        <a class="nav-item nav-link" href="{{ url_for('register') }}">Login</a>
+                        <a class="nav-item nav-link" href="{{ url_for('post') }}">Post</a>
+                        <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
                         <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
                     </div>
                 </div>
@@ -67,6 +68,19 @@
 
 
     <div class="template-container">
+        <div class="row">
+            <div class="col-12">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <div class=flashes>
+                    {% for category, message in messages %}
+                    <p class="alert alert-{{ category }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
         {% block content %}{% endblock %}
     </div>
 

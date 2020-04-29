@@ -1,7 +1,8 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, flash, redirect
 from forms import RegistrationForm, LoginForm
 
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = 'CODEFLOW_SECRET_KEY'
 
 
@@ -26,6 +27,27 @@ projects = [
     }
 ]
 
+articles = [
+    {
+        'author': "Sue Holder",
+        'title': "New Post",
+        'content': "New post content",
+        'date_posted': 'April 27, 2020'
+    },
+    {
+        'author': "John Doe",
+        'title': "Interview Tips",
+        'content': "Interview tips content",
+        'date_posted': 'April 26, 2020'
+    },
+    {
+        'author': "Jane Doe",
+        'title': "Interesting Article",
+        'content': "Interesting article content",
+        'date_posted': 'April 25, 2020'
+    }
+]
+
 
 @app.route("/")
 @app.route("/home")
@@ -44,21 +66,35 @@ def profile():
     return render_template('profiles.html', title='Profiles')
 
 
-@app.route("/register")
+@app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
-    return render_template('register.html', title='Register', form=form)
+    if form.validate_on_submit():
+        flash(
+            f'Thank you for creating an account, {form.username.data}.', 'success')
+        return redirect(url_for('blog'))
+    else:
+        return render_template('register.html', title='Register', form=form)
 
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    return render_template('login.html', title='Login', form=form)
+    if form.validate_on_submit():
+        flash(f'Welcome back, {form.username.data}.', 'success')
+        return redirect(url_for('blog'))
+    else:
+        return render_template('login.html', title='Login', form=form)
 
 
 @app.route("/post")
 def post():
-    return render_template('post.html', title='post')
+    return render_template('post.html', title='Post')
+
+
+@app.route("/blog")
+def blog():
+    return render_template('blog.html', title='Blog', articles=articles)
 
 
 if __name__ == "__main__":
