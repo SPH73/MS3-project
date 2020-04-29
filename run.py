@@ -56,5 +56,10 @@ def login():
     return render_template('login.html', title='Login', form=form)
 
 
+@app.route("/post")
+def post():
+    return render_template('post.html', title='post')
+
+
 if __name__ == "__main__":
     app.run(debug=True)
