@@ -71,21 +71,21 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         flash(
-            f'Thank you for creating an account, {form.username.data}.', 'success')
+            f'Thank you for creating an account, {form.username.data}!', 'success')
         return redirect(url_for('blog'))
-    else:
-        return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='Register', form=form)
 
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        flash(f'Welcome back, {form.username.data}.', 'success')
-        return redirect(url_for('blog'))
-    else:
-        flash(f'Please check your login details and try again', 'danger')
-        return render_template('login.html', title='Login', form=form)
+        if form.username.data == 'Sue' and form .email.data == 'email@email.com' and form.password.data == 'password':
+            flash(f'Welcome back, {form.username.data}!', 'success')
+            return redirect(url_for('blog'))
+        else:
+            flash('Please check login details', 'danger')
+    return render_template('login.html', title='Login', form=form)
 
 
 @app.route("/post")
