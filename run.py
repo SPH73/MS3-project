@@ -3,7 +3,7 @@ from forms import RegistrationForm, LoginForm
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'CODEFLOW_SECRET_KEY'
+app.config.from_pyfile('settings.py')
 
 
 projects = [
@@ -84,6 +84,7 @@ def login():
         flash(f'Welcome back, {form.username.data}.', 'success')
         return redirect(url_for('blog'))
     else:
+        flash(f'Please check your login details and try again', 'danger')
         return render_template('login.html', title='Login', form=form)
 
 
