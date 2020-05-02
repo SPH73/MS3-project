@@ -16,6 +16,7 @@ python-dotenv = "*"
 flask-wtf = "*"
 wtforms = "*"
 email-validator = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
