@@ -1,10 +1,8 @@
 import os
 
 MONGO_URI = os.environ.get("CODEFLOW_MONGO_URI")
-MONGO_DBNAME = os.environ.get("")
+MONGO_DBNAME = os.environ.get("MONGO_DBNAME")
 SECRET_KEY = os.environ.get("CODEFLOW_SECRET_KEY")
-IP = os.environ.get('IP')
-PORT = os.environ.get('PORT')
 
 
 RECAPTCHA_PUBLIC_KEY = os.environ.get("CODEFLOW_RECAPTCHA_PUBLIC_KEY")

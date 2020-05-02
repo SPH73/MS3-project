@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import RegistrationForm, LoginForm
 
@@ -100,4 +101,5 @@ def blog():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host=os.environ.get('IP'),
+            port=int(os.environ.get('PORT')))
