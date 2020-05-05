@@ -1,13 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'layout/base.html' %}
 {% block content %}
 
 
 
 <div class="container mt-5">
+    <h2>Welcome to the CodeFlow Blog</h2>
+    <p class="lead">Posts are invited by the community that will be of benefit and interest to the readers.</p>
+    <p>If you would like to contribute an article, please login and go to the post link.</p>
     <div class="section-content">
         {% for article in articles %}
         <h2>{{ article.title }}</h2>
         <p>Posted By {{ article.author }} on {{ article.date_posted }}</p>
+        <p></p>
         <p>{{ article.content }}</p>
         <hr>
         {% endfor %}

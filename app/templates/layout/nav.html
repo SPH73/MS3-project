@@ -1,0 +1,30 @@
+{% block nav %}
+
+<header class="nav">
+    <nav class="navbar navbar-light navbar-expand-md bg-nav fixed-top">
+        <div class="container">
+            <a class="navbar-brand mr-4" href="/"><img src="{{ url_for('static', filename='images/cf-logo.png') }}"
+                    width="100" height="50" alt="logo"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+                <div class="navbar-nav mr-auto">
+                    <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                    <a class="nav-item nav-link" href="{{ url_for('projects') }}">Projects</a>
+                    <a class="nav-item nav-link" href="{{ url_for('profiles') }}">Profiles</a>
+                    <a class="nav-item nav-link" href="{{ url_for('blog') }}">Blog</a>
+                </div>
+                <!-- Navbar Right Side -->
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="{{ url_for('post') }}">Post</a>
+                    <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+                    <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+{% endblock nav %}

@@ -1,4 +1,37 @@
-# MS3-project
+# MS3-project - CodeFlow
+
+## Introduction
+
+[CodeFlow](http://codeflow-app.herokuapp.com) was created to help bridge the gap to employed status for students. Based on the idea of the seasonal Hackathons held by Code Institute, where a brief is given and students collaborate to create finished projects, similarly developers (or anyone with an idea) can upload projects that require full or partial contribution, called 'Piece Projects'. The idea being that the more experience a student developer gains from working in a team or from developing code snippets to be used in a project, the more skilled they become at breaking down the project parts into smaller more manageable pieces or problems; resulting in a more confident developer who is naturally more appealing in the talent pool to employers.
+
+As a student, I find that describing and realising the whole-parts or 'pieces' of my projects is a challenging task and leaves me questioning how long it will take for me to become suitably experienced enough for employment in the industry. I would like exposure to others' projects and an opportunity to offer pieces of code I have written according to a brief to help me improve my skillset (level of understanding), increase speed and boost my confidence. I am certain that I am not alone and that the majority of software developer students, whether they are studying on a course or self-teaching will find value in the same.
+
+Any entity with a project or idea, be it developer, student or whomever, who would like to share it in part or whole with other developers to collaborate on, CodeFlow provides the platform for that.
+
+All 'noobs' are blessed when we can stand on the shoulders of giants and learn from our more experienced counterparts. The CodeFlow Blog invites the community to post articles that imparts knowledge or learning based on experience, interesting articles about new technologies or absolutely anything of a related nature that benefits the readers.
+
+## Table of Contents
+
+1. [UX](#ux)
+   - [Goals](#goals)
+   - [User Stories](#user-stories)
+     - [Visitor Stories](#visitor-stories)
+     - [Business Stories](#business-stories)
+   - [Wireframes](#wireframes)
+
+## UX
+
+## Features
+
+## Technologies Used
+
+## Testing
+
+## Deployment
+
+## Credits
+
+## Acknowledgements
 
 ## Project Helpers
 
