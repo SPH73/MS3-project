@@ -49,4 +49,4 @@ All 'noobs' are blessed when we can stand on the shoulders of giants and learn f
 [Deploying to Heroku](https://medium.com/technest/build-a-crud-app-with-flask-bootstrap-heroku-60dfa3a788e8)  
 [Favicon-generator](https://www.favicon-generator.org/)
 
-I improved the project organisation by turning the application into a package with `__init__.py` and moving the routes to `views.py`. to avoid confusion I renamed `app.py` to `run.py` to be different from the package name. At the same time I created a `requirements.txt` to be inclusive of choice for other developers, deployment and the assessors.
+I updated the project structure by turning the application into a package with `__init__.py` and moving the routes to `routes.py`. to avoid confusion I renamed `app.py` to `run.py` to be different from the package name. At the same time I created a `requirements.txt` to be inclusive of choice for other developers, deployment and the assessors.
