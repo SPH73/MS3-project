@@ -14,14 +14,75 @@ All 'noobs' are blessed when we can stand on the shoulders of giants and learn f
 
 1. [UX](#ux)
    - [Goals](#goals)
+     - [Current Goals](#current-goals)
+     - [Future Goals](#future-goals)
    - [User Stories](#user-stories)
      - [Visitor Stories](#visitor-stories)
-     - [Business Stories](#business-stories)
+     - [User Stories by Type](#user-stories-by-type)
    - [Wireframes](#wireframes)
+   - [Database Design](#database-design)
 
 ## UX
 
+### Goals
+
+#### Current Goals
+
+Create a platform that helps me and my peers on our journey towards employment as Software Developers and beyond.  
+Acquire 'Domain' knowledge.  
+Develop an application that is easy to use and meets the needs of the target audience and one which is aesthetically pleasing and intuitive to all users/visitors.  
+Purposefully implememt a database design suitable for the application.  
+Become proficient at developing a Flask Web Application that successfully stores and retrieves data from a MongoDB database.
+Create a project plan that outlines my project idea and the elements required to complete it.
+Learn additional material and develop a deeper understanding of the material already covered in the course.  
+Produce a project that meets all the requirements of the MileStone Project criteria.
+
+##### Target Audience
+
+Software Development Students (Bootcamp, College/University or self-teaching).  
+Project Managers.  
+Developers.  
+Mentors.
+
+##### User Goals
+
+Have a community platform to:  
+Post or find projects to contribute or collaborate on.  
+Find willing contributors to get involved in projects.  
+Share useful and relevant content.  
+Establish a reputation within the community as a skilled developer.
+Find articles and project helpers.
+
+#### Future Goals
+
+In addition to the current goals:  
+A platform where hiring personnel search for potential candidates.  
+A site that is monetised via:  
+Author's advertising their books and courses.  
+Business' advertising their products/services/events.
+
+### User Stories
+
+#### Visitor Stories
+
+As a site visitor, I expect/want/need:
+A responsive and intutitve site that helps me effectively achieve my goals.
+Content to be separated into clearly distinghuishable pages and categories as per my current needs and actions taken.
+Informative feedback on the actions I take when necessary.
+
+#### User Stories By Type
+
+### Wireframes
+
+### Database Design
+
+The initial [Database Design](design) schema.
+
 ## Features
+
+### Existing Features
+
+### Future Features
 
 ## Technologies Used
 
