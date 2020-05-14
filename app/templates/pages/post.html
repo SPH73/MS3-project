@@ -1,9 +1,47 @@
 {% extends 'layout/base.html' %}
 {% block content %}
 
-<div class="container">
-    <h2>What would you like to post?</h2>
+<div class="container mt-5">
+    <section class="section-content neu">
+        <legend class="text-center border-bottom mb-4">Post your content</legend>
+        <div class="accordion">
+            <div>
+                <input type="checkbox" name="project-accordion" id="project-accordion" class="post-accordion-input">
+                <label for="project-accordion" class="post-accordion-label border-bottom mb-4">Project</label>
+                <div class="post-accordion-content mt-0">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex et quis ipsa, cupiditate, ab beatae
+                        illo
+                        possimus aliquam inventore voluptatem sequi! Ex nemo eos quas veniam dolor officia minima illo?
+                    </p>
+                </div>
+            </div>
+            <div>
+                <input type="checkbox" name="profile-accordion" id="profile-accordion" class="post-accordion-input">
+                <label for="profile-accordion" class="post-accordion-label border-bottom mb-4">Profile</label>
+                <div class="post-accordion-content">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex et quis ipsa, cupiditate, ab beatae
+                        illo
+                        possimus aliquam inventore voluptatem sequi! Ex nemo eos quas veniam dolor officia minima illo?
+                    </p>
+                </div>
+            </div>
+            <div>
+                <input type="checkbox" name="article-accordion" id="article-accordion" class="post-accordion-input">
+                <label for="article-accordion" class="post-accordion-label border-bottom mb-4">Article</label>
+                <div class="post-accordion-content">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex et quis ipsa, cupiditate, ab beatae
+                        illo
+                        possimus aliquam inventore voluptatem sequi! Ex nemo eos quas veniam dolor officia minima illo?
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
+
+
+
+
 
 
 {% endblock %}

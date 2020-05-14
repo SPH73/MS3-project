@@ -1,11 +1,11 @@
 html,
 body {
-    margin: 2.4rem 0 0 0;
-    padding: 0;
-    background-color: #eaeaea;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    color: #444444;
+  margin: 2.4rem 0 0 0;
+  padding: 0;
+  background-color: #eaeaea;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  color: #444444;
 }
 
 /* BASE */
@@ -13,41 +13,99 @@ body {
 /* navbar */
 
 .navbar {
-    border-bottom: #070bc0 0.05rem solid;
-    background-color: #c3c6ca;
+  border-bottom: #070bc0 0.05rem solid;
+  background-color: #c3c6ca;
 }
 
 .navbar-light .navbar-nav .nav-link {
-    color: #080d84c7;
+  color: #080d84c7;
 }
 
 .navbar-nav .nav-link:hover {
-    color: #21254e;
-    font-weight: 400;
-    font-size: 1.1em;
+  color: #21254e;
+  font-weight: 400;
+  font-size: 1.1em;
 }
 
 .navbar-nav .nav-link.active {
-    font-weight: 500;
+  font-weight: 500;
 }
 
 /* background for templates */
 
 .template-container {
-    background-color: #eaeaea;
+  background-color: #eaeaea;
 }
 
 /* section styling */
 .section-content {
-    padding: 10px 20px;
-    border: 1px solid #dddddd;
-    margin-bottom: 20px;
-    margin-top: 30px;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  margin-bottom: 20px;
+  margin-top: 30px;
 }
 
 .neu {
-    border-radius: 27px;
-    background: linear-gradient(145deg, #fafafa, #d3d3d3);
-    box-shadow: 6px 6px 12px #cccccc,
-        -6px -6px 12px #ffffff;
+  border-radius: 27px;
+  background: linear-gradient(145deg, #fafafa, #d3d3d3);
+  box-shadow: 6px 6px 12px #cccccc,
+    -6px -6px 12px #ffffff;
 }
+
+.accordion {
+  max-width: 100%;
+  overflow: hidden;
+
+}
+
+.post-accordion-label,
+.post-accordion-content {
+  padding: 14px 20px;
+
+}
+
+.post-accordion-label {
+  display: block;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s;
+
+}
+
+.post-accordion-label:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* instructions from stackoverflow 
+https://stackoverflow.com/questions/2701192/what-characters-can-be-used-for-up-down-triangle-arrow-without-stem-for-displa */
+.post-accordion-label::after {
+  content: "\25BC";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 20px;
+  width: 12px;
+  height: 6px;
+  background-size: contain;
+  transition: transform 0.4s;
+}
+
+.post-accordion-content {
+  line-height: 1.6;
+  font-size: 0.85em;
+  display: none;
+
+}
+
+.post-accordion-input {
+  display: none;
+}
+
+.post-accordion-input:checked~.post-accordion-content {
+  display: block;
+}
+
+.post-accordion-input:checked~.post-accordion-label::after {
+  transform: translateY(-50%) rotateX(180deg);
+}
+
