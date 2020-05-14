@@ -1,35 +1,43 @@
 {% extends 'layout/base.html' %}
 {% block content %}
-<div class="container">
 
-    <div class="container mt-5">
-        <h2>User Profiles</h2>
-        <p class="lead">Profiles are posted by the community who are actively searching for Piece Projects to contribute
-            to. </p>
-        <p>If you would like to add your profile, please use the post link.</p>
-        <div class="section-content">
-            {% for profile in profiles %}
-            <h2>Profile of: {{ profile.username }}</h2>
-            <p>Last updated on {{ profile.date }}</p>
-            <p>A bit about me: {{ profile.bio }} </p>
-            <p>I am a {{ profile.occupation }}</p>
-            <p>I have experience with the following languages:</p>
-            <p>{{ profile.languages }}</p>
-            <p>I have experience with the following frameworks:</p>
-            <p>{{ profile.frameworks }}</p>
-            <p>I have {{ profile.yrs_experience }} years experience in some or all of the above.</p>
-            <p>I would like to collaborate on projcts with any of the following:</p>
-            <p>{{ profile.looking_for }} </p>
-            <p>My personal links:</p>
-            <p>{{ profile.personal_links }} </p>
-            <button id="profile-btn" type="button" class="btn btn-outline-info">Contact me</button>
-            <hr>
-            {% endfor %}
+<div class="container mt-5">
+    <h2>User Profiles</h2>
+    <p class="lead">Profiles are posted by the community who are actively searching for Piece Projects to contribute
+        to. </p>
+    <p>If you would like to add your profile, please use the post link.</p>
+    <div class="section-content">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {% for profile in profiles %}
+                    <h2 class="panel-title"><a data-toggle="collapse" href="#profile">Profile of:
+                            {{ profile.username }}</a></h2>
+                    <p class="panel-title">{{ profile.headline }}</p>
+                    <p class="panel-title">Last updated on {{ profile.date }}</p>
+                </div>
+                <div id="profile" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <p>A bit about me: {{ profile.bio }} </p>
+                        <p>I am a {{ profile.occupation }}</p>
+                        <p>I have experience with the following languages:</p>
+                        <p>{{ profile.languages }}</p>
+                        <p>I have experience with the following frameworks:</p>
+                        <p>{{ profile.frameworks }}</p>
+                        <p>I have {{ profile.yrs_experience }} years experience in some or all of the above.</p>
+                        <p>I would like to collaborate on projcts with any of the following:</p>
+                        <p>{{ profile.looking_for }} </p>
+                        <p>My personal links:</p>
+                        <p>{{ profile.personal_links }} </p>
+                    </div>
+
+                    <div class="panel-footer"><button id="profile-btn" type="button"
+                            class="btn btn-outline-info">Contact me</button></div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-
-
-
     </div>
-
 </div>
+
 {% endblock content %}

@@ -1,27 +1,38 @@
 {% extends 'layout/base.html' %}
 {% block content %}
 
-
-
-
 <div class="container mt-5">
+    <h2>Piece Projects</h2>
+    <p class="lead">Piece Projects are posted by the community who are actively searching for collaborators to work
+        with. </p>
+    <small class="text-muted">Collaborators are accepted at the project owners discretion</small>
+    <p>If you would like to add a project, please use the post link.</p>
     <div class="section-content">
-        {% for project in projects %}
-        <h2>{{ project.title }}</h2>
-        <p>Posted by {{ project.username }} on {{ project.post_date }}</p>
-        <p>The closing date for this project is {{ project.closing_date }}</p>
-        <p>Project Brief: <br>
-            {{ project.brief }}</p>
-        <p>Project files: {{ project.file_upload }}</p>
-        <button id="project-btn" type="button" class="btn btn-outline-info">Collaborate</button>
-        <hr>
-        {% endfor %}
-
+        <ul class="panel-group">
+            {% for project in projects %}
+            <li>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title"><a data-toggle="collapse" href="#project">Project shared by:
+                                {{ project.username }}</a></h2>
+                        <p class="panel-title">{{ project.title }}</p>
+                        <p class="panel-title">Posted on {{ project.post_date }}</p>
+                        <div id="project" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>The closing date to join the team is {{ project.closing_date }}</p>
+                                <p>Project Brief: <br>
+                                    {{ project.brief }}</p>
+                                <p>Project files: {{ project.file_upload }}</p>
+                            </div>
+                            <div class="panel-footer"><button id="project-btn" type="button"
+                                    class="btn btn-outline-info">Join</button></div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 
-
-
-</div>
-
-
-{% endblock content %}
+    {% endblock content %}
