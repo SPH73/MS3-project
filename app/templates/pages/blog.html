@@ -1,33 +1,23 @@
 {% extends 'layout/base.html' %}
 {% block content %}
-
 <div class="container mt-5">
-    <h2>Welcome to the CodeFlow Blog</h2>
-    <p class="lead">Posts are invited by the community that will be of benefit and interest to the readers.</p>
-    <p>If you would like to post an article, please login and go to the post link.</p>
-    <div class="section-content">
-        <div class="panel-group">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    {% for article in articles %}
-                    <h2 class="panel-title"><a data-toggle="collapse" href="#article">
-                            {{ article.title }}</a></h2>
-                    <p class="panel-title">By {{ article.author }}</p>
-                    <p class="panel-title">Posted on {{ article.post_date }}</p>
-                </div>
-                <div id="article" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <p>{{ article.content }}</p>
-                    </div>
-                    <div class="panel-footer"><button id="blog-btn" type="button"
-                            class="btn btn-outline-info">Comment</button></div>
-                    <hr>
-                    {% endfor %}
-                </div>
+    <section class="section-content neu">
+        <legend class="text-center border-bottom mb-4">Read The Lastest Content</legend>
+        <div class="accordion">
+            {% for article in articles %}
+            <div id="blog-accordion" class="accordion-label"><span class="title">
+                    {{ article.title }}
+                </span> <br>By {{ article.author }} on
+                {{ article.post_date }}</div>
+            <div class="accordion-content">
+                <p>{{ article.content }}</p>
             </div>
+            <hr>
+            {% endfor %}
         </div>
-    </div>
+    </section>
 </div>
+
 
 
 {% endblock content %}

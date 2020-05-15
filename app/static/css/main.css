@@ -52,10 +52,41 @@ body {
     -6px -6px 12px #ffffff;
 }
 
-.accordion {
+/* accordion styling for retrieved database content */
+.accordion-label {
+  width: 100%;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+span.title {
+  font-weight: 500;
+  font-size: 18px;
+  color:#080d84c7;
+}
+
+.accordion-label::after {
+  content: '\25BC';
+  float: right;
+}
+
+.accordion-label:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.accordion-content {
+  padding: 0 20px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-in-out;
+}
+
+/* accordion styling for post content */
+
+.post-accordion {
   max-width: 100%;
   overflow: hidden;
-
 }
 
 .post-accordion-label,
@@ -90,6 +121,7 @@ https://stackoverflow.com/questions/2701192/what-characters-can-be-used-for-up-d
   transition: transform 0.4s;
 }
 
+
 .post-accordion-content {
   line-height: 1.6;
   font-size: 0.85em;
@@ -108,4 +140,3 @@ https://stackoverflow.com/questions/2701192/what-characters-can-be-used-for-up-d
 .post-accordion-input:checked~.post-accordion-label::after {
   transform: translateY(-50%) rotateX(180deg);
 }
-
