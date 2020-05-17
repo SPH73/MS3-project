@@ -1,5 +1,7 @@
-from app import app, mongo
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, session
+from app import app, mongo, bcrypt
+from bson.objectid import ObjectId
+from datetime import datetime
 from app.forms import RegistrationForm, LoginForm
 
 
@@ -11,10 +13,20 @@ def home():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
-    if form.validate_on_submit():
-        flash(
-            f'Thank you for creating an account, {form.username.data}!', 'success')
-        return redirect(url_for('blog'))
+    if request.method == 'POST':
+        if form.validate_on_submit():            
+            user = mongo.db.user
+            registered = user.find_one(form.username.data)
+            
+            if registered is None:
+                hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+                user.insert({'username': form.username.data, 
+                             'email': form.email.data, 
+                             'hashed_password': hashed_pw})              
+                session['username'] = form.username.data
+                flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your personal dashboard!', 'success')
+                return redirect(url_for('login'))
+        flash('Something went wrong - please try again.', 'info')
     return render_template('pages/register.html', title='Register', form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -37,29 +49,7 @@ def post():
 @app.route("/")
 @app.route("/projects")
 def projects():
-#     projects = [
-#     {
-#         'owner': "Sue Holder",
-#         'title': "Flask Web App",
-#         'category': "Projects",
-#         'brief': "Web App project brief",
-#         'date_posted': 'April 27, 2020'
-#     },
-#     {
-#         'owner': "John Doe",
-#         'title': "Static Website",
-#         'category': "Projects",
-#         'brief': "Website project brief",
-#         'date_posted': 'April 26, 2020'
-#     },
-#     {
-#         'owner': "Jane Doe",
-#         'title': "E-commerce Website",
-#         'category': "Projects",
-#         'brief': "E-commerce project brief",
-#         'date_posted': 'April 25, 2020'
-#     }
-# ]
+
     projects = mongo.db.projects.find()
     return render_template('pages/projects.html', title='Projects', projects=projects)
 
