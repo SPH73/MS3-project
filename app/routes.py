@@ -16,17 +16,15 @@ def register():
     if request.method == 'POST':
         if form.validate_on_submit():            
             user = mongo.db.user
-            registered = user.find_one(form.username.data)
-            
+            registered = user.find_one({'username':form.username.data})            
             if registered is None:
                 hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
                 user.insert({'username': form.username.data, 
                              'email': form.email.data, 
-                             'hashed_password': hashed_pw})              
-                session['username'] = form.username.data
-                flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your personal dashboard!', 'success')
+                             'hashed_password': hashed_pw})                
+                flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your dashboard!', 'success')
                 return redirect(url_for('login'))
-        flash('Something went wrong - please try again.', 'info')
+        flash('Sorry, that username is not available, please try another.', 'info')
     return render_template('pages/register.html', title='Register', form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -40,7 +38,9 @@ def login():
             flash('Please check login details', 'danger')
     return render_template('pages/login.html', title='Login', form=form)
 
-
+@app.route("/dashboard")
+def dashboard():
+    return render_template('pages/dashboard.html', title='Dashboard')
 
 @app.route("/post")
 def post():
