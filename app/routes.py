@@ -3,6 +3,7 @@ from app import app, mongo, bcrypt
 from bson.objectid import ObjectId
 from datetime import datetime
 from app.forms import RegistrationForm, LoginForm
+import bcrypt
 
 
 @app.route("/")
@@ -16,26 +17,33 @@ def register():
     if request.method == 'POST':
         if form.validate_on_submit():            
             user = mongo.db.user
-            registered = user.find_one({'username':form.username.data})            
-            if registered is None:
-                hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-                user.insert({'username': form.username.data, 
+            registered_username = user.find_one({'username':form.username.data})                
+            if registered_username is None:
+                registered_email = user.find_one({'email': form.email.data})       
+                if registered_email is None:
+                    hashed_pw = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt())
+                    user.insert({'username': form.username.data, 
                              'email': form.email.data, 
                              'hashed_password': hashed_pw})                
-                flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your dashboard!', 'success')
-                return redirect(url_for('login'))
-        flash('Sorry, that username is not available, please try another.', 'info')
+                    flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your dashboard!', 'success')
+                    return redirect(url_for('login'))
+                flash('That eamil is already registered. Please login.', 'info')
+                return redirect(url_for('login'))                
+            flash('Sorry, that username is not available, please try another.', 'info')
     return render_template('pages/register.html', title='Register', form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if form.validate_on_submit():
-        if form.username.data == 'Sue' and form.password.data == 'password':
-            flash(f'Welcome back, {form.username.data}!', 'success')
-            return redirect(url_for('blog'))
-        else:
-            flash('Please check login details', 'danger')
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            user = mongo.db.user.find_one({'username':form.username.data})
+            if user:
+                if bcrypt.checkpw(request.form['password'].encode('utf-8'), user['hashed_password']):
+                    flash(f'Welcome back, {form.username.data}!', 'success')
+                    return redirect(url_for('blog'))
+                flash('Please check login details.', 'danger')
+        flash('Please check login details.', 'danger')
     return render_template('pages/login.html', title='Login', form=form)
 
 @app.route("/dashboard")

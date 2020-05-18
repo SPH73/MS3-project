@@ -18,6 +18,7 @@ email-validator = "*"
 gunicorn = "*"
 pymongo = "*"
 flask-pymongo = "*"
+bcrypt = "*"
 
 [requires]
 python_version = "3.7"
