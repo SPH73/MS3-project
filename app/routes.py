@@ -1,5 +1,5 @@
 from flask import render_template, url_for, flash, redirect, request, session
-from app import app, mongo, bcrypt
+from app import app, mongo
 from bson.objectid import ObjectId
 from datetime import datetime
 from app.forms import RegistrationForm, LoginForm
