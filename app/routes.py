@@ -11,6 +11,11 @@ import bcrypt
 def home():
     return render_template('pages/home.html')
 
+@app.route("/blog")
+def blog():
+    articles = mongo.db.articles.find()
+    return render_template('pages/blog.html', title='Blog', articles=articles)
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -38,37 +43,62 @@ def login():
     if request.method == 'POST':
         if form.validate_on_submit():
             user = mongo.db.user.find_one({'username':form.username.data})
-            if user:
-                if bcrypt.checkpw(request.form['password'].encode('utf-8'), user['hashed_password']):
-                    flash(f'Welcome back, {form.username.data}!', 'success')
-                    return redirect(url_for('blog'))
-                flash('Please check login details.', 'danger')
+            if user and bcrypt.checkpw(request.form['password'].encode('utf-8'), user['hashed_password']):
+                session['username'] = form.username.data
+                flash(f'Welcome back, {form.username.data}!', 'success')
+                return redirect(url_for('dashboard'))
+            flash('Please check login details.', 'danger')
         flash('Please check login details.', 'danger')
     return render_template('pages/login.html', title='Login', form=form)
 
-@app.route("/dashboard")
+@app.route('/logout')
+def logout():
+       # remove the username from the session if it is there
+   session.pop('username', None)
+   flash('You have logged out.', 'success')
+   return redirect(url_for('home'))
+    
+
+@app.route("/dashboard", methods=['GET', 'POST'])
 def dashboard():
-    return render_template('pages/dashboard.html', title='Dashboard')
+        if 'username' in session:
+            user_profile = mongo.db.profiles.find_one({'username': session['username']})
+            user_projects = mongo.db.projects.find({'username': session['username']})
+            profile_messages = mongo.db.profile_messages.find({'username': session['username']})
+            project_messages = mongo.db.project_messages.find({'username': session['username']})            
+            return render_template('pages/dashboard.html', 
+                                title='Dashboard',
+                                user_profile=user_profile, 
+                                user_projects=user_projects, 
+                                profile_messages=profile_messages,
+                                project_messages=project_messages)
+            
+        flash('You need to be logged in to access your dashboard.', 'warning')
+        return redirect(url_for('login'))
 
 @app.route("/post")
 def post():
-    return render_template('pages/post.html', title='Post')
+    if 'username' in session:
+        return render_template('pages/post.html', title='Post')
+    flash('You need to be logged in to post any content.', 'warning')
+    return redirect(url_for('login'))
 
 @app.route("/")
 @app.route("/projects")
 def projects():
-
-    projects = mongo.db.projects.find()
-    return render_template('pages/projects.html', title='Projects', projects=projects)
+    if 'username' in session:
+        projects = mongo.db.projects.find()
+        return render_template('pages/projects.html', title='Projects', projects=projects)
+    flash('Please login to view user projects.', 'warning')
+    return redirect(url_for('login'))
 
 
 @app.route("/profiles")
 def profiles():
-    profiles = mongo.db.profiles.find()
-    return render_template('pages/profiles.html', title='Profiles', profiles = profiles)
+    if 'username' in session:
+        profiles = mongo.db.profiles.find()
+        return render_template('pages/profiles.html', title='Profiles', profiles = profiles)
+    flash('Please login to view user profiles.', 'warning')
+    return redirect(url_for('login'))
 
 
-@app.route("/blog")
-def blog():
-    articles = mongo.db.articles.find()
-    return render_template('pages/blog.html', title='Blog', articles=articles)
