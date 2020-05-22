@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, session
 from app import app, mongo
 from bson.objectid import ObjectId
 from datetime import datetime
-from app.forms import RegistrationForm, LoginForm
+from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm
 import bcrypt
 
 
@@ -76,11 +76,25 @@ def dashboard():
         flash('You need to be logged in to access your dashboard.', 'warning')
         return redirect(url_for('login'))
 
-@app.route("/post")
+@app.route("/post", methods=['GET', 'POST'])
 def post():
-    if 'username' in session:
-        return render_template('pages/post.html', title='Post')
-    flash('You need to be logged in to post any content.', 'warning')
+    if 'username' in session:        
+        article_form=BlogForm()
+        project_form=ProjectForm()
+        profile_form=ProfileForm()
+        if request.method == 'POST':
+            if article_form.validate_on_submit():
+                flash('Your blog post has been created!', 'success')
+                return redirect('blog')
+            elif project_form.validate_on_submit(): 
+                flash('Your project has been created!', 'success')
+                return redirect('projects')
+            elif profile_form.validate_on_submit():
+                flash('Your profile has been created!', 'success')
+                return redirect('profiles')                      
+        return render_template('pages/post.html', title='Post', 
+                                article_form=article_form, project_form=project_form, profile_form=profile_form)
+    flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
 
 @app.route("/")
