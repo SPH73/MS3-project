@@ -9,36 +9,60 @@ import bcrypt
 @app.route("/")
 @app.route("/home")
 def home():
+    
     return render_template('pages/home.html')
 
 @app.route("/blog")
 def blog():
+    
     articles = mongo.db.articles.find()
     return render_template('pages/blog.html', title='Blog', articles=articles)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    '''First check if user has an active session, if not, check if the email address exists, if not check if username is taken otherwise create user.
+    '''
+    
+    if 'username' in session:    
+        flash("You are already registerd and logged in. Did you mean to go to your dashboard instead?", 'info')
+        return redirect(url_for('dashboard'))
+        
     form = RegistrationForm()
+    
     if request.method == 'POST':
         if form.validate_on_submit():            
             user = mongo.db.user
-            registered_username = user.find_one({'username':form.username.data})                
-            if registered_username is None:
-                registered_email = user.find_one({'email': form.email.data})       
-                if registered_email is None:
+            registered_email = user.find_one({'email': form.email.data})
+                                    
+            if registered_email is None:
+                registered_username = user.find_one({'username':form.username.data})
+                
+                if registered_username is None:
                     hashed_pw = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt())
                     user.insert({'username': form.username.data, 
                              'email': form.email.data, 
                              'hashed_password': hashed_pw})                
-                    flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your dashboard!', 'success')
+                    flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your dashboard!',
+                          'success')
                     return redirect(url_for('login'))
-                flash('That eamil is already registered. Please login.', 'info')
-                return redirect(url_for('login'))                
-            flash('Sorry, that username is not available, please try another.', 'info')
+                
+                flash('Sorry, that username is not available, please try another.', 'info')
+                return render_template('pages/register.html', title='Register', form=form)            
+                        
+            flash('That email is already registered. Please login.', 'info')
+            return redirect(url_for('login'))
+        
     return render_template('pages/register.html', title='Register', form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    '''First check if user has an active session, if not, check the users credentials are correct, if so log them in and add the username to the session.
+    '''
+    
+    if 'username' in session:
+        flash("You are already logged in. Did you mean to go to your dashboard instead?", 'info')
+        return redirect(url_for('dashboard'))
+        
     form = LoginForm()
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -48,7 +72,7 @@ def login():
                 flash(f'Welcome back, {form.username.data}!', 'success')
                 return redirect(url_for('dashboard'))
             flash('Please check login details.', 'danger')
-        flash('Please check login details.', 'danger')
+       
     return render_template('pages/login.html', title='Login', form=form)
 
 @app.route('/logout')
