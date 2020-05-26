@@ -49,6 +49,4 @@ class ProfileForm(FlaskForm):
     headline = StringField('Headline', validators=[DataRequired(), Length(min=20, max=200)])
     bio = TextAreaField('Bio', validators=[Length(min=20, max=200)])
     xp = IntegerField('Years Experience', validators=[NumberRange(min=0)])
-    submit = SubmitField('Send')
-        
-        
+    submit = SubmitField('Send')    
