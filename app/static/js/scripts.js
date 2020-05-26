@@ -1,4 +1,4 @@
-// dynamic accordion
+// dynamic accordion for blog/profiles/projects pages
 
 let coll = document.getElementsByClassName("accordion-label");
 let i;
@@ -6,7 +6,9 @@ let i;
 for (i = 0; i < coll.length; i++) {
     coll[i].onclick = function () {
         this.classList.toggle("active");
+
         let content = this.nextElementSibling;
+
         console.log(content);
 
         if (content.style.maxHeight) {
