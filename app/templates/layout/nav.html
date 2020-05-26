@@ -11,8 +11,8 @@
             </button>
             <!-- LOGGED AND LOGGED OUT VIEWS -->
             <!-- for logged in Left side Navbar -->
+            {% if 'username' in session %}
             <div class="collapse navbar-collapse" id="navbarToggle">
-                {% if username in session %}
                 <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
                     <a class="nav-item nav-link" href="{{ url_for('blog') }}">Blog</a>
@@ -25,8 +25,10 @@
                     <a class="nav-item nav-link" href="{{ url_for('post') }}">Post</a>
                     <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
                 </div>
-                <!-- for logged out Left side Navbar -->
-                {%  else %}
+            </div>
+            <!-- for logged out Left side Navbar -->
+            {%  else %}
+            <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
                     <a class="nav-item nav-link" href="{{ url_for('blog') }}">Blog</a>
@@ -36,8 +38,8 @@
                     <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
                     <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
                 </div>
-                {% endif %}
             </div>
+            {% endif %}
         </div>
     </nav>
 </header>
