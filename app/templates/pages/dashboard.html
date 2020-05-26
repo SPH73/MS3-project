@@ -1,8 +1,61 @@
 {% extends 'layout/base.html' %}
 {% block content %}
-<div class="container mt-5">
-    <h2>My Dashboard</h2>
 
+
+<div class="container mt-5">
+
+    <section class="section-content neu">
+        <legend class="text-center border-bottom mb-4">{{ user_profile.username }}'s Dashboard</legend>
+        <div class="row section-content">
+            <div class="col-6" id="div-profile-image">
+                <img id="dashboard-profile-image" src="{{ url_for('static', filename='images/gear-avatar.png') }}"
+                    alt="user-profile-image" width="80" height="80">
+            </div>
+            <div class="col-6" id="div-profile-image">
+                <button type="submit" id="update-profile">Update</button>
+                <button type="submit" id="delete-profile">Delete</button>
+            </div>
+            <div class="col-12 section-content dashboard-profile">
+                {% if user_profile %}
+                <div class="profile">
+                    <p>Last update: {{ user_profile.date }} </p>
+                    <div>
+                        <table style="width:100%">
+                            <tr>
+                                <th>Headline:</th>
+                                <td> {{ user_profile.headline }}</td>
+                            </tr>
+                            <tr>
+                                <th>Bio:</th>
+                                <td>{{ user_profile.bio }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <table width="100%">
+                            <tr>
+                                <th>Languages:</th>
+                                {% for lang in user_profile.languages %}
+                                <td>{{ lang }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <th>Frameworks:</th>
+                                {% for item in user_profile.frameworks %}
+                                <td>{{ item }}</td>
+                                {% endfor %}
+                            </tr>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="profile">
+                        <p>If you create a profile it will appear here.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
 {% endblock content %}

@@ -20,7 +20,7 @@ def blog():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    '''First check if user has an active session, if not, check if the email address exists, if not check if username is taken otherwise create user.
+    '''First check if user has an active session, if not, check if the email address exists, if not and username isn't taken then create user.
     '''
     
     if 'username' in session:    
@@ -84,21 +84,28 @@ def logout():
     
 
 @app.route("/dashboard", methods=['GET', 'POST'])
-def dashboard():
-        if 'username' in session:
-            user_profile = mongo.db.profiles.find_one({'username': session['username']})
-            user_projects = mongo.db.projects.find({'username': session['username']})
-            profile_messages = mongo.db.profile_messages.find({'username': session['username']})
-            project_messages = mongo.db.project_messages.find({'username': session['username']})            
-            return render_template('pages/dashboard.html', 
-                                title='Dashboard',
-                                user_profile=user_profile, 
-                                user_projects=user_projects, 
-                                profile_messages=profile_messages,
-                                project_messages=project_messages)
-            
-        flash('You need to be logged in to access your dashboard.', 'warning')
-        return redirect(url_for('login'))
+def dashboard():    
+    if 'username' in session:       
+        user_profile = mongo.db.profiles.find_one({'username': session['username']})
+        user_projects = mongo.db.projects.find({'username': session['username']})
+        profile_messages = mongo.db.profile_messages.find({'username': session['username']})
+        project_messages = mongo.db.project_messages.find({'username': session['username']})            
+        return render_template('pages/dashboard.html', 
+                            title='Dashboard',            
+                            user_profile=user_profile, 
+                            user_projects=user_projects, 
+                            profile_messages=profile_messages,
+                            project_messages=project_messages)
+        
+    flash('You need to be logged in to access your dashboard.', 'warning')
+    return redirect(url_for('login'))
+
+@app.route('/update_profile', methods=['POST'])
+def update_profile():
+    profile = mongo.db.profiles.find_one({'username': session['username']})
+    profile.insert_one(request.form.to_dict())
+    return redirect(url_for('dashboard'))
+    
 
 @app.route("/post", methods=['GET', 'POST'])
 def post():
