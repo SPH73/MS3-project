@@ -21,6 +21,23 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
     
+class ForgotPassword(FlaskForm):
+    username = StringField('Username', 
+                           validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email Address', validators=[DataRequired(), Email()])
+    recaptcha = RecaptchaField()
+    submit = SubmitField('Reset')
+    
+class ResetPassword(FlaskForm):
+    username = StringField('Username', 
+                           validators=[DataRequired(), Length(min=2, max=20)])
+    current_password = PasswordField('Current Password', validators=[DataRequired()])
+    new_password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', 
+                                     validators=[DataRequired(), EqualTo('new_password')])
+    recaptcha = RecaptchaField()
+    submit = SubmitField('Reset')  
+    
 class BlogForm(FlaskForm):
     author = StringField('Author')
     post_date = DateField('Post Date', default=date.today(), format='%d-%m-%Y')
