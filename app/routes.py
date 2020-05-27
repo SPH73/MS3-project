@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, session
 from app import app, mongo
 from bson.objectid import ObjectId
 from datetime import datetime
-from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm
+from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm
 import bcrypt
 
 
@@ -38,9 +38,11 @@ def register():
                 registered_username = user.find_one({'username':form.username.data})
                 
                 if registered_username is None:
+                    h_phrase = bcrypt.hashpw(form.passphrase.data.encode('utf-8'), bcrypt.gensalt())
                     hashed_pw = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt())
                     user.insert({'username': form.username.data, 
-                             'email': form.email.data, 
+                             'email': form.email.data,
+                             'passphrase': h_phrase, 
                              'hashed_password': hashed_pw})                
                     flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your dashboard!',
                           'success')
@@ -53,6 +55,52 @@ def register():
             return redirect(url_for('login'))
         
     return render_template('pages/register.html', title='Register', form=form)
+
+@app.route("/forgot_password", methods=['GET', 'POST'])
+def forgot_password():
+    '''First check if user has an active session, if not, check if the email address exists and then redirect to reset password.
+    '''
+    
+    if 'username' in session:    
+        flash("You are already logged in, you can reset your password here.", 'info')
+        return redirect(url_for('dashboard'))
+        
+    form = ForgotPasswordForm()
+    
+    if request.method == 'POST':
+        if form.validate_on_submit():            
+            user = mongo.db.user.find_one({'email':form.email.data})
+
+            if user:
+                # Consider adding a security passphrase instead/as well
+                flash("Please enter your security passphrase and create a new password", 'info')
+                return redirect(url_for('reset_password'))                        
+                
+            flash("Email address not found!", 'danger')
+            return render_template('pages/forgot.html', title='Forgot Password', form=form)
+                
+    return render_template('pages/forgot.html', title='Forgot Password', form=form)
+
+@app.route("/reset_password", methods=['GET', 'POST'])
+def reset_password():
+    '''First check if passphrase and username are correct then update password.
+    '''   
+          
+    form = ResetPasswordForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            
+            hashed_pw = bcrypt.hashpw(form.new_password.data.encode('utf-8'), bcrypt.gensalt())
+            user = mongo.db.user.find_one({'username': form.username.data})
+            
+            if user and bcrypt.checkpw(request.form['passphrase'].encode('utf-8'), user['passphrase']):
+                mongo.db.user.find_one_and_update({'username': form.username.data}, {'$set':{'hashed_password':hashed_pw}})
+                
+                flash(f'Password reset was successful, {form.username.data}, you can now login.',
+                          'success')
+                return redirect(url_for('login'))
+            
+    return render_template('pages/reset.html', title='Forgot Password', form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():

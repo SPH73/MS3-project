@@ -3,10 +3,10 @@
 
 <div class="container mt-5">
     <section class="section-content neu">
-        <form action="#" method="post" novalidate>
+        <form action="{{url_for('reset_password')}}" method="post" novalidate>
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="text-center border-bottom mb-4">Sign Up</legend>
+                <legend class="text-center border-bottom mb-4">Reset Password</legend>
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}
                     {% if form.username.errors %}
@@ -18,20 +18,6 @@
                     </div>
                     {% else %}
                     {{ form.username(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
-                    {{ form.email.label(class="form-control-label") }}
-                    {% if form.email.errors %}
-                    {{ form.email(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.email.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.email(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
                 <div class="form-group">
@@ -47,18 +33,17 @@
                     {{ form.passphrase(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-
                 <div class="form-group">
-                    {{ form.password.label(class="form-control-label") }}
-                    {% if form.password.errors %}
+                    {{ form.new_password.label(class="form-control-label") }}
+                    {% if form.new_password.errors %}
                     {{ form.password(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.password.errors %}
+                        {% for error in form.new_password.errors %}
                         <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                     {% else %}
-                    {{ form.password(class="form-control form-control-lg") }}
+                    {{ form.new_password(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
 
@@ -76,16 +61,12 @@
                     {% endif %}
                 </div>
             </fieldset>
+            </fieldset>
             <div class="form-group">
                 {{ form.recaptcha }}
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
-        <div class="border-top pt-3 text-center">
-            <small class="text-muted">
-                <i>Already Have An Account?<a class="ml-2" href="{{ url_for('login') }}">Sign In</a></i>
-            </small>
-        </div>
     </section>
 </div>
 {% endblock content %}
