@@ -50,6 +50,10 @@ body {
   font-size: 1.1em;
 }
 
+.dropdown:hover>.dropdown-menu {
+  display: block;
+}
+
 /* background for templates */
 
 .template-container {
@@ -136,4 +140,3 @@ th {
   width: 7em;
 
 }
-
