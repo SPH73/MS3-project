@@ -7,14 +7,18 @@
         <div class="accordion">
             {% for project in projects %}
             <div id="project-accordion" class="accordion-label"><span class="title">
-                    {{ project.title }}</span><br>By {{ project.username }} Posted on {{ project.post_date }}
+                    {{ project.title }}</span><br>Owner:
+                {{ project.owner }} : Project manager:
+                {{ project.username }}<br><small>{{ project.date.strftime('%B %d, %Y') }}</small>
             </div>
             <div class="accordion-content">
-                <button id="project-btn" type="button" class="btn btn-outline-info">Join</button>
+                <button id="project-btn" type="button" class="btn btn-outline-info mt-2 mb-2">Join</button>
                 <p>Project Description: <br>
                     {{ project.brief }}</p>
-                <p>The closing date to join the project team is: <br>
-                    {{ project.closing_date }}</p>
+                <p>Current Status: <br>
+                    {{ project.status }}</p>
+                <p>Project deadline: <br>
+                    {{ project.deadline }}</p>
                 <p>Project Brief: <br>
                     {{ project.brief }}</p>
                 <p>Project files: <br>

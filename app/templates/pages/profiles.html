@@ -7,17 +7,19 @@
         <div class="accordion">
             {% for profile in profiles %}
             <div id="project-accordion" class="accordion-label"><span class="title text-center">
-                    {{ profile.headline.title() }}</span><br>{{ profile.username.upper() }} Last updated on
-                {{ profile.date }}
+                    {{ profile.headline.title() }}</span><br>
+                {{ profile.username.upper() }}<br><small>{{ profile.date.strftime('%B %d, %Y') }}</small>
             </div>
             <div class="accordion-content">
-                <button id="project-btn" type="button" class="btn btn-outline-info">Message</button>
+                <button id="project-btn" type="button" class="btn btn-outline-info mt-2 mb-2">Message</button>
                 <p>Bio: <br>
                     {{ profile.bio }}</p>
                 <p>I am a {{ profile.occupation }}</p>
                 <p>I have experience with the following:<br>
                     Languages - {% for item in languages %}
-                    {{ item }}
+                    {% if lang in item %}
+                    {{ lang }}
+                    {% endif %}
                     {% endfor %}<br>
                     Frameworks - {% for item in frameworks %}
                     {{ item }}
