@@ -11,13 +11,25 @@ body {
 /* BASE */
 
 /* navbar */
-
 .navbar {
   border-bottom: #070bc0 0.05rem solid;
   background-color: #c3c6ca;
 }
 
+.dropdown-menu {
+  color: #080d84c7;
+  background-color: #c3c6ca;
+  background-clip: padding-box;
+  border: 0.5px solid rgba(0, 0, 0, .15);
+  border-radius: .25rem;
+}
+
+
 .navbar-light .navbar-nav .nav-link {
+  color: #080d84c7;
+}
+
+.dropdown-item {
   color: #080d84c7;
 }
 
@@ -29,6 +41,13 @@ body {
 
 .navbar-nav .nav-link.active {
   font-weight: 500;
+}
+
+.dropdown-item:hover {
+  color: #21254e;
+  background-color: #c3c6ca;
+  font-weight: 400;
+  font-size: 1.1em;
 }
 
 /* background for templates */
@@ -82,66 +101,6 @@ span.title {
   transition: max-height 0.2s ease-in-out;
 }
 
-/* accordion styling for post content */
-
-.post-accordion {
-  max-width: 100%;
-  overflow: hidden;
-}
-
-.post-accordion-label,
-.post-accordion-content {
-  padding: 0 20px 12px;
-
-}
-
-.post-accordion-label {
-  font-size: 18px;
-  font-weight: 500;
-  color: #21254e;
-  display: block;
-  cursor: pointer;
-  position: relative;
-  transition: background-color 0.2s;
-
-}
-
-.post-accordion-label:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-/* instructions from stackoverflow 
-https://stackoverflow.com/questions/2701192/what-characters-can-be-used-for-up-down-triangle-arrow-without-stem-for-displa */
-.post-accordion-label::after {
-  content: "\25BC";
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 20px;
-  width: 12px;
-  height: 6px;
-  background-size: contain;
-  transition: transform 0.4s;
-}
-
-
-.post-accordion-content {
-  line-height: 1.6;
-  font-size: 0.85em;
-  display: none;
-}
-
-.post-accordion-input {
-  display: none;
-}
-
-.post-accordion-input:checked~.post-accordion-content {
-  display: block;
-}
-
-.post-accordion-input:checked~.post-accordion-label::after {
-  transform: translateY(-50%) rotateX(180deg);
-}
 
 /* dashboard */
 #div-profile-image {
@@ -151,18 +110,30 @@ https://stackoverflow.com/questions/2701192/what-characters-can-be-used-for-up-d
 }
 
 table,
-th,
-td {
+th {
   border: 1px solid black;
   border-collapse: collapse;
-}
-
-th,
-td {
-  padding: 5px;
-  text-align: left;
+  margin-bottom: 0.3em;
 }
 
 th {
-  width: 8em;
+  padding: 5px;
+  text-align: left;
+  font-size: 0.8rem;
+  width: 125px;
 }
+
+td {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+th {
+  width: 7em;
+
+}
+
