@@ -1,0 +1,61 @@
+{% extends 'layout/base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+    <section class="section-content neu">
+        <legend class="text-center border-bottom mb-4">Create Your Blog Article</legend>
+        <div class="post-content mt-0">
+            <form action="" method="post" novalidate>
+                {{ article_form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <div class="form-group">
+                        <div class="form-group">
+                            {{ article_form.author.label(class="form-control-label") }}
+                            {% if article_form.author.errors %}
+                            {{ article_form.author(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in article_form.author.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ article_form.author(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                        {{ article_form.title.label(class="form-control-label") }}
+                        {% if article_form.title.errors %}
+                        {{ article_form.title(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in article_form.title.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ article_form.title(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ article_form.content.label(class="form-control-label") }}
+                        {% if article_form.content.errors %}
+                        {{ article_form.content(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in article_form.content.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ article_form.content(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    {{ article_form.submit(class="btn btn-outline-info") }}
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+{{ ckeditor.load() }}
+{{ ckeditor.config(name='content') }}
+{% endblock content %}

@@ -1,0 +1,115 @@
+{% extends 'layout/base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+    <section class="section-content neu">
+        <legend class="text-center border-bottom mb-4">Add Your New Project</legend>
+        <form action="" method="post" novalidate>
+            {{ project_form.hidden_tag() }}
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{ project_form.owner.label(class="form-control-label") }}
+                    {% if project_form.owner.errors %}
+                    {{ project_form.owner(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in project_form.owner.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ project_form.owner(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ project_form.posted.label(class="form-control-label") }}
+                    {% if project_form.posted.errors %}
+                    {{ project_form.posted(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in project_form.posted.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ project_form.posted(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ project_form.status.label(class="form-control-label") }}
+                    {% if project_form.status.errors %}
+                    {{ project_form.status(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in project_form.status.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ project_form.status(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group" name="daterange" type="date">
+                    {{ project_form.deadline.label(class="form-control-label") }}
+                    {% if project_form.deadline.errors %}
+                    {{ project_form.deadline(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in project_form.deadline.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ project_form.deadline(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ project_form.title.label(class="form-control-label") }}
+                    {% if project_form.title.errors %}
+                    {{ project_form.title(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in project_form.title.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ project_form.title(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ project_form.brief.label(class="form-control-label") }}
+                    {% if project_form.brief.errors %}
+                    {{ project_form.brief(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in project_form.brief.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ project_form.brief(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ project_form.pieces.label(class="form-control-label") }}
+                    {% if project_form.pieces.errors %}
+                    {{ project_form.pieces(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in project_form.pieces.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {% for p in project_form.pieces %}
+                    {{ p.form.piece(class="form-control form-control-lg") }}
+                    <input type="button" value="Add" id="add-piece" class="btn btn-outline-info">
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ project_form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </section>
+</div>
+
+{{ ckeditor.load() }}
+{{ ckeditor.config(name='brief') }}
+
+{% endblock %}

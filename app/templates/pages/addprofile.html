@@ -1,0 +1,73 @@
+{% extends 'layout/base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+    <section class="section-content neu">
+        <legend class="text-center border-bottom mb-4">Create Your Profile</legend>
+        <form action="" method="post" novalidate>
+            {{ profile_form.hidden_tag() }}
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{ profile_form.posted.label(class="form-control-label") }}
+                    {% if profile_form.posted.errors %}
+                    {{ profile_form.posted(class="form-control form-control-md is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in profile_form.posted.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ profile_form.posted(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ profile_form.headline.label(class="form-control-label") }}
+                    {% if profile_form.headline.errors %}
+                    {{ profile_form.headline(class="form-control form-control-md is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in profile_form.headline.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ profile_form.headline(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ profile_form.bio.label(class="form-control-label") }}
+                    {% if profile_form.bio.errors %}
+                    {{ profile_form.bio(class="form-control form-control-md is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in profile_form.bio.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ profile_form.bio(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ profile_form.xp.label(class="form-control-label") }}
+                    {% if profile_form.xp.errors %}
+                    {{ profile_form.xp(class="form-control form-control-md is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in profile_form.xp.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ profile_form.xp(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ profile_form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </section>
+</div>
+
+{{ ckeditor.load() }}
+{{ ckeditor.config(name='bio') }}
+{{ ckeditor.config(name='interests') }}
+{% endblock %}
