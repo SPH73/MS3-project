@@ -19,6 +19,6 @@ gunicorn = "*"
 pymongo = "*"
 flask-pymongo = "*"
 bcrypt = "*"
-
+flask-ckeditor = "*"
 [requires]
 python_version = "3.7"
