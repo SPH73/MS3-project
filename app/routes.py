@@ -1,9 +1,12 @@
 from flask import render_template, url_for, flash, redirect, request, session
 from app import app, mongo
 from bson.objectid import ObjectId
+import pymongo
 from datetime import datetime
-from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, ListForm, PasswordForm
+from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, ListForm
 import bcrypt
+import bleach
+
 
 @app.route("/")
 @app.route("/home")
@@ -14,7 +17,7 @@ def home():
 @app.route("/blog")
 def blog():
     
-    articles = mongo.db.articles.find()
+    articles = mongo.db.articles.find().sort('date',pymongo.DESCENDING)
     return render_template('pages/blog.html', title='Blog', articles=articles)
 
 
@@ -194,15 +197,16 @@ def add_article():
     if 'username' in session:    
         article_form=BlogForm()
         if request.method == 'POST':
-                article = mongo.db.articles
-                if article_form.validate_on_submit():   
-                    article.insert({'title': article_form.title.data,
-                                    'author': article_form.author.data, 
-                                'content': article_form.content.data,
-                                'username': session['username'],
-                                'date': datetime.utcnow()})      
-                    flash('Your blog post has been created!', 'success')
-                    return redirect('blog')
+            bleached = bleach.clean(article_form.content.data, tags=bleach.sanitizer.ALLOWED_TAGS + ['h1', 'br'])
+            article = mongo.db.articles
+            if article_form.validate_on_submit():   
+                article.insert({'title': article_form.title.data,
+                                'author': article_form.author.data, 
+                            'content': bleached,
+                            'username': session['username'],
+                            'date': datetime.utcnow()})      
+                flash('Your blog post has been created!', 'success')
+                return redirect('blog')
         return render_template('pages/addblog.html', title='New Article', article_form=article_form)
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
@@ -218,18 +222,62 @@ def edit_article():
 def delete_article():
     pass
 
-@app.route("/add_project", methods=['GET','POST'])
-def add_project():
+@app.route('/add_piece', methods=['GET', 'POST'])
+def add_piece():
     if 'username' in session:
-        project_form=ProjectForm()
-        list_form=ListForm(csrf_enabled=False)
+        form=PieceForm()
+        piece=mongo.db.projects
         if request.method == 'POST':
-            if project_form.validate_on_submit(): 
-                flash('Your project has been posted!', 'success')
-            return redirect('projects')
-        return render_template('pages/addproject.html', title='New Project', project_form=project_form, list_form=list_form)
+            if piece.validate_on_submit():
+                piece = {'task': piece.task.data,
+                         'description': piece.description.data,
+                         'status': piece.status.data,
+                         'username': piece.username.data
+                         }
+
+                
+        return render_template('pages/addproject.html', title='New Project', form=form)    
     flash('You need to be logged in to post any content.', 'info')
-    return redirect(url_for('login'))
+    return redirect(url_for('login'))                 
+
+@app.route("/add_project", methods=['GET','POST'])
+def add_project():    
+    if 'username' in session:
+        piece=PieceForm()
+        pieces = []
+        piece_count = 0
+        form=ProjectForm()
+        project=mongo.db.projects
+        if request.method == 'POST':
+            if piece.validate_on_submit():
+                piece = {'task': piece.task.data,
+                         'description': piece.description.data,
+                         'status': piece.status.data,
+                         'username': piece.username.data,
+                         'piece_id': piece_count
+                         }
+                pieces.append(piece)
+                piece_count +=1
+                       
+            elif form.validate_on_submit():
+                project.insert({'owner': request.form.get('owner'), 
+                        'content': request.form.get('content'),
+                        'username': session['username'],
+                        'date': datetime.utcnow(),
+                        'status': form.status.data,
+                        'deadline':form.deadline.data,
+                        'title': form.title.data,
+                        'brief': form.brief.data
+                        
+                        })
+                flash('Your project has been created!', 'success')
+                return redirect('projects')
+                            
+        return render_template('pages/addproject.html', title='New Project', piece=piece, form=form)    
+    flash('You need to be logged in to post any content.', 'info')
+    return redirect(url_for('login'))        
+            
+ 
 
 @app.route('/update_project')
 def update_project():
