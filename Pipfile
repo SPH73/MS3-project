@@ -20,5 +20,7 @@ pymongo = "*"
 flask-pymongo = "*"
 bcrypt = "*"
 flask-ckeditor = "*"
+bleach = "*"
+
 [requires]
 python_version = "3.7"
