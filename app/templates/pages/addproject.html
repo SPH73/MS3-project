@@ -4,7 +4,7 @@
 <div class="container mt-5">
     <section class="section-content neu">
         <legend class="text-center border-bottom mb-4">Add New Project</legend>
-        <form action="{{url_for('add_project')}}" method="post">
+        <form action="{{url_for('add_project')}}" method="post" novalidate>
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <div class="form-group">
@@ -18,19 +18,6 @@
                     </div>
                     {% else %}
                     {{ form.owner(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.posted.label(class="form-control-label") }}
-                    {% if form.posted.errors %}
-                    {{ form.posted(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.posted.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.posted(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
                 <div class="form-group">
@@ -86,65 +73,7 @@
                     {% endif %}
                 </div>
             </fieldset>
-            <legend class="border-bottom mb-4">{{ form.pieces.label(class="form-control-label") }}</legend>
-            <fieldset>
-                {{ piece.hidden_tag() }}
-                <div class="form-group">
-                    {{ piece.task.label(class="form-control form-control-lg") }}
-                    {% if piece.task.errors %}
-                    {{ piece.task(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in piece.task.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ piece.task(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ piece.description.label(class="form-control form-control-lg") }}
-                    {% if piece.description.errors %}
-                    {{ piece.description(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in piece.description.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ piece.description(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ piece.status.label(class="form-control form-control-lg") }}
-                    {% if piece.description.errors %}
-                    {{ piece.description(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in piece.description.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ piece.status(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ piece.username.label(class="form-control form-control-lg") }}
-                    {% if piece.username.errors %}
-                    {{ piece.username(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in piece.username.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ piece.username(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ piece.add_piece(class="btn btn-outline-info") }}
-                </div>
-            </fieldset>
+
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
@@ -153,12 +82,6 @@
 </div>
 {{ ckeditor.load() }}
 {{ ckeditor.config(name='brief') }}
-<script>
-    $( function() {
-      $( "#datepicker" ).datepicker({
-        showButtonPanel: true
-      });
-    } );
-    </script>
+
 
 {% endblock %}

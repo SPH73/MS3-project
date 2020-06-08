@@ -8,7 +8,8 @@
             {% for article in articles %}
             <div id="blog-accordion" class="accordion-label"><span class="title">
                     {{ article.title }}
-                </span> <br>By {{ article.author }}<br><small>{{ article.date.strftime('%B %d, %Y') }}</small>
+                </span> <br>By
+                {{ article.author }}<br><small>{{ article.date.strftime('%B %d, %Y') }}</small>
             </div>
             <div class="accordion-content">
                 <div>{{ article.content|safe }}</div>
