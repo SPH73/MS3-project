@@ -7,28 +7,31 @@
         <div class="accordion">
             {% for project in projects %}
             <div id="project-accordion" class="accordion-label"><span class="title">
-                    {{ project.title }}</span><br>Owner:
-                {{ project.owner }} : Project manager:
-                {{ project.username }}<br><small>{{ project.date.strftime('%m %d, %Y') }}</small>
+                    {{ project.title }}</span><br><small>Owner:
+                    {{ project.owner }} - Project manager:
+                    {{ project.username }} - Post date: {{ project.date.strftime('%B %d, %Y') }}</small>
             </div>
             <div class="accordion-content">
-                {% if 'username' in session == project.username %}
-                <a href="#" id="project-btn-join" type="button" class="btn btn-outline-info mt-2 mb-2">Join</a>
+                {% if not project.username == 'username' in session %}
+                <a href="#" id="project-btn-request-piece" type="button" class="btn btn-outline-info mt-2 mb-2">View
+                    Pieces</a>
                 {% else %}
                 <a href="#" id="project-btn-edit" type="button" class="btn btn-outline-info mt-2 mb-2">Edit</a>
                 <a href="#" id="project-btn-delete" type="button" class="btn btn-outline-danger mt-2 mb-2">Delete</a>
                 {% endif %}
 
+                <p>Current Status: {{ project.status }}
+                </p>
+                <p>Project deadline: {{ project.deadline }}
+                </p>
+                <p>Project files:
+                    {% if project.file_upload %}
+                    {{ project.file_upload }}
+                    {% else %}
+                    No File uploads for this project.</p>
+                {% endif %}
                 <p>Project Description: <br>
-                    {{ project.brief }}</p>
-                <p>Current Status: <br>
-                    {{ project.status }}</p>
-                <p>Project deadline: <br>
-                    {{ project.deadline }}</p>
-                <p>Project Brief: <br>
-                    {{ project.brief }}</p>
-                <p>Project files: <br>
-                    {{ project.file_upload }}</p>
+                    {{ project.brief|safe }}</p>
             </div>
             {% if not loop.last %}
             <hr>

@@ -230,6 +230,8 @@ def delete_article(article_id):
     flash('Your blog article has been deleted.', 'success')
     return redirect(url_for('blog'))
 
+# PROJECTS
+
 @app.route("/projects")
 def projects():
     if 'username' in session:
@@ -247,6 +249,7 @@ def add_project():
         if request.method == 'POST':
             if form.validate_on_submit():
                 project.insert_one({'owner': form.owner.data,
+                                    'username': session['username'],
                                     'date': datetime.utcnow(),
                                     'title': form.title.data,
                                     'deadline': form.deadline.data,
@@ -273,7 +276,7 @@ def add_piece():
                                   'due_date': piece.due_date.data,
                                   'project_id': project._id})
                 piece_id = piece.inserted_id
-                project.insert_one({'pieces': [piece_id]})
+                project.pieces.insert_one({'pieces': [{piece_id}]})
                 return redirect(url_for('dashboard'))
                 
         return render_template('pages/addproject.html', title='New Project', form=form, project_id=project)    
