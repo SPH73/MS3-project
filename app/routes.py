@@ -14,22 +14,10 @@ def home():
    
     return render_template('pages/home.html')
 
-@app.route("/blog")
-def blog():
-    articles = mongo.db.articles.find().sort('date',pymongo.DESCENDING)
-    return render_template('pages/blog.html', title='Blog', articles=articles)
 
 
 
 
-
-@app.route("/profiles")
-def profiles():
-    if 'username' in session:
-        profiles = mongo.db.profiles.find()
-        return render_template('pages/profiles.html', title='Profiles', profiles = profiles)
-    flash('Please login to view user profiles.', 'warning')
-    return redirect(url_for('login'))
 
 # USER ACCOUNT VIEWS/ACTIONS
 
@@ -86,7 +74,8 @@ def login():
             user = mongo.db.user.find_one({'username':form.username.data})
             if user and bcrypt.checkpw(request.form['password'].encode('utf-8'), user['hashed_password']):
                 session['username'] = form.username.data
-                flash(f'Welcome back, {form.username.data}!', 'success')
+                current_user = session['username']
+                flash(f'Welcome back, {current_user}!', 'success')
                 return redirect(url_for('dashboard'))
             flash('Please check login details.', 'danger')
        
@@ -184,92 +173,120 @@ def dashboard():
     flash('You need to be logged in to access your dashboard.', 'warning')
     return redirect(url_for('login'))
 
+# BLOG ARTICLE VIEWS
+
+@app.route("/blog")
+def blog():
+    '''Retrieve all the documents from the articles collection and dislpay them in order of newest to oldest.
+    '''
+    
+    articles = mongo.db.articles.find().sort('date',pymongo.DESCENDING)
+    return render_template('pages/blog.html', title='Blog', articles=articles)
+
 
 @app.route("/add_article", methods=['GET','POST'])
 def add_article():
-    if 'username' in session:    
-        article_form=BlogForm()
+    '''If a user is logged in render the form to add a blog article. If the form is validated, retrieve the users id and add it to the articles collection.
+    '''
+    
+    if 'username' in session:           
+        form=BlogForm()
+        
         if request.method == 'POST':
-            article = mongo.db.articles
-            if article_form.validate_on_submit():   
-                article.insert({'title': article_form.title.data,
-                                'author': article_form.author.data,
-                                'content': article_form.content.data,
-                                'username': session['username'],
-                                'date': datetime.utcnow()})
-                article_id = article.inserted_id    
+            if form.validate_on_submit():
+                user = mongo.db.user.find_one({'username': session['username']})    
+                mongo.db.articles.insert_one({'title': form.title.data,
+                                'content': form.content.data,
+                                'author': session['username'],
+                                'date': datetime.utcnow(),
+                                'user_id': user['_id']})
+                 
                 flash('Your blog post has been created!', 'success')
-                return redirect('blog', article_id)
-        return render_template('pages/addblog.html', title='New Article', article_form=article_form)
+                return redirect(url_for('blog'))
+            
+        return render_template('pages/addarticle.html', title='New Article', article_form=form, legend="Create Your Blog Article")
+    
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
 
 # TODO
 # - EDIT AND DELETE 
 
-@app.route('/edit_article<article_id>')
+@app.route('/edit_article/<article_id>')
 def edit_article(article_id):
-    update_article=BlogForm()
-    article_id = mongo.db.articles.find_one_or_404({"_id": ObjectId(article_id)})
-    return render_template('editarticle.html', form=update_article, article=article_id)
+    article = mongo.db.articles.find_one_or_404(
+        {"_id": ObjectId(article_id)})
+    form=BlogForm()
+    form.title.data = article['title']
+    form.content.data = article['content']
+    return render_template('pages/editarticle.html', form=form, article=article, legend='Edit your Blog Article')
 
 @app.route('/update_article/<article_id>', methods=['POST'])
 def update_article(article_id):
     article = mongo.db.articles
-    article.update({'_id': ObjectId(article_id)},
-                   {'title': request.form.get('title'),                    
-                    'content': request.form.get('content'),                    
-                    'date': datetime.utcnow()})
-    flash('Your blog article has been updated.', 'success')
+    article.find_one_and_update({'_id': ObjectId(article_id), 
+                    },{'$set':
+                    {'title': request.form.get('title'),
+                    'content': request.form.get('content')}})
     return redirect(url_for('blog'))
     
 
 @app.route('/delete_article/<article_id>', methods=['POST'])
 def delete_article(article_id):
-    mongo.db.articles.find_one_and_delete(article_id)
+    article = mongo.db.articles
+    article.delete_one({'_id': ObjectId(article_id)})
     flash('Your blog article has been deleted.', 'success')
     return redirect(url_for('blog'))
 
-# PROJECTS
+# PROJECT VIEWS
 
 @app.route("/projects")
 def projects():
+    '''First check that the user is logged in, then display all the projects in the database sorted by the newest first.
+    '''
+    
     if 'username' in session:
-        projects = mongo.db.projects.find()
-        return render_template('pages/projects.html', title='Projects', projects=projects)
+        current_user = mongo.db.user.find_one({'username': session['username']})      
+        projects = mongo.db.projects.find().sort('date',pymongo.DESCENDING)
+        return render_template('pages/projects.html', title='Projects', projects=projects, current_user=current_user)
+    
     flash('Please login to view user projects.', 'warning')
     return redirect(url_for('login'))
 
                  
 @app.route("/add_project", methods=['GET','POST'])
 def add_project():    
-    if 'username' in session:
+    if 'username' in session:        
         form=ProjectForm()
-        project=mongo.db.projects
+        
         if request.method == 'POST':
             if form.validate_on_submit():
-                project.insert_one({'owner': form.owner.data,
-                                    'username': session['username'],
+                user = mongo.db.user.find_one({'username': session['username']})
+                project = mongo.db.projects.insert_one({'username': session['username'],
                                     'date': datetime.utcnow(),
                                     'title': form.title.data,
                                     'deadline': form.deadline.data,
                                     'brief': form.brief.data,
-                                    'status': form.status.data})
+                                    'status': form.status.data,
+                                    'user_id': user._id})
+                project_id = project.inserted_id
                 flash('Your project has been created.', 'success')
-                return redirect(url_for('projects'))                  
-        return render_template('pages/addproject.html', title='New Project',  form=form)    
+                return redirect(url_for('projects'), project_id)
+            
+        return render_template('pages/addproject.html', title='New Project',  form=form)
+        
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))        
             
-@app.route('/add_piece', methods=['GET', 'POST'])
-def add_piece():
+@app.route('/add_piece/<title>', methods=['GET', 'POST'])
+def add_piece(title):
     if 'username' in session:
         form=PieceForm()
-        piece=mongo.db.pieces
-        project = mongo.db.projects.find_one_or_404({"_id": ObjectId})
+        
         if request.method == 'POST':
             if form.validate_on_submit():
-                piece.insert({'task': piece.task.data,
+                project = mongo.db.projects.find_one_or_404({'title': title})
+                piece = mongo.db.pieces.insert({'task': piece.task.data,
                                   'description': piece.description.data,
                                   'status': piece.status.data,
                                   'username': piece.username.data,
@@ -279,7 +296,8 @@ def add_piece():
                 project.pieces.insert_one({'pieces': [{piece_id}]})
                 return redirect(url_for('dashboard'))
                 
-        return render_template('pages/addproject.html', title='New Project', form=form, project_id=project)    
+        return render_template('pages/addproject.html', title='New Project', form=form, project_id=project)
+    
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
 
@@ -290,6 +308,16 @@ def update_project(project_id):
 @app.route('/delete_project<project_id>')
 def delete_project(project_id):
     pass
+
+# PROFILE VIEWS
+
+@app.route("/profiles")
+def profiles():
+    if 'username' in session:
+        profiles = mongo.db.profiles.find()
+        return render_template('pages/profiles.html', title='Profiles', profiles = profiles)
+    flash('Please login to view user profiles.', 'warning')
+    return redirect(url_for('login'))
 
 
 @app.route('/add_profile', methods=['GET','POST'])
