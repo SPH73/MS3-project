@@ -30,7 +30,7 @@
                 <div class="col-12 mb-2 text-center ">
                     <a class="btn btn-outline-info" type="button" id="update-profile-btn" href="#">Update
                         Profile</a>
-                    <!-- Button triggers modal for confirmation -->
+                    <!-- Button to trigger modal for confirmation of delete request -->
                     <button class="btn btn-outline-danger" type="button" id="delete-profile-modal" data-toggle="modal"
                         data-target="#deleteProfile">Delete Profile
                     </button>
@@ -93,9 +93,12 @@
                                 </tr>
                             </table>
                             <table width="100%">
-                                <tr>{% for link in user_profile.personal_links %}
+                                <tr>
                                     <th>Personal Links:</th>
-                                    <td>{{ link }}</td>
+                                    {% for link in user_profile.personal_links %}
+                                    {% for key, value in link.items() %}
+                                    <td>{{ key }}: {{ value }}</td>
+                                    {% endfor %}
                                     {% endfor %}
                                 </tr>
                             </table>
