@@ -44,7 +44,6 @@ class PasswordForm(FlaskForm):
     submit = SubmitField('Update Password')    
  
 class BlogForm(FlaskForm):
-    author = StringField('Author *', validators=[DataRequired()])
     title = StringField('Title *', validators=[DataRequired()])
     content = CKEditorField('Content *', validators=[DataRequired()])
     submit = SubmitField('Send')
@@ -62,10 +61,9 @@ class PieceForm(FlaskForm):
   
     
 class ProjectForm(FlaskForm):
-    owner = StringField('Project owner *', validators=[DataRequired()])
+    title = StringField('Title *', validators=[DataRequired()])
     status = StringField('Status *', default='open' )
     deadline = StringField('Set deadline', validators=[DataRequired()])
-    title = StringField('Title *', validators=[DataRequired()])
     brief = CKEditorField('Project description *', validators=[DataRequired()])
     submit = SubmitField('Post Project')
        
@@ -79,13 +77,10 @@ class ListForm(FlaskForm):
 class ProfileForm(FlaskForm):
     posted = DateField('Post date *', default=datetime.utcnow(), 
                           validators=[DataRequired()],format='%B %d, %Y')
-    first = StringField('First name')
-    last = StringField('Last')   
     headline = StringField('Headline *', validators=[DataRequired(), Length(min=30, max=150)])
-    bio = CKEditorField('Bio *', validators=[Length(min=30, max=1000)])
+    bio = CKEditorField('Bio: *', validators=[Length(min=30, max=1000)])
     xp = IntegerField('Years experience *', validators=[NumberRange(min=0)])
-    interests = CKEditorField("Interests *", validators=[DataRequired()])
-    skills = FieldList(FormField(ListForm), min_entries=2)
+    interests = TextAreaField("What type of projects are you interested in?", validators=[DataRequired()])
     languages = FieldList(FormField(ListForm), min_entries=1)
     frameworks = FieldList(FormField(ListForm), min_entries=1)
     links = FieldList(FormField(ListForm), min_entries=1)

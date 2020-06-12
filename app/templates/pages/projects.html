@@ -2,22 +2,49 @@
 {% block content %}
 
 <div class="container mt-5">
-    <section class="section-content neu">
+    <section class="section-content">
         <legend class="text-center border-bottom mb-4">Current Projects</legend>
         <div class="accordion">
             {% for project in projects %}
             <div id="project-accordion" class="accordion-label"><span class="title">
                     {{ project.title }}</span><br><small>Owner:
                     {{ project.owner }} - Project manager:
-                    {{ project.username }} - Post date: {{ project.date.strftime('%B %d, %Y') }}</small>
+                    {{ project.user_id }} - Post date: {{ project.date.strftime('%B %d, %Y') }}</small>
             </div>
             <div class="accordion-content">
-                {% if not project.username == 'username' in session %}
-                <a href="#" id="project-btn-request-piece" type="button" class="btn btn-outline-info mt-2 mb-2">View
-                    Pieces</a>
+                {% if project.user_id == session['username'] %}
+                <a href="{{ url_for('edit_project', project_id=project._id) }}" id="project-btn-edit" type="button"
+                    class="btn btn-outline-primary btn-sm mb-1">Edit</a>
+                <button class="btn btn-outline-danger btn-sm mb-1" type="button" id="delete-project-modal"
+                    data-toggle="modal" data-target="#deleteProject">Delete
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="deleteProject" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title" style="color:red;">WARNING</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>This process is immediate and cannot be undone. Are you sure?</p>
+                                <!-- Button to confirm delete article -->
+                                <form action="{{ url_for('delete_project', project_id=project._id) }}" method="post">
+                                    <input id="delete-project-btn" class="btn btn-outline-success" type="submit"
+                                        value="Confirm Delete">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-danger"
+                                    data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {% else %}
-                <a href="#" id="project-btn-edit" type="button" class="btn btn-outline-info mt-2 mb-2">Edit</a>
-                <a href="#" id="project-btn-delete" type="button" class="btn btn-outline-danger mt-2 mb-2">Delete</a>
+                <a href="#" id="profile-btn-message" type="button"
+                    class="btn btn-outline-primary btn-sm mt-1 mb-1">Message</a>
                 {% endif %}
 
                 <p>Current Status: {{ project.status }}

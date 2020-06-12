@@ -13,12 +13,12 @@ body {
 /* navbar */
 .navbar {
   border-bottom: #070bc0 0.05rem solid;
-  background-color: #c3c6ca;
+  background-color: #c9dcf2;
 }
 
 .dropdown-menu {
   color: #080d84c7;
-  background-color: #c3c6ca;
+  background-color: #c9dcf2;
   background-clip: padding-box;
   border: 0.5px solid rgba(0, 0, 0, .15);
   border-radius: .25rem;
@@ -45,7 +45,7 @@ body {
 
 .dropdown-item:hover {
   color: #21254e;
-  background-color: #c3c6ca;
+  background-color: #eaeaea;
   font-weight: 400;
   font-size: 1.1em;
 }
@@ -60,7 +60,27 @@ body {
   background-color: #eaeaea;
 }
 
-/* section styling */
+/* SECTION STYLING */
+
+/* button styling */
+.btn-outline-primary {
+  color: #070bc0;
+  border-color: #070bc0;
+}
+
+.btn-outline-primary:hover {
+  color: #fff;
+  background-color: #070bc0;
+  border-color: #070bc0;
+}
+
+/* labels/legend */
+legend,
+label {
+  color: #070bc0;
+}
+
+
 .section-content {
   padding: 10px 20px;
   border: 1px solid #dddddd;
@@ -68,12 +88,7 @@ body {
   margin-top: 30px;
 }
 
-.neu {
-  border-radius: 27px;
-  background: linear-gradient(145deg, #fafafa, #d3d3d3);
-  box-shadow: 6px 6px 12px #cccccc,
-    -6px -6px 12px #ffffff;
-}
+
 
 /* accordion styling for retrieved database content */
 .accordion-label {
@@ -115,7 +130,7 @@ span.title {
 
 table,
 th {
-  border: 1px solid black;
+  border: 1px solid rgb(92, 90, 90);
   border-collapse: collapse;
   margin-bottom: 0.3em;
 }

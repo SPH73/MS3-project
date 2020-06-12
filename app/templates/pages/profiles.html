@@ -2,36 +2,77 @@
 {% block content %}
 
 <div class="container mt-5">
-    <section class="section-content neu">
+    <section class="section-content">
         <legend class="text-center border-bottom mb-4">Available Collaborators</legend>
         <div class="accordion">
             {% for profile in profiles %}
             <div id="project-accordion" class="accordion-label"><span class="title text-center">
                     {{ profile.headline.title() }}</span><br>
-                {{ profile.username.upper() }}<br><small>{{ profile.date.strftime('%B %d, %Y') }}</small>
+                {{ profile.username }}<br><small>{{ profile.date.strftime('%B %d, %Y') }}</small>
             </div>
             <div class="accordion-content">
-                <button id="project-btn" type="button" class="btn btn-outline-info mt-2 mb-2">Message</button>
-                <p>Bio: <br>
-                    {{ profile.bio }}</p>
+                {% if profile.user_id == session['username'] %}
+                <a href="{{ url_for('edit_profile', profile_id=profile._id) }}" id="profile-btn-edit" type="button"
+                    class="btn btn-outline-primary btn-sm mb-1">Edit</a>
+                <button class="btn btn-outline-danger btn-sm mb-1" type="button" id="delete-profile-modal"
+                    data-toggle="modal" data-target="#deleteProfile">Delete
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="deleteProfile" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title" style="color:red;">WARNING</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>This process is immediate and cannot be undone. Are you sure?</p>
+                                <!-- Button to confirm delete article -->
+                                <form action="{{ url_for('delete_profile', profile_id=profile._id) }}" method="post">
+                                    <input id="delete-profile-btn" class="btn btn-outline-success" type="submit"
+                                        value="Confirm Delete">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-danger"
+                                    data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <a href="#" id="profile-btn-message" type="button"
+                    class="btn btn-outline-primary btn-sm mt-1 mb-1">Message</a>
+                {% endif %}
+                <p>Bio: - {{ profile.bio|safe }}</p>
                 <p>I am a {{ profile.occupation }}</p>
-                <p>I have experience with the following:<br>
-                    Languages - {% for item in languages %}
-                    {% if lang in item %}
-                    {{ lang }}
-                    {% endif %}
-                    {% endfor %}<br>
-                    Frameworks - {% for item in frameworks %}
-                    {{ item }}
+                <ul>I have experience with the following:
+                    <li>
+                        Languages - {% for item in profile.languages %}{{ lang }}
+                        {% endfor %}</li>
+                    <li>
+                        Frameworks - {% for item in frameworks %} {{ item }}
+                        {% endfor %}
+                    </li>
+                </ul>
+                <p>I have {{ profile.xp }} years experience in some or all of the above.</p>
+                <ul>I am keen to collaborate on projcts with any of the following:
+                    {% for item in profile.looking_for %}
+                    <li>{{ item }}</li>
                     {% endfor %}
-                </p>
-                <p>I have {{ profile.yrs_experience }} years experience in some or all of the above.</p>
-                <p>I am keen to collaborate on projcts with any of the following:</p>
-                <p>{{ profile.looking_for }}</p>
-                <p>My personal links:</p>
-                <p>{{ profile.personal_links }} </p>
-                <p>Files: <br>
-                    {{ profile.file_upload }}</p>
+                </ul>
+
+                <ul>My personal links:
+                    {% for link in profile.personal_links %}
+                    {% for key, value in link.items() %}
+                    <li>{{ key }}: {{ value }} </li>
+                    {% endfor %}
+                    {% endfor %}
+                </ul>
+                {% if profile.file_upload %}
+                <p>Files: {{ profile.file_upload }}</p>
+                {% endif %}
             </div>
             {% if not loop.last %}
             <hr>

@@ -16,9 +16,6 @@ def home():
 
 
 
-
-
-
 # USER ACCOUNT VIEWS/ACTIONS
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -158,15 +155,15 @@ def logout():
 
 @app.route("/dashboard", methods=['GET', 'POST'])
 def dashboard():    
-    if 'username' in session:       
+    if 'username' in session:
         user_profile = mongo.db.profiles.find_one({'username': session['username']})
         user_projects = mongo.db.projects.find({'username': session['username']})
         profile_messages = mongo.db.profile_messages.find({'username': session['username']})
         project_messages = mongo.db.project_messages.find({'username': session['username']})            
         return render_template('pages/dashboard.html', 
                             title='Dashboard',            
-                            user_profile=user_profile, 
-                            user_projects=user_projects, 
+                            profile=user_profile, 
+                            projects=user_projects, 
                             profile_messages=profile_messages,
                             project_messages=project_messages)
         
@@ -278,6 +275,19 @@ def add_project():
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))        
             
+
+@app.route('/edit_project<project_id>')
+def edit_project(project_id):
+    pass
+
+@app.route('/update_project<project_id>')
+def update_project(project_id):
+    pass
+
+@app.route('/delete_project<project_id>')
+def delete_project(project_id):
+    pass
+
 @app.route('/add_piece/<title>', methods=['GET', 'POST'])
 def add_piece(title):
     if 'username' in session:
@@ -301,18 +311,13 @@ def add_piece(title):
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
 
-@app.route('/update_project<project_id>')
-def update_project(project_id):
-    pass
-
-@app.route('/delete_project<project_id>')
-def delete_project(project_id):
-    pass
-
 # PROFILE VIEWS
 
 @app.route("/profiles")
 def profiles():
+    '''Checked if is the user is logged in first and then render page.
+    '''
+    
     if 'username' in session:
         profiles = mongo.db.profiles.find()
         return render_template('pages/profiles.html', title='Profiles', profiles = profiles)
@@ -322,29 +327,69 @@ def profiles():
 
 @app.route('/add_profile', methods=['GET','POST'])
 def add_profile():
-    if 'username' in session:             
-        profile_form=ProfileForm()
+    '''Check if the user has an active session and an existing profile first and then render the form and add to database if validated.
+    '''
+    
+    if 'username' in session:
+        user = mongo.db.user.find_one({'username': session['username']})           
+        form=ProfileForm()
         list_form=ListForm(csrf_enabled=False)
         
         if request.method == 'POST':
-            if profile_form.validate_on_submit():
+            if form.validate_on_submit():                    
+                mongo.db.profiles.insert_one({'headline': form.headline.data,
+                                              'bio': form.bio.data,
+                                              'username': session['username'],
+                                              'date': datetime.utcnow(),
+                                              'xp': form.xp.data,
+                                              'interests': form.interests.data,
+                                              'user_id': user['_id']})
                 flash('Your profile has been created.', 'success')
-                return redirect('profiles')                      
-        return render_template('pages/addprofile.html', title='Post',
-                               profile_form=profile_form, list_form=list_form)
+                return redirect('profiles')
+            
+        elif request.method == 'GET':
+            pro = mongo.db.profiles.find_one({'user_id': user['_id']})
+            if pro:
+                flash('Sorry, only one profile per user permitted. Would you like to edit your existing profile?', 'info')
+                return redirect(url_for('dashboard'))
+            
+            return render_template('pages/addprofile.html', title='Post',
+                               form=form, list_form=list_form, legend='Create your profile')
+        
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
     
+@app.route('/edit_profile/<profile_id>')
+def edit_profile(profile_id):
+    profile = mongo.db.profiles.find_one_or_404(
+        {"_id": ObjectId(profile_id)})
+    form=ProfileForm()
+    form.headline.data = profile['headline']
+    form.bio.data = profile['bio']
+    form.xp.data = profile['xp']
+    form.interests.data = profile['interests']
+    return render_template('pages/editprofile.html', form=form, profile=profile, legend='Edit your Profile')
     
-@app.route('/update_profile', methods=['POST'])
-def update_profile():
-    mongo.db.profiles.find_one_and_update({'username': session['username']})
+@app.route('/update_profile/<profile_id>', methods=['POST'])
+def update_profile(profile_id):
+    profile = mongo.db.profiles
+    profile.find_one_and_update({'_id': ObjectId(profile_id)},
+                                {'$set': {'date': datetime.utcnow(),
+                                          'headline': request.form.get('headline'),
+                                          'bio': request.form.get('bio'),
+                                          'xp': request.form.get('xp'),
+                                          'interests': request.form.get('interests')}})
     return redirect(url_for('dashboard'))
 
-@app.route('/delete_profile', methods=['POST'])
-def delete_profile():
-    mongo.db.profiles.find_one_and_delete({'username': session['username']})
-    return redirect(url_for('dashboard'))    
+
+@app.route('/delete_profile/<profile_id>', methods=['POST'])
+def delete_profile(profile_id):
+    profile = mongo.db.profiles
+    profile.delete_one({'_id': ObjectId(profile_id)})
+    flash('Your profile has been deleted.', 'success')
+    return redirect(url_for('dashboard'))
+
+
 
 
 

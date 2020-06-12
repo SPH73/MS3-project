@@ -4,8 +4,8 @@
 <div class="container mt-5">
     <section class="section-content neu">
         <legend class="text-center border-bottom mb-4">{{ legend }}</legend>
-        <form action="{{ url_for('add_profile') }}" method="post" novalidate>
-            {{ profile_form.hidden_tag() }}
+        <form action="{{ url_for('update_profile', profile_id=profile._id) }}" method="post" novalidate>
+            {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <div class="form-group">
                     {{ form.headline.label(class="form-control-label") }}
@@ -25,7 +25,7 @@
                     {% if form.bio.errors %}
                     {{ form.bio(class="form-control form-control-md is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in profile_form.bio.errors %}
+                        {% for error in form.bio.errors %}
                         <span>{{ error }}</span>
                         {% endfor %}
                     </div>
@@ -38,7 +38,7 @@
                     {% if form.xp.errors %}
                     {{ form.xp(class="form-control form-control-md is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in profile_form.xp.errors %}
+                        {% for error in form.xp.errors %}
                         <span>{{ error }}</span>
                         {% endfor %}
                     </div>
@@ -61,7 +61,7 @@
                 </div>
             </fieldset>
             <div class="form-group">
-                {{ profile_form.submit(class="btn btn-outline-primary btn-sm") }}
+                {{ form.submit(class="btn btn-outline-primary btn-sm") }}
             </div>
         </form>
     </section>
@@ -69,5 +69,4 @@
 
 {{ ckeditor.load() }}
 {{ ckeditor.config(name='bio') }}
-
 {% endblock %}
