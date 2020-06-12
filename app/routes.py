@@ -20,7 +20,7 @@ def home():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    '''First check if user has an active session, if not, check if the email address exists, if not and username isn't taken then create user.
+    '''Checks if user has an active session, if not, checks if the email address exists, if not and username isn't taken then creates user.
     '''
     
     if 'username' in session:    
@@ -58,7 +58,7 @@ def register():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    '''First check if user has an active session, if not, check the users credentials are correct, if so log them in and add the username to the session.
+    '''First checks if user has an active session, if not, checks the users credentials are correct, if so logs them in and adds the username to the session.
     '''
     
     if 'username' in session:
@@ -80,7 +80,7 @@ def login():
 
 @app.route("/forgot_password", methods=['GET', 'POST'])
 def forgot_password():
-    '''First check if user has an active session, if not, check if the email address exists and then redirect to reset password.
+    '''First checks if user has an active session, if not, checks if the email address exists and then redirects to reset password.
     '''
     
     if 'username' in session:    
@@ -105,7 +105,7 @@ def forgot_password():
 
 @app.route("/reset_password", methods=['GET', 'POST'])
 def reset_password():
-    '''First check if passphrase and username are correct then update password.
+    '''First checks if passphrase and username are correct then updates new password in database.
     '''   
           
     form = ResetPasswordForm()
@@ -126,7 +126,7 @@ def reset_password():
 
 @app.route("/update_password", methods=['GET', 'POST'])
 def update_password():
-    '''First check if current password is correct then update password.
+    '''First checks if the users current password is correct then updates the password in the database.
     '''   
     
     form = PasswordForm()
@@ -147,14 +147,19 @@ def update_password():
 
 @app.route('/logout')
 def logout():
-       # remove the username from the session if it is there
-   session.pop('username', None)
-   flash('You have logged out.', 'success')
-   return redirect(url_for('home'))
+    '''Removes the username from the session.
+    '''
+    
+    session.pop('username', None)
+    flash('You have logged out.', 'success')
+    return redirect(url_for('home'))
     
 
 @app.route("/dashboard", methods=['GET', 'POST'])
-def dashboard():    
+def dashboard():
+    '''First checks the user is logged in then renders the users content to the dashboard template.
+    '''
+    
     if 'username' in session:
         user_profile = mongo.db.profiles.find_one({'username': session['username']})
         user_projects = mongo.db.projects.find({'username': session['username']})
@@ -174,7 +179,7 @@ def dashboard():
 
 @app.route("/blog")
 def blog():
-    '''Retrieve all the documents from the articles collection and dislpay them in order of newest to oldest.
+    '''Retrieves all the documents from the articles collection and dislpay them in order of newest to oldest.
     '''
     
     articles = mongo.db.articles.find().sort('date',pymongo.DESCENDING)
@@ -183,12 +188,11 @@ def blog():
 
 @app.route("/add_article", methods=['GET','POST'])
 def add_article():
-    '''If a user is logged in render the form to add a blog article. If the form is validated, retrieve the users id and add it to the articles collection.
+    '''Checks if the user is logged in then renders the form to add a blog article. If the form validates, retrieves the users id and includes it with the form data to the articles collection.
     '''
     
     if 'username' in session:           
-        form=BlogForm()
-        
+        form=BlogForm()        
         if request.method == 'POST':
             if form.validate_on_submit():
                 user = mongo.db.user.find_one({'username': session['username']})    
@@ -211,25 +215,35 @@ def add_article():
 
 @app.route('/edit_article/<article_id>')
 def edit_article(article_id):
-    article = mongo.db.articles.find_one_or_404(
-        {"_id": ObjectId(article_id)})
-    form=BlogForm()
-    form.title.data = article['title']
-    form.content.data = article['content']
-    return render_template('pages/editarticle.html', form=form, article=article, legend='Edit your Blog Article')
+    '''First checks that the user is logged in then renders the form with the data from the collection document. (Edit button only appears if there is a match with the user id in the database for the particular document id).
+    '''
+    
+    if 'username' in session: 
+        article = mongo.db.articles.find_one_or_404(
+            {"_id": ObjectId(article_id)})
+        form=BlogForm()
+        form.title.data = article['title']
+        form.content.data = article['content']
+        return render_template('pages/editarticle.html', form=form, article=article, legend='Edit your Blog Article')
 
 @app.route('/update_article/<article_id>', methods=['POST'])
 def update_article(article_id):
+    '''When the user submits the edited content, the document in the collection is updated with the changes and redirects the user to the blog page.
+    '''
+    
     article = mongo.db.articles
-    article.find_one_and_update({'_id': ObjectId(article_id), 
-                    },{'$set':
-                    {'title': request.form.get('title'),
-                    'content': request.form.get('content')}})
+    article.find_one_and_update({'_id': ObjectId(article_id) },
+                                {'$set':
+                                    {'title': request.form.get('title'),
+                                     'content': request.form.get('content')}})
     return redirect(url_for('blog'))
     
 
 @app.route('/delete_article/<article_id>', methods=['POST'])
 def delete_article(article_id):
+    '''If the user is logged in and the user id is located in the document then the document to removed from the collection. (Client-side confirmation is passed before the user reaches this view function.)
+    '''
+    
     article = mongo.db.articles
     article.delete_one({'_id': ObjectId(article_id)})
     flash('Your blog article has been deleted.', 'success')
@@ -239,7 +253,7 @@ def delete_article(article_id):
 
 @app.route("/projects")
 def projects():
-    '''First check that the user is logged in, then display all the projects in the database sorted by the newest first.
+    '''First check that the user is logged in, then display all the projects in the database sorted by newest first.
     '''
     
     if 'username' in session:
@@ -252,7 +266,10 @@ def projects():
 
                  
 @app.route("/add_project", methods=['GET','POST'])
-def add_project():    
+def add_project():
+    '''First checks that the user is logged in before rendering the form. When the form is validated, the users user_id is retireved and add with the form content with the current date and time to the collection.
+    '''
+    
     if 'username' in session:        
         form=ProjectForm()
         
@@ -327,7 +344,7 @@ def profiles():
 
 @app.route('/add_profile', methods=['GET','POST'])
 def add_profile():
-    '''Check if the user has an active session and an existing profile first and then render the form and add to database if validated.
+    '''Checks if the user has an active session and an exisiting profile for the user doesn't exist before renders the form. When the form is validated first retrieves the user_id to include it with the form data to the database collection with the current date and time.
     '''
     
     if 'username' in session:
@@ -361,6 +378,9 @@ def add_profile():
     
 @app.route('/edit_profile/<profile_id>')
 def edit_profile(profile_id):
+    '''If the user is logged in and the user_id matches with the document, the form is rendered with the existing values. 
+    '''
+    
     profile = mongo.db.profiles.find_one_or_404(
         {"_id": ObjectId(profile_id)})
     form=ProfileForm()
@@ -372,6 +392,9 @@ def edit_profile(profile_id):
     
 @app.route('/update_profile/<profile_id>', methods=['POST'])
 def update_profile(profile_id):
+    '''When the form is submitted, the collection is updated with the changes and the current date and time.
+    '''
+    
     profile = mongo.db.profiles
     profile.find_one_and_update({'_id': ObjectId(profile_id)},
                                 {'$set': {'date': datetime.utcnow(),
@@ -384,6 +407,9 @@ def update_profile(profile_id):
 
 @app.route('/delete_profile/<profile_id>', methods=['POST'])
 def delete_profile(profile_id):
+    '''If the user is logged in and their id matches the document, the document is removed from the database collection. (Client-side validation passed before the user reaches the view function.)
+    '''
+    
     profile = mongo.db.profiles
     profile.delete_one({'_id': ObjectId(profile_id)})
     flash('Your profile has been deleted.', 'success')
