@@ -241,7 +241,7 @@ def update_article(article_id):
 
 @app.route('/delete_article/<article_id>', methods=['POST'])
 def delete_article(article_id):
-    '''If the user is logged in and the user id is located in the document then the document to removed from the collection. (Client-side confirmation is passed before the user reaches this view function.)
+    '''If the user is logged in and the user id is located in the document then the document is removed from the collection. (Client-side confirmation is passed before the user reaches this view function.)
     '''
     
     article = mongo.db.articles
@@ -295,15 +295,42 @@ def add_project():
 
 @app.route('/edit_project<project_id>')
 def edit_project(project_id):
-    pass
+    '''First checks that the user is logged in then renders the form with the data from the collection document. (Edit button only appears if there is a match with the user id in the database for the particular document id and the users session data).
+    '''
+    
+    if 'username' in session: 
+        project = mongo.db.projects.find_one_or_404(
+            {"_id": ObjectId(project_id)})
+        form=ProjectForm()
+        form.title.data = project['title']
+        form.status.data = project['status']
+        form.deadline.data = project['deadline']
+        form.brief.data = project['brief']
+        return render_template('pages/editproject.html', form=form, project=project, legend='Edit your project')
 
 @app.route('/update_project<project_id>')
 def update_project(project_id):
-    pass
+    '''When the user submits the edited content, the document in the collection is updated with the changes and redirects the user to the projects page.
+    '''
+    
+    project = mongo.db.projects
+    project.find_one_and_update({'_id': ObjectId(project_id) },
+                                {'$set':
+                                    {'title': request.form.get('title'),
+                                     'status': request.form.get('status'),
+                                     'deadline': request.form.get('deadline'),
+                                     'brief': request.form.get('brief')}})
+    return redirect(url_for('projects'))
 
 @app.route('/delete_project<project_id>')
 def delete_project(project_id):
-    pass
+    '''If the user is logged in and the user id is located in the document then the document is removed from the collection. (Client-side confirmation is passed before the user reaches this view function.)
+    '''
+    
+    project = mongo.db.projects
+    project.delete_one({'_id': ObjectId(project_id)})
+    flash('Your project has been deleted.', 'success')
+    return redirect(url_for('projects'))
 
 @app.route('/add_piece/<title>', methods=['GET', 'POST'])
 def add_piece(title):

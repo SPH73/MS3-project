@@ -7,9 +7,9 @@
         <div class="accordion">
             {% for project in projects %}
             <div id="project-accordion" class="accordion-label"><span class="title">
-                    {{ project.title }}</span><br><small>Owner:
-                    {{ project.owner }} - Project manager:
-                    {{ project.user_id }} - Post date: {{ project.date.strftime('%B %d, %Y') }}</small>
+                    {{ project.title }}</span><br>
+                <small>Project manager: {{ project.user_id }} - Post date:
+                    {{ project.date.strftime('%B %d, %Y') }}</small>
             </div>
             <div class="accordion-content">
                 {% if project.user_id == session['username'] %}
@@ -31,12 +31,12 @@
                                 <p>This process is immediate and cannot be undone. Are you sure?</p>
                                 <!-- Button to confirm delete article -->
                                 <form action="{{ url_for('delete_project', project_id=project._id) }}" method="post">
-                                    <input id="delete-project-btn" class="btn btn-outline-success" type="submit"
+                                    <input id="delete-project-btn" class="btn btn-outline-success btn-sm" type="submit"
                                         value="Confirm Delete">
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger"
+                                <button type="button" class="btn btn-outline-danger btn-sm"
                                     data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
@@ -57,8 +57,7 @@
                     {% else %}
                     No File uploads for this project.</p>
                 {% endif %}
-                <p>Project Description: <br>
-                    {{ project.brief|safe }}</p>
+                <p>Project Description: {{ project.brief|safe }}</p>
             </div>
             {% if not loop.last %}
             <hr>
