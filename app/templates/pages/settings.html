@@ -51,12 +51,11 @@
             </fieldset>
             <div class="form-group">
                 {{ form.recaptcha }}
-                {{ form.submit(class="btn btn-outline-primary btn-sm") }}
+                {{ form.submit(class="btn btn-outline-primary btn-sm mt-2") }}
+                <a type="button" class="btn btn-outline-danger btn-sm mt-2" id="cancel-password"
+                    href="{{ url_for('dashboard') }}">Cancel</a>
             </div>
-
         </form>
-        <a type="button" class="btn btn-outline-danger btn-sm" id="cancel-password"
-            href="{{ url_for('dashboard') }}">Cancel</a>
     </section>
 </div>
 
