@@ -8,11 +8,11 @@
             {% for project in projects %}
             <div id="project-accordion" class="accordion-label"><span class="title">
                     {{ project.title }}</span><br>
-                <small>Project manager: {{ project.user_id }} - Post date:
-                    {{ project.date.strftime('%B %d, %Y') }}</small>
+                <small>{{ project.username }} - Post date:
+                    {{ project.date.strftime('%d %B, %Y') }}</small>
             </div>
             <div class="accordion-content">
-                {% if project.user_id == session['username'] %}
+                {% if project.username == session['username'] %}
                 <a href="{{ url_for('edit_project', project_id=project._id) }}" id="project-btn-edit" type="button"
                     class="btn btn-outline-primary btn-sm mb-1">Edit</a>
                 <button class="btn btn-outline-danger btn-sm mb-1" type="button" id="delete-project-modal"
@@ -49,7 +49,7 @@
 
                 <p>Current Status: {{ project.status }}
                 </p>
-                <p>Project deadline: {{ project.deadline }}
+                <p>Project deadline: {{ project.deadline.strftime('%d %B, %Y') }}
                 </p>
                 <p>Project files:
                     {% if project.file_upload %}
@@ -57,7 +57,8 @@
                     {% else %}
                     No File uploads for this project.</p>
                 {% endif %}
-                <p>Project Description: {{ project.brief|safe }}</p>
+                <p>Project Description: {{ project.brief|safe }}
+                </p>
             </div>
             {% if not loop.last %}
             <hr>

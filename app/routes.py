@@ -183,6 +183,7 @@ def blog():
     '''
     
     articles = mongo.db.articles.find().sort('date',pymongo.DESCENDING)
+                     
     return render_template('pages/blog.html', title='Blog', articles=articles)
 
 
@@ -276,16 +277,16 @@ def add_project():
         if request.method == 'POST':
             if form.validate_on_submit():
                 user = mongo.db.user.find_one({'username': session['username']})
-                project = mongo.db.projects.insert_one({'username': session['username'],
+                mongo.db.projects.insert_one({'username': session['username'],
                                     'date': datetime.utcnow(),
                                     'title': form.title.data,
-                                    'deadline': form.deadline.data,
+                                    'deadline': datetime.strptime(form.deadline.data, "%m/%d/%Y"),
                                     'brief': form.brief.data,
                                     'status': form.status.data,
-                                    'user_id': user._id})
-                project_id = project.inserted_id
+                                    'user_id': user['_id']})
+                
                 flash('Your project has been created.', 'success')
-                return redirect(url_for('projects'), project_id)
+                return redirect(url_for('projects'))
             
         return render_template('pages/addproject.html', title='New Project',  form=form)
         
@@ -308,17 +309,17 @@ def edit_project(project_id):
         form.brief.data = project['brief']
         return render_template('pages/editproject.html', form=form, project=project, legend='Edit your project')
 
-@app.route('/update_project<project_id>')
+@app.route('/update_project<project_id>', methods=['POST'])
 def update_project(project_id):
     '''When the user submits the edited content, the document in the collection is updated with the changes and redirects the user to the projects page.
     '''
-    
+
     project = mongo.db.projects
     project.find_one_and_update({'_id': ObjectId(project_id) },
                                 {'$set':
                                     {'title': request.form.get('title'),
                                      'status': request.form.get('status'),
-                                     'deadline': request.form.get('deadline'),
+                                     'deadline': datetime.strptime(request.form.get('deadline'), "%m/%d/%Y"),
                                      'brief': request.form.get('brief')}})
     return redirect(url_for('projects'))
 
