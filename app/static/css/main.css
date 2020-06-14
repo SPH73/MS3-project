@@ -155,3 +155,8 @@ th {
   width: 7em;
 
 }
+
+/* hidden form for blog/profile/project comments/messages */
+.hidden {
+  display: none;
+}

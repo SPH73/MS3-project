@@ -47,6 +47,39 @@
                     {% endif %}
                 </div>
                 <div>{{ article.content|safe }}</div>
+                <div>
+                    <div>
+                        <button class="comment-btn btn btn-outline-secondary btn-sm mb-1" type="button">Comment</button>
+                        <form action="{{ url_for('add_comment') }}" method="post" class="comment-form hidden">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input class="form-control form-control-sm" type="text" id="username"
+                                    aria-describedby="usernameHelpInline">
+                                <small id="usernameHelpInline" class="text-muted">
+                                    You need to be logged in to comment.
+                                </small>
+                                <div class="form-group">
+                                    <label for="textarea">Comment</label>
+                                    <textarea class="form-control" id="textarea" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-1">Post
+                                    comment</button>
+                        </form>
+                    </div>
+                    <div>
+                        {% if article.comments %}
+                        <hr>
+                        <ul>Comments:
+                            {% for comment in article.comments %}
+                            <li>{{ comment }} </li>
+                            {% endfor %}
+                        </ul>
+                        {% if not loop.last %}
+                        <hr>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
             </div>
             {% if not loop.last %}
             <hr>

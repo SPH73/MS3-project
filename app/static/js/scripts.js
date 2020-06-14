@@ -21,9 +21,14 @@ for (i = 0; i < coll.length; i++) {
 let today = new Date();
 $('#deadline').datepicker({
     minDate: today,
-    dateFormate: 'mm dd, yyyy',
+    dateFormate: "dd-mm-yy",
     changeYear: true,
     changeMonth: true,
     showWeek: true,
     showOtherMonths: true
+});
+
+// toggle blog comment form
+$(".comment-btn").click(function () {
+    $('.comment-form').toggleClass("hidden");
 });
