@@ -250,6 +250,34 @@ def delete_article(article_id):
     flash('Your blog article has been deleted.', 'success')
     return redirect(url_for('blog'))
 
+@app.route('/add_comment/<article_id>', methods=['GET', 'POST'])
+def add_comment(article_id):
+    '''If a user is logged in, adds a comment in the article collection comments array and creates a reference document in the comments collection for user dashboards.
+    '''
+
+    article = mongo.db.articles
+    if 'username' in session:
+        if request.method == 'POST':
+            comment = mongo.db.article_comments
+            user = mongo.db.user.find_one({'username': session['username']})
+            article.find_one_and_update({'_id': ObjectId(article_id) },{
+                '$push':{'comments':{'username': session['username'],
+                                      'date': datetime.utcnow(),
+                                      'text': request.form.get('comment')}}})
+            comment.insert_one({'user': user['_id'],
+                                'from_user': session['username'],
+                                'article': article['_id'],
+                                'article_title': article['title'],
+                                'date': datetime.utcnow(),
+                                'to_user': article['username'],
+                                'text': request.form.get('comment')})
+            flash('Your comment has been added.', 'success')
+        return render_template('pages/blog.html')
+    flash('Please login to post a comment.', 'info')
+    return redirect(url_for('login'))
+
+
+
 # PROJECT VIEWS
 
 @app.route("/projects")
@@ -280,7 +308,7 @@ def add_project():
                 mongo.db.projects.insert_one({'username': session['username'],
                                     'date': datetime.utcnow(),
                                     'title': form.title.data,
-                                    'deadline': datetime.strptime(form.deadline.data, "%m/%d/%Y"),
+                                    'deadline': datetime.strptime(form.deadline.data, "%d/%m/%Y"),
                                     'brief': form.brief.data,
                                     'status': form.status.data,
                                     'user_id': user['_id']})
@@ -323,7 +351,7 @@ def update_project(project_id):
                                      'brief': request.form.get('brief')}})
     return redirect(url_for('projects'))
 
-@app.route('/delete_project<project_id>')
+@app.route('/delete_project<project_id>', methods=['POST'])
 def delete_project(project_id):
     '''If the user is logged in and the user id is located in the document then the document is removed from the collection. (Client-side confirmation is passed before the user reaches this view function.)
     '''

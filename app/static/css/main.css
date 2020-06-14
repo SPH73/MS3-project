@@ -60,7 +60,7 @@ body {
   background-color: #eaeaea;
 }
 
-/* SECTION STYLING */
+/* SECTION-CONTENT STYLING */
 
 /* button styling */
 .btn-outline-primary {
@@ -87,7 +87,6 @@ label {
   margin-bottom: 20px;
   margin-top: 30px;
 }
-
 
 
 /* accordion styling for retrieved database content */
@@ -156,7 +155,19 @@ th {
 
 }
 
-/* hidden form for blog/profile/project comments/messages */
-.hidden {
-  display: none;
+/* slide-in form for blog/profile/project comments/messages */
+.form-box {
+  position: fixed;
+  top: 12%;
+  left: -100%;
+
+  height: auto;
+  margin-top: 20px;
+  transition: 0.4s ease all;
+  background-color: #eaeaea;
+  z-index: 10;
+}
+
+.show {
+  left: 13%;
 }

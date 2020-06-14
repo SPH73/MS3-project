@@ -21,7 +21,6 @@ for (i = 0; i < coll.length; i++) {
 let today = new Date();
 $('#deadline').datepicker({
     minDate: today,
-    dateFormate: "dd-mm-yy",
     changeYear: true,
     changeMonth: true,
     showWeek: true,
@@ -29,6 +28,10 @@ $('#deadline').datepicker({
 });
 
 // toggle blog comment form
-$(".comment-btn").click(function () {
-    $('.comment-form').toggleClass("hidden");
-});
+
+$('.comment-btn').on('click', function () {
+    $('.form-box').toggleClass('show');
+})
+$('.close-btn').on('click', function () {
+    $('.form-box').toggleClass('show');
+})
