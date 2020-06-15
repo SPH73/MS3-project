@@ -3,13 +3,13 @@
 
 <div class="container mt-5">
     <section class="section-content">
-        <legend class="text-center border-bottom mb-4">Read The Lastest Content</legend>
+        <legend class="text-center border-bottom mb-4">{{ legend }}</legend>
         <div class="accordion">
             {% for article in articles %}
             <div id="blog-accordion" class="accordion-label"><span class="title">
                     {{ article.title }}
-                </span><br><small>By
-                    {{ article.author }} on {{ article.date.strftime('%d, %B %Y') }}</small>
+                </span><br><span class="secondary-title">By
+                    {{ article.author }} on {{ article.date.strftime('%d, %B %Y') }}</span>
             </div>
             <div class="accordion-content">
                 <div>
@@ -49,7 +49,7 @@
                 <div>{{ article.content|safe }}</div>
                 <div>
                     <div>
-                        <button class="comment-btn btn btn-outline-secondary btn-sm mb-1" type="button">Comment</button>
+                        <a href="#" class="comment-btn btn btn-outline-secondary btn-sm mb-1" type="button">Comment</a>
                         <div class="form-box">
                             <div class="form-group">
                                 <div class="close-btn btn btn-outline-danger btn-sm mb-2">Close</div>

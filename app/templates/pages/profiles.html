@@ -8,7 +8,8 @@
             {% for profile in profiles %}
             <div id="project-accordion" class="accordion-label"><span class="title text-center">
                     {{ profile.headline.title() }}</span><br>
-                <small>{{ profile.username }} - Last updated: {{ profile.date.strftime('%B %d, %Y') }}</small>
+                <span class="secondary-title">{{ profile.username }} - Last updated:
+                    {{ profile.date.strftime('%d %B, %Y') }}</span>
             </div>
             <div class="accordion-content">
                 {% if profile.user_id == session['username'] %}
@@ -42,8 +43,8 @@
                     </div>
                 </div>
                 {% else %}
-                <a href="#" id="profile-btn-message" type="button"
-                    class="btn btn-outline-primary btn-sm mt-1 mb-1">Message</a>
+                <button id="profile-message-btn" class="btn btn-outline-primary btn-sm mt-1 mb-1">Message</button>
+
                 {% endif %}
                 <p>Bio: - {{ profile.bio|safe }}</p>
                 <ul>I have experience with the following:
@@ -82,3 +83,9 @@
 </div>
 
 {% endblock content %}
+
+<script>
+    $("#profile-message-btn").click(function () {
+        $("#message-form").toggle();
+    });
+</script>
