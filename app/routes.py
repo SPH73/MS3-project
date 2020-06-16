@@ -7,13 +7,11 @@ from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, Profil
 import bcrypt
 
 
-
 @app.route("/")
 @app.route("/home")
 def home():
    
     return render_template('pages/home.html')
-
 
 
 # USER ACCOUNT VIEWS/ACTIONS
@@ -160,19 +158,21 @@ def dashboard():
     """
     
     if 'username' in session:
-        user_profile = mongo.db.profiles.find_one({'username': session['username']})
-        user_projects = mongo.db.projects.find({'username': session['username']})
-        profile_messages = mongo.db.profile_messages.find({'username': session['username']})
-        project_messages = mongo.db.project_messages.find({'username': session['username']})            
+        user = mongo.db.user.find_one({'username': session['username']})
+        
+        profile = mongo.db.profiles.find_one({'user_id': user['_id']})
+        projects = mongo.db.projects.find({'user_id': user['_id']})
+
         return render_template('pages/dashboard.html', 
-                            title='Dashboard',            
-                            profile=user_profile, 
-                            projects=user_projects, 
-                            profile_messages=profile_messages,
-                            project_messages=project_messages)
+                                title='Dashboard',     
+                                profile=profile,
+                                projects=projects
+                            
+)
         
     flash('You need to be logged in to access your dashboard.', 'warning')
     return redirect(url_for('login'))
+
 
 # BLOG ARTICLE VIEWS
 
@@ -273,7 +273,6 @@ def add_comment(article_id):
         return render_template('pages/blog.html')
     flash('Please login to post a comment.', 'info')
     return redirect(url_for('login'))
-
 
 
 # PROJECT VIEWS
