@@ -314,7 +314,7 @@ def add_project():
                 flash('Your project has been created.', 'success')
                 return redirect(url_for('projects'))
             
-        return render_template('pages/addproject.html', title='New Project',  form=form)
+        return render_template('pages/addproject.html', title='New Project',  form=form, legend="Add a project")
         
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))        
@@ -424,7 +424,7 @@ def add_profile():
         elif request.method == 'GET':
             pro = mongo.db.profiles.find_one({'user_id': user['_id']})
             if pro:
-                flash('Sorry, only one profile per user permitted. Would you like to edit your existing profile?', 'info')
+                flash('Sorry, only one profile per user permitted. You can edit your profile here.', 'info')
                 return redirect(url_for('dashboard'))
             
             return render_template('pages/addprofile.html', title='Post',
