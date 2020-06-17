@@ -76,6 +76,13 @@ a:not([href]):hover {
   border-color: rgba(0, 0, 0, .15) rgba(0, 0, 0, .15) rgba(0, 0, 0, .15);
 }
 
+.nav-tabs .nav-link:active {
+  color: #5d5d5c;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, .15);
+  border-color: rgba(0, 0, 0, .15) rgba(0, 0, 0, .15) rgba(0, 0, 0, .15);
+}
+
 .navbar {
   /* maybe add border-bottom */
   background-color: #c3c3c3;
@@ -131,6 +138,12 @@ button:focus {
 
 .dropdown:hover>.dropdown-menu {
   display: block;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  color: #089b93;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 :focus {
