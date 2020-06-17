@@ -21,17 +21,16 @@
                 </div>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
-                    <l1 class="nav-item dropdown " data-toggle="tooltip" title="Hover to view, click to select.">
+                    <a class="nav-item nav-link" href="{{ url_for('dashboard')}}">Dashboard</a>
+                    <li class="nav-item dropdown " data-toggle="tooltip" title="Hover to view, click to select.">
                         <a class="nav-link dropdown-toggle mr-4" id="navbardrop" data-toggle="dropdown">
-                            Post
-                        </a>
+                            Post</a>
                         <div class="dropdown-menu" aria-labelledby="navbardrop">
                             <a class="dropdown-item" href="{{ url_for('add_article') }}">New Blog Article</a>
                             <a class="dropdown-item" href="{{ url_for('add_project') }}">New Project</a>
                             <a class="dropdown-item" href="{{ url_for('add_profile') }}">Create Profile</a>
                         </div>
-                    </l1>
-                    <a class="nav-item nav-link" href="{{ url_for('dashboard')}}">Dashboard</a>
+                    </li>
                     <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
                     <div id="div-profile-image"><a class="navbar-brand ml-4" href=""><img
                                 src="{{ url_for('static', filename='images/gear-avatar.png') }}"

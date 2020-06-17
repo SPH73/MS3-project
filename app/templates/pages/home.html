@@ -3,9 +3,62 @@
 
 
 <div class="container mt-3">
-    
+    <!-- <div class="nav nav-tabs justify-content-center">
+        <a class="nav-item nav-link" data-toggle="tab" href="">Articles</a>
+        <l1 class="nav-item dropdown" data-toggle="tooltip" title="Hover to view, click to select.">
+            <a class="nav-link dropdown-toggle mr-4" id="dashnavproj" data-toggle="dropdown">
+                Projects
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dashnavproj">
+                <a class="dropdown-item" data-toggle="tab" href="#projects">My Projects</a>
+                <a class="dropdown-item" href="{{ url_for('add_project')}}">Add Project</a>
+                <a class="dropdown-item" data-toggle="tab" href="#projectmessages">Messages</a>
+                <a class="dropdown-item" data-toggle="tab" href="#pieces">My Pieces</a>
+
+            </div>
+        </l1>
+        <l1 class="nav-item dropdown" data-toggle="tooltip" title="Hover to view, click to select.">
+            <a class="nav-link dropdown-toggle mr-4" id="dashnavprof" data-toggle="dropdown">
+                Profile
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dashnavprof">
+                <a class="dropdown-item" data-toggle="tab" href="#profile">My Profile</a>
+                <a class="dropdown-item" data-toggle="tab" href="#profilemessages">Messages</a>
+                <a class="dropdown-item" href="{{ url_for('edit_profile', profile_id=profile._id) }}">Update
+                    Profile</a>
+                <a class="dropdown-item" href="{{ url_for('add_profile')}}">Create Profile</a>
+                <a class="dropdown-item" id="delete-profile-modal" data-toggle="modal"
+                    data-target="#deleteProfile">Delete
+                    Profile</a>
+
+            </div>
+        </l1>
+        <a class="nav-item nav-link" href="">Password</a>
+    </div> -->
 
 
-</div>
 
-{% endblock content %}
+    <div class="nav nav-tabs justify-content-center">
+        <a class="nav-item nav-link" data-toggle="tab" href="#articles">Blog Articles</a>
+        <li class="nav-item">
+            <a href="#profile" class="nav-link" data-toggle="tab">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a href="#profilemessages" class="nav-link" data-toggle="tab">Messages</a>
+        </li>
+        </<div>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="articles">
+                <p>Article tab content ...</p>
+            </div>
+            <div class="tab-pane fade" id="profile">
+                <p>Profile tab content ...</p>
+            </div>
+            <div class="tab-pane fade" id="profilemessages">
+                <p>Profile Messages tab content ...</p>
+            </div>
+        </div>
+    </div>
+
+
+    {% endblock content %}

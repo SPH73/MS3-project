@@ -3,7 +3,7 @@
 
 <div class="container mt-3">
     <section class="section-content neu">
-        <legend class="text-center border-bottom mb-4">{{ legend }}</legend>
+        <legend class="text-center legend-border mb-4">{{ legend }}</legend>
         <div class="post-content mt-0">
             <form action="{{ url_for('add_article') }}" method="post" novalidate>
                 {{ article_form.hidden_tag() }}

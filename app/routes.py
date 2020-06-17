@@ -22,7 +22,8 @@ def register():
     """
     
     if 'username' in session:    
-        flash('You are already registered and logged in. Did you mean to go to your dashboard instead?', 'info')
+        flash('You are already registered and logged in. Did you mean to go to your dashboard instead?', 'info'
+    )
         return redirect(url_for('dashboard'))
         
     form = RegistrationForm()
@@ -41,18 +42,25 @@ def register():
                     user.insert({'username': form.username.data, 
                              'email': form.email.data,
                              'passphrase': h_phrase, 
-                             'hashed_password': hashed_pw})                
-                    flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your dashboard!',
-                          'success')
+                             'hashed_password': hashed_pw
+                    })
+                    
+                    flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your dashboard!','success')
                     return redirect(url_for('login'))
                 
                 flash('Sorry, that username is not available, please try another.', 'info')
-                return render_template('pages/register.html', title='Register', form=form)            
+                return render_template('pages/register.html',
+                                       title='Register', 
+                                       form=form
+                )            
                         
             flash('That email is already registered. Please login.', 'info')
             return redirect(url_for('login'))
         
-    return render_template('pages/register.html', title='Register', form=form)
+    return render_template('pages/register.html', 
+                           title='Register', 
+                           form=form
+    )
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -64,6 +72,7 @@ def login():
         return redirect(url_for('dashboard'))
         
     form = LoginForm()
+    
     if request.method == 'POST':
         if form.validate_on_submit():
             user = mongo.db.user.find_one({'username':form.username.data})
@@ -72,6 +81,7 @@ def login():
                 current_user = session['username']
                 flash(f'Welcome back, {current_user}!', 'success')
                 return redirect(url_for('dashboard'))
+            
             flash('Please check login details.', 'danger')
        
     return render_template('pages/login.html', title='Login', form=form)
@@ -96,7 +106,10 @@ def forgot_password():
                 return redirect(url_for('reset_password'))                        
                 
             flash('Email address not found!', 'danger')
-            return render_template('pages/forgot.html', title='Forgot Password', form=form)
+            return render_template('pages/forgot.html', 
+                                   title='Forgot Password', 
+                                   form=form
+            )
                 
     return render_template('pages/forgot.html', title='Forgot Password', form=form)
 
@@ -115,8 +128,8 @@ def reset_password():
             if user and bcrypt.checkpw(request.form['passphrase'].encode('utf-8'), user['passphrase']):
                 mongo.db.user.find_one_and_update({'username': form.username.data}, {'$set':{'hashed_password':hashed_pw}})
                 
-                flash(f'Password reset was successful, {form.username.data}, you can now login.',
-                          'success')
+                flash(f'Password reset was successful, {form.username.data}, pleaselogin again with your new password.','success'
+            )
                 return redirect(url_for('login'))
             
     return render_template('pages/reset.html', title='Forgot Password', form=form)
@@ -136,11 +149,13 @@ def update_password():
             if bcrypt.checkpw(request.form['password'].encode('utf-8'), user['hashed_password']):
                 mongo.db.user.find_one_and_update({'username': session['username']}, {'$set':{'hashed_password':hashed_pw}})
                 
-                flash(f'Password reset was successful, please login again.',
-                          'success')
+                flash(f'Password reset was successful, please login again.','success')
                 return redirect(url_for('login'))
             
-    return render_template('pages/settings.html', title='Password', form=form)
+    return render_template('pages/settings.html', 
+                           title='Password', 
+                           form=form
+    )
 
 @app.route('/logout')
 def logout():
@@ -159,16 +174,16 @@ def dashboard():
     
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
-        
+        articles = mongo.db.articles.find({'user_id': user['_id']})
         profile = mongo.db.profiles.find_one({'user_id': user['_id']})
         projects = mongo.db.projects.find({'user_id': user['_id']})
 
         return render_template('pages/dashboard.html', 
-                                title='Dashboard',     
+                                title='Dashboard',
+                                articles=articles,
                                 profile=profile,
                                 projects=projects
-                            
-)
+        )
         
     flash('You need to be logged in to access your dashboard.', 'warning')
     return redirect(url_for('login'))
@@ -183,7 +198,11 @@ def blog():
     
     articles = mongo.db.articles.find().sort('date',pymongo.DESCENDING)
                      
-    return render_template('pages/blog.html', title='Blog', articles=articles, legend='Read the latest articles')
+    return render_template('pages/blog.html',
+                           title='Blog', 
+                           articles=articles, 
+                           legend='Read the latest articles'
+    )
 
 
 @app.route('/add_article', methods=['GET','POST'])
@@ -200,7 +219,8 @@ def add_article():
                                 'content': form.content.data,
                                 'author': session['username'],
                                 'date': datetime.utcnow(),
-                                'user_id': user['_id']})
+                                'user_id': user['_id']
+                })
                  
                 flash('Your blog post has been created!', 'success')
                 return redirect(url_for('blog'))
@@ -222,7 +242,11 @@ def edit_article(article_id):
         form=BlogForm()
         form.title.data = article['title']
         form.content.data = article['content']
-        return render_template('pages/editarticle.html', form=form, article=article, legend='Edit your Blog Article')
+        return render_template('pages/editarticle.html',
+                               form=form, 
+                               article=article, 
+                               legend='Edit your Blog Article'
+    )
 
 @app.route('/update_article/<article_id>', methods=['POST'])
 def update_article(article_id):
@@ -233,7 +257,9 @@ def update_article(article_id):
     article.find_one_and_update({'_id': ObjectId(article_id) },
                                 {'$set':
                                     {'title': request.form.get('title'),
-                                     'content': request.form.get('content')}})
+                                     'content': request.form.get('content')
+                                    }
+                                })
     flash('Your post has been updated.' 'success')
     return redirect(url_for('blog'))
     
@@ -253,15 +279,22 @@ def add_comment(article_id):
     """If a user is logged in, adds a comment in the article collection comments array and creates a reference document in the comments collection for user dashboards.
     """
 
-    article = mongo.db.articles
     if 'username' in session:
         if request.method == 'POST':
-            comment = mongo.db.article_comments
             user = mongo.db.user.find_one({'username': session['username']})
-            article.find_one_and_update({'_id': ObjectId(article_id) },{
-                '$push':{'comments':{'username': session['username'],
-                                      'date': datetime.utcnow(),
-                                      'text': request.form.get('comment')}}})
+            
+            article = mongo.db.articles
+            article.find_one_and_update({'_id': ObjectId(article_id) },
+                                        {'$push':
+                                            {'comments':
+                                                {'username': session['username'],
+                                                 'date': datetime.utcnow(),
+                                                 'text': request.form.get('comment')
+                                                 }
+                                            }
+                                        })
+            
+            comment = mongo.db.article_comments
             comment.insert_one({'user': user['_id'],
                                 'from_user': session['username'],
                                 'article': article['_id'],
@@ -270,10 +303,10 @@ def add_comment(article_id):
                                 'to_user': article['username'],
                                 'text': request.form.get('comment')})
             flash('Your comment has been added.', 'success')
-        return render_template('pages/blog.html')
+            return render_template('pages/blog.html')
+        
     flash('Please login to post a comment.', 'info')
     return redirect(url_for('login'))
-
 
 # PROJECT VIEWS
 
@@ -423,7 +456,7 @@ def add_profile():
         elif request.method == 'GET':
             pro = mongo.db.profiles.find_one({'user_id': user['_id']})
             if pro:
-                flash('Sorry, only one profile per user permitted. You can edit your profile here.', 'info')
+                flash('Sorry, only one profile per user permitted. You can update your profile here under the profile.', 'info')
                 return redirect(url_for('dashboard'))
             
             return render_template('pages/addprofile.html', title='Post',

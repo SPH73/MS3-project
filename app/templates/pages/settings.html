@@ -6,7 +6,7 @@
         <form action="{{url_for('update_password')}}" method="post" novalidate>
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="text-center border-bottom mb-4">Update Password</legend>
+                <legend class="text-center legend-border mb-4">Update Password</legend>
                 <div class="form-group">
                     {{ form.password.label(class="form-control-label") }}
                     {% if form.password.errors %}
