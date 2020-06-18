@@ -70,19 +70,21 @@
                 {% if articles %}
                 <div class="accordion">
                     {% for article in articles %}
-                    <div id="dashboard-blog-accordion" class="accordion-label"><span class="title">
+                    <div id="dashboard-blog-accordion{{ loop.index }}" class="accordion-label"><span class="title">
                             {{ article.title }}
                         </span><br><span class="secondary-title">{{ article.date.strftime('%d, %B %Y') }}</span>
                     </div>
                     <div class="accordion-content">
-                        <div id="dash-article-edit">
-                            <a href="{{ url_for('edit_article', article_id=article._id) }}" id="article-btn-edit"
-                                type="button" class="btn btn-outline-primary btn-sm mt-1 mb-1">Edit</a>
-                            <button class="btn btn-outline-danger btn-sm" type="button" id="delete-article-modal"
-                                data-toggle="modal" data-target="#deleteArticle">Delete
+                        <div id="dash-article-edit{{ loop.index }}">
+                            <a href="{{ url_for('edit_article', article_id=article._id) }}"
+                                id="article-btn-edit{{ loop.index }}" type="button"
+                                class="btn btn-outline-primary btn-sm mt-1 mb-1">Edit</a>
+                            <button class="btn btn-outline-danger btn-sm" type="button"
+                                id="delete-article-modal{{ loop.index }}" data-toggle="modal"
+                                data-target="#deleteArticle">Delete
                             </button>
                             <!-- Modal -->
-                            <div class="modal fade" id="deleteArticle" role="dialog">
+                            <div class="modal fade" id="deleteArticle{{ loop.index }}" role="dialog">
                                 <div class="modal-dialog">
                                     <!-- Modal content-->
                                     <div class="modal-content">
@@ -95,8 +97,9 @@
                                             <!-- Button to confirm delete article -->
                                             <form action="{{ url_for('delete_article', article_id=article._id) }}"
                                                 method="post">
-                                                <input id="delete-article-btn" class="btn btn-outline-primary btn-sm"
-                                                    type="submit" value="Confirm Delete">
+                                                <input id="delete-article-btn{{ loop.index }}"
+                                                    class="btn btn-outline-primary btn-sm" type="submit"
+                                                    value="Confirm Delete">
                                             </form>
                                         </div>
                                         <div class="modal-footer">
@@ -108,8 +111,8 @@
                             </div>
                         </div>
                         <div>{{ article.content|safe }}</div>
-                        <div id="dash-article-comments-div">
-                            <div id="dash-article-comment-form">
+                        <div id="dash-article-comments-div{{ loop.index }}">
+                            <div id="dash-article-comment-form{{ loop.index }}">
                                 <a href="#" class="comment-btn btn btn-outline-secondary btn-sm mb-1"
                                     type="button">Comment</a>
                                 <div class="form-box">
@@ -118,9 +121,10 @@
                                         <form action="{{ url_for('add_comment', article_id=article._id) }}"
                                             method="post">
                                             <div class="form-group">
-                                                <textarea class="form-control mt-2" name="comment" id="comment" rows="2"
+                                                <textarea class="form-control mt-2" name="comment"
+                                                    id="comment{{ loop.index }}" rows="2"
                                                     aria-describedby="commentHelpInline" required></textarea>
-                                                <small id="commentHelpInline" class="text-muted">
+                                                <small id="commentHelpInline{{ loop.index }}" class="text-muted">
                                                     You need to be logged in to comment.
                                                 </small>
                                             </div>
@@ -168,13 +172,15 @@
                     </div>
                     <div class="accordion-content">
                         {% if project.username == session['username'] %}
-                        <a href="{{ url_for('edit_project', project_id=project._id) }}" id="project-btn-edit"
-                            type="button" class="btn btn-outline-primary btn-sm mb-1">Edit</a>
-                        <button class="btn btn-outline-danger btn-sm mb-1" type="button" id="delete-project-modal"
-                            data-toggle="modal" data-target="#deleteProject">Delete
+                        <a href="{{ url_for('edit_project', project_id=project._id) }}"
+                            id="project-btn-edit{{ loop.index }}" type="button"
+                            class="btn btn-outline-primary btn-sm mb-1">Edit</a>
+                        <button class="btn btn-outline-danger btn-sm mb-1" type="button"
+                            id="delete-project-modal{{ loop.index }}" data-toggle="modal"
+                            data-target="#deleteProject">Delete
                         </button>
                         <!-- Modal -->
-                        <div class="modal fade" id="deleteProject" role="dialog">
+                        <div class="modal fade" id="deleteProject{{ loop.index }}" role="dialog">
                             <div class="modal-dialog">
                                 <!-- Modal content-->
                                 <div class="modal-content">
@@ -187,8 +193,9 @@
                                         <!-- Button to confirm delete project -->
                                         <form action="{{ url_for('delete_project', project_id=project._id) }}"
                                             method="post">
-                                            <input id="delete-project-btn" class="btn btn-outline-success btn-sm"
-                                                type="submit" value="Confirm Delete">
+                                            <input id="delete-project-btn{{ loop.index }}"
+                                                class="btn btn-outline-success btn-sm" type="submit"
+                                                value="Confirm Delete">
                                         </form>
                                     </div>
                                     <div class="modal-footer">
@@ -199,7 +206,7 @@
                             </div>
                         </div>
                         {% else %}
-                        <a href="#" id="project-btn-message" type="button"
+                        <a href="#" id="project-btn-message{{ loop.index }}" type="button"
                             class="btn btn-outline-primary btn-sm mt-1 mb-1">Message</a>
                         {% endif %}
 
