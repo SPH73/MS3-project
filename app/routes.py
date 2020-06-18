@@ -280,9 +280,9 @@ def add_comment(article_id):
     """
 
     if 'username' in session:
+        user = mongo.db.user.find_one({'username': session['username']})
+        
         if request.method == 'POST':
-            user = mongo.db.user.find_one({'username': session['username']})
-            
             article = mongo.db.articles
             article.find_one_and_update({'_id': ObjectId(article_id) },
                                         {'$push':
@@ -301,7 +301,9 @@ def add_comment(article_id):
                                 'article_title': article['title'],
                                 'date': datetime.utcnow(),
                                 'to_user': article['username'],
-                                'text': request.form.get('comment')})
+                                'text': request.form.get('comment')
+            })
+            
             flash('Your comment has been added.', 'success')
             return render_template('pages/blog.html')
         

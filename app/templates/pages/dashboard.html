@@ -118,8 +118,8 @@
                                         <form action="{{ url_for('add_comment', article_id=article._id) }}"
                                             method="post">
                                             <div class="form-group">
-                                                <textarea class="form-control mt-2 class=" com-form"" id="textarea"
-                                                    rows="2" aria-describedby="commentHelpInline" required></textarea>
+                                                <textarea class="form-control mt-2" name="comment" id="comment" rows="2"
+                                                    aria-describedby="commentHelpInline" required></textarea>
                                                 <small id="commentHelpInline" class="text-muted">
                                                     You need to be logged in to comment.
                                                 </small>
