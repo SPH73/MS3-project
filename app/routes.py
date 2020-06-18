@@ -305,7 +305,7 @@ def add_comment(article_id):
             })
             
             flash('Your comment has been added.', 'success')
-            return render_template('pages/blog.html')
+            return redirect(url_for('blog'))
         
     flash('Please login to post a comment.', 'info')
     return redirect(url_for('login'))
@@ -505,10 +505,4 @@ def delete_profile(profile_id):
     profile.delete_one({'_id': ObjectId(profile_id)})
     flash('Your profile has been deleted.', 'success')
     return redirect(url_for('dashboard'))
-
-
-
-
-
-
 
