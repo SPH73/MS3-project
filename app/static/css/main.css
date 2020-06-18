@@ -298,17 +298,20 @@ li {
   transition: 0.4s ease all;
   background-color: #5d5d5c;
   z-index: 10;
-}
+} */
 
-.show {
+/* .show {
   left: 13%;
 } */
-.form-box {
-  display: block;
+
+.hide {
+  display: none;
+  transition: display 0.4s ease all;
 }
 
 .show {
-  display: none;
+  display: block;
+  transition: display 0.4s ease all;
 }
 
 

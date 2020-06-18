@@ -29,35 +29,23 @@ $('#deadline').datepicker({
 
 // toggle blog comment form
 
-$('.comment-btn').on('click', function () {
-    $('.form-box').toggle();
 
-})
+function changeValue(el) {
 
-// function changeValue() {
+    // let form = el.parentElement.nextSibling;
 
-//     let btn = document.getElementsByClassName('comment-btn');
-
-//     if (btn.value == "Hide") {
-//         btn.value = "Comment";
-//         btn.innerHTML = "Comment";
-//     } else {
-//         btn.value = "Hide";
-//         btn.innerHTML = "Hide";
-//     }
-// }
-
-function changeValue() {
-
-    let btn = document.getElementById('blog-comment-btn');
-
-    if (btn.textContent === "Hide") {
-        btn.textContent = "Comment";
-    } else {
+    let btn = this;
+    if (btn.textContent === "Comment") {
         btn.textContent = "Hide";
-
+    } else {
+        btn.textContent = "Comment";
     }
 }
-// $('.close-btn').on('click', function () {
-//     $('.form-box').hide();
-// })
+
+
+
+$('.comment-btn').on('click', function () {
+    $('.form-box').toggleClass('show');
+    $('.form-box').toggleClass('hide');
+
+})

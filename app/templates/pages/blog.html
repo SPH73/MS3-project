@@ -48,42 +48,40 @@
                 </div>
                 <div>{{ article.content|safe }}</div>
                 <div>
-                    <div>
-                        <button onclick="changeValue(this)" value="Hide" id="blog-comment-btn"
-                            class="comment-btn btn btn-outline-secondary btn-sm mb-1"
-                            type="button">Hide</button>
-                        <div class="form-box" id="blog-form-box{{ loop.index }}">
-                            <div id="blog-form-div{{ loop.index }}" class="form-group">
-                                <!-- <div class="close-btn btn btn-outline-danger btn-sm mb-2">Close</div> -->
-                                <form id="blog-comment-form{{ loop.index }}"
-                                    action="{{ url_for('add_comment', article_id=article._id) }}" method="post">
-                                    <div class="form-group">
-                                        <textarea class="form-control mt-2 com-form" name="comment"
-                                            id="comment{{ loop.index }}" rows="2" aria-describedby="commentHelpInline"
-                                            required></textarea>
-                                        <small id="commentHelpInline{{ loop.index }}" class="text-muted">
-                                            You need to be logged in to comment.
-                                        </small>
-                                    </div>
-                                    <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-1">Post
-                                        comment</button>
-                                </form>
-                            </div>
+                    <button onclick="changeValue(this)" value="Comment" id="blog-comment-btn{{ loop.index }}"
+                        class="comment-btn btn btn-outline-secondary btn-sm mb-1" type="button">Comment</button>
+                    <div class="form-box hide">
+                        <div id="blog-form-div" class="form-group">
+                            <form id="blog-comment-form{{ loop.index }}"
+                                action="{{ url_for('add_comment', article_id=article._id) }}" method="post">
+                                <div class="form-group">
+                                    <textarea class="form-control mt-2 com-form" name="comment"
+                                        id="comment{{ loop.index }}" rows="2" aria-describedby="commentHelpInline"
+                                        required></textarea>
+                                    <small id="commentHelpInline{{ loop.index }}" class="text-muted">
+                                        You need to be logged in to comment.
+                                    </small>
+                                </div>
+                                <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-1">Post
+                                    comment</button>
+                            </form>
                         </div>
                     </div>
-                    <div>
+                </div>
+                <div>
+                    <hr>
+                    <ul>Comments:
                         {% if article.comments %}
-                        <hr>
-                        <ul>Comments:
-                            {% for comment in article.comments %}
-                            <li>{{ comment }} </li>
-                            {% endfor %}
-                        </ul>
-                        {% if not loop.last %}
-                        <hr>
-                        {% endif %}
-                        {% endif %}
-                    </div>
+                        {% for comment in article.comments %}
+                        <li>{{ comment }} </li>
+                        {% endfor %}
+                    </ul>
+                    {% if not loop.last %}
+                    <hr>
+                    {% endif %}
+                    {% else %}
+                    <p>Be the first to comment!</p>
+                    {% endif %}
                 </div>
             </div>
             {% if not loop.last %}
