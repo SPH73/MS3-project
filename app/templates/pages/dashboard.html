@@ -76,15 +76,13 @@
                     </div>
                     <div class="accordion-content">
                         <div id="dash-article-edit{{ loop.index }}">
-                            <a href="{{ url_for('edit_article', article_id=article._id) }}"
-                                id="article-btn-edit{{ loop.index }}" type="button"
-                                class="btn btn-outline-primary btn-sm mt-1 mb-1">Edit</a>
-                            <button class="btn btn-outline-danger btn-sm" type="button"
-                                id="delete-article-modal{{ loop.index }}" data-toggle="modal"
-                                data-target="#deleteArticle">Delete
+                            <a href="{{ url_for('edit_article', article_id=article._id) }}" id="article-btn-edit"
+                                type="button" class="btn btn-outline-primary btn-sm mt-1 mb-1">Edit</a>
+                            <button class="btn btn-outline-danger btn-sm" type="button" id="delete-article-modal"
+                                data-toggle="modal" data-target="#deleteArticle">Delete
                             </button>
                             <!-- Modal -->
-                            <div class="modal fade" id="deleteArticle{{ loop.index }}" role="dialog">
+                            <div class="modal fade" id="deleteArticle" role="dialog">
                                 <div class="modal-dialog">
                                     <!-- Modal content-->
                                     <div class="modal-content">
@@ -97,9 +95,8 @@
                                             <!-- Button to confirm delete article -->
                                             <form action="{{ url_for('delete_article', article_id=article._id) }}"
                                                 method="post">
-                                                <input id="delete-article-btn{{ loop.index }}"
-                                                    class="btn btn-outline-primary btn-sm" type="submit"
-                                                    value="Confirm Delete">
+                                                <input id="delete-article-btn" class="btn btn-outline-primary btn-sm"
+                                                    type="submit" value="Confirm Delete">
                                             </form>
                                         </div>
                                         <div class="modal-footer">

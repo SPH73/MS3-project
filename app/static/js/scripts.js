@@ -30,8 +30,34 @@ $('#deadline').datepicker({
 // toggle blog comment form
 
 $('.comment-btn').on('click', function () {
-    $('.form-box').toggleClass('show');
+    $('.form-box').toggle();
+
 })
-$('.close-btn').on('click', function () {
-    $('.form-box').toggleClass('show');
-})
+
+// function changeValue() {
+
+//     let btn = document.getElementsByClassName('comment-btn');
+
+//     if (btn.value == "Hide") {
+//         btn.value = "Comment";
+//         btn.innerHTML = "Comment";
+//     } else {
+//         btn.value = "Hide";
+//         btn.innerHTML = "Hide";
+//     }
+// }
+
+function changeValue() {
+
+    let btn = document.getElementById('blog-comment-btn');
+
+    if (btn.textContent === "Hide") {
+        btn.textContent = "Comment";
+    } else {
+        btn.textContent = "Hide";
+
+    }
+}
+// $('.close-btn').on('click', function () {
+//     $('.form-box').hide();
+// })

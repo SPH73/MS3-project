@@ -289,8 +289,8 @@ li {
 }
 
 /* slide-in form for blog/profile/project comments/messages */
-.form-box {
-  position: fixed;
+/* .form-box {
+  position: absolute;
   top: 12%;
   left: -100%;
   height: auto;
@@ -302,7 +302,15 @@ li {
 
 .show {
   left: 13%;
+} */
+.form-box {
+  display: block;
 }
+
+.show {
+  display: none;
+}
+
 
 footer {
   background-color: #5d5d5c;

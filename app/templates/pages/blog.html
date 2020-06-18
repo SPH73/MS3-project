@@ -49,11 +49,12 @@
                 <div>{{ article.content|safe }}</div>
                 <div>
                     <div>
-                        <div id="blog-comment-btn{{ loop.index }}"
-                            class="comment-btn btn btn-outline-secondary btn-sm mb-1" type="button">Comment</div>
+                        <button onclick="changeValue" value="Hide" id="blog-comment-btn"
+                            class="comment-btn btn btn-outline-secondary btn-sm mb-1"
+                            type="button">Comment/Close</button>
                         <div class="form-box" id="blog-form-box{{ loop.index }}">
                             <div id="blog-form-div{{ loop.index }}" class="form-group">
-                                <div class="close-btn btn btn-outline-danger btn-sm mb-2">Close</div>
+                                <!-- <div class="close-btn btn btn-outline-danger btn-sm mb-2">Close</div> -->
                                 <form id="blog-comment-form{{ loop.index }}"
                                     action="{{ url_for('add_comment', article_id=article._id) }}" method="post">
                                     <div class="form-group">
