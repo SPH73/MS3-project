@@ -14,15 +14,13 @@
             <div class="accordion-content">
                 <div>
                     {% if article.author == session['username'] %}
-                    <a href="{{ url_for('edit_article', article_id=article._id) }}"
-                        id="article-btn-edit{{ loop.index }}" type="button"
+                    <a href="{{ url_for('edit_article', article_id=article._id) }}" id="article-btn-edit" type="button"
                         class="btn btn-outline-primary btn-sm mt-1 mb-1">Edit</a>
-                    <button class="btn btn-outline-danger btn-sm" type="button"
-                        id="delete-article-modal{{ loop.index }}" data-toggle="modal"
-                        data-target="#deleteArticle">Delete
+                    <button class="btn btn-outline-danger btn-sm" type="button" id="delete-article-modal"
+                        data-toggle="modal" data-target="#deleteArticle">Delete
                     </button>
                     <!-- Modal -->
-                    <div class="modal fade" id="deleteArticle{{ loop.index }}" role="dialog">
+                    <div class="modal fade" id="deleteArticle" role="dialog">
                         <div class="modal-dialog">
                             <!-- Modal content-->
                             <div class="modal-content">
@@ -51,11 +49,13 @@
                 <div>{{ article.content|safe }}</div>
                 <div>
                     <div>
-                        <a href="#" class="comment-btn btn btn-outline-secondary btn-sm mb-1" type="button">Comment</a>
-                        <div class="form-box">
-                            <div class="form-group">
+                        <div id="blog-comment-btn{{ loop.index }}"
+                            class="comment-btn btn btn-outline-secondary btn-sm mb-1" type="button">Comment</div>
+                        <div class="form-box" id="blog-form-box{{ loop.index }}">
+                            <div id="blog-form-div{{ loop.index }}" class="form-group">
                                 <div class="close-btn btn btn-outline-danger btn-sm mb-2">Close</div>
-                                <form action="{{ url_for('add_comment', article_id=article._id) }}" method="post">
+                                <form id="blog-comment-form{{ loop.index }}"
+                                    action="{{ url_for('add_comment', article_id=article._id) }}" method="post">
                                     <div class="form-group">
                                         <textarea class="form-control mt-2 com-form" name="comment"
                                             id="comment{{ loop.index }}" rows="2" aria-describedby="commentHelpInline"
