@@ -49,9 +49,9 @@
                 <div>{{ article.content|safe }}</div>
                 <div>
                     <div>
-                        <button onclick="changeValue" value="Hide" id="blog-comment-btn"
+                        <button onclick="changeValue(this)" value="Hide" id="blog-comment-btn"
                             class="comment-btn btn btn-outline-secondary btn-sm mb-1"
-                            type="button">Comment/Close</button>
+                            type="button">Hide</button>
                         <div class="form-box" id="blog-form-box{{ loop.index }}">
                             <div id="blog-form-div{{ loop.index }}" class="form-group">
                                 <!-- <div class="close-btn btn btn-outline-danger btn-sm mb-2">Close</div> -->
