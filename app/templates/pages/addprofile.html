@@ -5,7 +5,7 @@
     <section class="section-content neu">
         <legend class="text-center legend-border mb-4">{{ legend }}</legend>
         <form action="{{ url_for('add_profile') }}" method="post" novalidate>
-            {{ profile_form.hidden_tag() }}
+            {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <div class="form-group">
                     {{ form.headline.label(class="form-control-label") }}
@@ -61,7 +61,7 @@
                 </div>
             </fieldset>
             <div class="form-group">
-                {{ profile_form.submit(class="btn btn-outline-primary btn-sm") }}
+                {{ form.submit(class="btn btn-outline-primary btn-sm") }}
             </div>
         </form>
     </section>
