@@ -8,30 +8,33 @@
         <div id="dashnav" class="container">
             <ul class="nav nav-tabs justify-content-center">
                 <li class=" nav-item active nav-link"><a href="#articles" data-toggle="tab">Articles</a></li>
-
                 <li class="nav-item dropdown nav-link">
                     <a class="dropdown-toggle mr-4" id="projectsdrop" data-toggle="dropdown">
                         Projects</a>
                     <ul class="dropdown-menu" aria-labelledby="projectsdrop">
                         <a class="dropdown-item" data-toggle="tab" href="#projects">My Projects</a>
-                        <a class="dropdown-item" data-toggle="tab" href="#pieces">My Pieces</a>
                         <a class="dropdown-item" data-toggle="tab" href="#projectmsgs">Project Messages</a>
+                        <a class="dropdown-item" data-toggle="tab" href="#pieces">My Pieces</a>
                         <a class="dropdown-item" href="{{ url_for('add_project') }}">New Project</a>
                     </ul>
                 </li>
-
                 <li class="nav-item dropdown nav-link">
                     <a class="dropdown-toggle mr-4" id="profiledrop" data-toggle="dropdown">
                         Profile</a>
                     <ul class="dropdown-menu" aria-labelledby="profiledrop">
                         <a class="dropdown-item" data-toggle="tab" href="#profile">My Profile</a>
-                        <a class="dropdown-item" data-toggle="tab" href="#profilmsgs">Profile Messages</a>
-                        <a class="dropdown-item" href="{{ url_for('add_profile') }}">Add Profile</a>
+                        <a class="dropdown-item" data-toggle="tab" href="#profilemsgs">Profile Messages</a>
+                        <!-- only visible if a profile exists with the logged in user's user_id -->
+                        {% if profile %}
                         <a class="dropdown-item" href="{{ url_for('edit_profile', profile_id=profile._id) }}">Update
                             Profile</a>
                         <a class="dropdown-item" id="delete-profile-modal" data-toggle="modal"
                             data-target="#deleteProfile">Delete Profile
                         </a>
+                        <!-- only visible if no profile was found matching the logged in user's user_id  -->
+                        {% else %}
+                        <a class="dropdown-item" href="{{ url_for('add_profile') }}">Add Profile</a>
+                        {% endif %}
                         <a class="dropdown-item" href="{{ url_for('update_password') }}">Update Password</a>
                     </ul>
                 </li>
@@ -301,9 +304,9 @@
             <!-- END OF PROFILE -->
 
             <!-- Profile Messages -->
-            <div class="tab-pane fade" id="profilmsgs">
+            <div class="tab-pane fade" id="profilemsgs">
                 <p>profile messages tab</p>
-                
+
             </div>
             <!-- END OF PROFILE MESSAGES -->
 

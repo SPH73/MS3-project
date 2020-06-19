@@ -467,18 +467,22 @@ def add_profile():
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
     
-@app.route('/edit_profile/<profile_id>')
+@app.route('/edit_profile/<profile_id>', methods=['GET', 'POST'])
 def edit_profile(profile_id):
-    """Checks if the user is logged in and the user_id matches with the document, then renders the form with the existing values. 
+    """Checks if the user is logged in and the user_id is in the profiles collection, then renders the form with the existing values according to the profile_id. 
     """
-    
-    profile = mongo.db.profiles.find_one_or_404(
-        {'_id': ObjectId(profile_id)})
-    form=ProfileForm()
-    form.headline.data = profile['headline']
-    form.bio.data = profile['bio']
-    form.xp.data = profile['xp']
-    form.interests.data = profile['interests']
+    # This check is in place to avoid users trying to edit a profile via the dashboard
+    # when they have not created one. If not the option is not displayed
+    user = mongo.db.user.find_one({'username': session['username']})
+    chck = mongo.db.profiles.find_one_or_404({'user_id': user['_id']})
+    if chck:                
+        profile = mongo.db.profiles.find_one(
+            {'_id': ObjectId(profile_id)})
+        form=ProfileForm()
+        form.headline.data = profile['headline']
+        form.bio.data = profile['bio']
+        form.xp.data = profile['xp']
+        form.interests.data = profile['interests']
     return render_template('pages/editprofile.html', form=form, profile=profile, legend='Edit your Profile')
     
 @app.route('/update_profile/<profile_id>', methods=['POST'])
