@@ -15,7 +15,7 @@
                     <ul class="dropdown-menu" aria-labelledby="projectsdrop">
                         <a class="dropdown-item" data-toggle="tab" href="#projects">My Projects</a>
                         <a class="dropdown-item" data-toggle="tab" href="#pieces">My Pieces</a>
-                        <a class="dropdown-item" data-toggle="tab" href="#projectMessages">Project Messages</a>
+                        <a class="dropdown-item" data-toggle="tab" href="#projectmsgs">Project Messages</a>
                         <a class="dropdown-item" href="{{ url_for('add_project') }}">New Project</a>
                     </ul>
                 </li>
@@ -25,7 +25,7 @@
                         Profile</a>
                     <ul class="dropdown-menu" aria-labelledby="profiledrop">
                         <a class="dropdown-item" data-toggle="tab" href="#profile">My Profile</a>
-                        <a class="dropdown-item" data-toggle="tab" href="#profilemessages">Profile Messages</a>
+                        <a class="dropdown-item" data-toggle="tab" href="#profilmsgs">Profile Messages</a>
                         <a class="dropdown-item" href="{{ url_for('add_profile') }}">Add Profile</a>
                         <a class="dropdown-item" href="{{ url_for('edit_profile', profile_id=profile._id) }}">Update
                             Profile</a>
@@ -62,10 +62,11 @@
             </div>
         </div>
 
-        <!-- Dashboard Tab Content -->
+        <!-- DASHBAORD TAB CONTENT -->
         <div class="tab-content">
 
-            <!-- Article tab content -->
+            <!-- ARTICLE TAB CONTENT -->
+
             <div class="tab-pane fade show active" id="articles">
                 {% if articles %}
                 <div class="accordion">
@@ -157,7 +158,10 @@
                 </div>
                 {% endif %}
             </div>
-            <!-- Projects tab content -->
+
+            <!-- PROJECT TAB CONTENT -->
+
+            <!-- Projects  -->
             <div class="tab-pane fade" id="projects">
                 {% if projects %}
                 <div class="accordion">
@@ -225,8 +229,23 @@
                     {% endif %}
                 </div>
             </div>
+            <!-- END OF PROJECTS -->
 
-            <!-- Profile tab content -->
+            <!-- Project Pieces -->
+            <div class="tab-pane fade" id="pieces">
+                <p>project pieces tab</p>
+            </div>
+            <!-- END OF PIECES -->
+
+            <!-- Project Messages -->
+            <div class="tab-pane fade" id="projectmsgs">
+                <p>project messages tab</p>
+            </div>
+            <!-- END OF PROJECT MESSAGES -->
+
+            <!-- PROFILE TAB CONTENT -->
+
+            <!-- Profile  -->
             <div class="tab-pane fade" id="profile">
                 {% if profile %}
                 <div class="row">
@@ -279,6 +298,16 @@
                     {% endif %}
                 </div>
             </div>
+            <!-- END OF PROFILE -->
+
+            <!-- Profile Messages -->
+            <div class="tab-pane fade" id="profilmsgs">
+                <p>profile messages tab</p>
+                
+            </div>
+            <!-- END OF PROFILE MESSAGES -->
+
+
         </div>
     </section>
 </div>
