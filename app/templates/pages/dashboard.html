@@ -9,8 +9,7 @@
             <ul class="dash-tabs">
                 <li><a class="tab-item dropdown-toggle">Articles</a>
                     <ul class="tabs-dropdown">
-                        <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'articles')">My
-                                Articles</a>
+                        <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'articles')">My Articles</a>
                         </li>
                         <li><a class="tab-item tab-link" href="{{ url_for('add_article') }}">New Article</a></li>
                     </ul>
@@ -48,8 +47,7 @@
                 </li>
             </ul>
         </nav>
-
-        <!-- Modal -->
+        <!-- Delete Profile Modal -->
         <div class="modal fade" id="deleteProfile" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->
@@ -74,25 +72,211 @@
         </div>
 
         <!-- DASHBAORD TAB CONTENT -->
-        <!-- ARTICLE TAB CONTENT -->
-        <div id="articles" class="tabcontent">
-            <div class="container">
-                <div class="accordion">
-                    {% if articles %}
-                    {% for article in articles %}
-                    <div class="accordion-label"><span class="title">
-                            {{ article.title }}
-                        </span><br><span class="secondary-title">{{ article.date.strftime('%d, %B %Y') }}</span>
+        <div id="dash-tabs">
+            <!-- ARTICLE TAB CONTENT -->
+            <div id="articles" class="tabcontent">
+                <div class="container">
+                    <div class="accordion">
+                        {% if articles %}
+                        {% for article in articles %}
+                        <div class="accordion-label"><span class="title">
+                                {{ article.title }}
+                            </span><br><span class="secondary-title">{{ article.date.strftime('%d, %B %Y') }}</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div>
+                                <a href="{{ url_for('edit_article', article_id=article._id) }}" type="button"
+                                    class="btn btn-outline-primary btn-sm mt-1 mb-1">Edit</a>
+                                <button class="btn btn-outline-danger btn-sm" type="button" id="delete-article-modal"
+                                    data-toggle="modal" data-target="#deleteArticle">Delete
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="deleteArticle" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close"
+                                                    data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title" style="color:red;">WARNING</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>This process is immediate and cannot be undone. Are you sure?</p>
+                                                <!-- Button to confirm delete article -->
+                                                <form action="{{ url_for('delete_article', article_id=article._id) }}"
+                                                    method="post">
+                                                    <input class="btn btn-outline-primary btn-sm" type="submit"
+                                                        value="Confirm Delete">
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-danger btn-sm"
+                                                    data-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>{{ article.content|safe }}</div>
+                            <div>
+                                <div>
+                                    <a href="#" class="comment-btn btn btn-outline-secondary btn-sm mb-1"
+                                        type="button">Comment</a>
+                                    <div class="form-box">
+                                        <div class="form-group">
+                                            <div class="close-btn btn btn-outline-danger btn-sm mb-2">Close</div>
+                                            <form action="{{ url_for('add_comment', article_id=article._id) }}"
+                                                method="post">
+                                                <div class="form-group">
+                                                    <textarea class="form-control mt-2" name="comment"
+                                                        id="comment{{ loop.index }}" rows="2"
+                                                        aria-describedby="commentHelpInline" required></textarea>
+                                                    <small id="commentHelpInline{{ loop.index }}" class="text-muted">
+                                                        You need to be logged in to comment.
+                                                    </small>
+                                                </div>
+                                                <button type="submit"
+                                                    class="btn btn-outline-primary btn-sm mt-1 mb-1">Post
+                                                    comment</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="dash-article-comments">
+                                    <ul>Comments:
+                                        <hr>
+                                        {% if article.comments %}
+                                        {% for comment in article.comments %}
+                                        <li>{{ comment }} </li>
+                                        {% endfor %}
+                                    </ul>
+                                    {%  else %}
+                                    <p>There are no comments on this post.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% if not loop.last %}
+                        <hr>
+                        {% endif %}
+                        {% endfor %}
+                        {% else %}
+                        <div class="col-sm-12 text-center">
+                            <p>Your blog articles will appear here.</p>
+                        </div>
+                        {% endif %}
                     </div>
-                    <div class="accordion-content">
-                        <div>
-                            <a href="{{ url_for('edit_article', article_id=article._id) }}" type="button"
-                                class="btn btn-outline-primary btn-sm mt-1 mb-1">Edit</a>
-                            <button class="btn btn-outline-danger btn-sm" type="button" id="delete-article-modal"
-                                data-toggle="modal" data-target="#deleteArticle">Delete
+                </div>
+            </div>
+            <!-- /END OF ARTICLE TAB CONTENT -->
+
+            <!-- PROFILE TAB CONTENT -->
+            <!-- Profile  -->
+            <div id="profile" class="tabcontent">
+                <div class="container">
+                    {% if profile %}
+                    <div class="row">
+                        <div class="col-12 secondary-title text-center mt-2">
+                            <p>Last updated: {{ profile.date.strftime('%d, %B %Y') }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <ul>Headline:
+                                <li>{{ profile.headline }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <ul>Bio:
+                                <li>{{ profile.bio|safe }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <ul>Languages:
+                                {% for lang in profile.languages %}
+                                <li>{{ lang }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-sm-4">
+                            <ul>Frameworks:
+                                {% for item in profile.frameworks %}
+                                <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-sm-4">
+                            <ul>Links:
+                                {% for link in profile.personal_links %}
+                                {% for key, value in link.items() %}
+                                <li>{{ key }}: {{ value }}</li>
+                                {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-sm-12 text-center">
+                        <p>If you create a profile it will appear here.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- End of Profile -->
+
+            <!-- Profile Messages -->
+            <div id="profileMsg" class="tabcontent">
+                <div class="container">
+                    <p>Profile Messages Here.</p>
+                </div>
+
+            </div>
+            <!-- End of Profile Messages -->
+            <!-- /END OF PROFILE TAB CONTENT -->
+
+            <!-- PROJECT TAB CONTENT -->
+            <!-- Project Messages -->
+            <div id="projectMsg" class="tabcontent">
+                <p>Project Messages here.</p>
+            </div>
+            <!-- End of Project Messages -->
+
+            <!-- Project Pieces -->
+            <div id="pieces" class="tabcontent">
+                <p>My Pieces here.</p>
+            </div>
+            <!-- End of Pieces -->
+
+            <!-- Projects  -->
+            <div id="projects" class="tabcontent">
+                <div class="container">
+                    {% if not projects %}
+                    <div class="col-sm-12 text-center">
+                        <p>Your projects will appear here.</p>
+                    </div>
+                    {% endif %}
+                    {% if projects %}
+                    {% for project in projects %}
+                    <div class="accordion">
+                        <div id="project-accordion" class="accordion-label"><span class="title">
+                                {{ project.title }}</span><br>
+                            <span secondary-title>Post date:
+                                {{ project.date.strftime('%d %B, %Y') }}</span>
+                        </div>
+                        <div class="accordion-content">
+                            <a href="{{ url_for('edit_project', project_id=project._id) }}"
+                                id="project-btn-edit{{ loop.index }}" type="button"
+                                class="btn btn-outline-primary btn-sm mb-1">Edit</a>
+                            <button class="btn btn-outline-danger btn-sm mb-1" type="button"
+                                id="delete-project-modal{{ loop.index }}" data-toggle="modal"
+                                data-target="#deleteProject">Delete
                             </button>
                             <!-- Modal -->
-                            <div class="modal fade" id="deleteArticle" role="dialog">
+                            <div class="modal fade" id="deleteProject{{ loop.index }}" role="dialog">
                                 <div class="modal-dialog">
                                     <!-- Modal content-->
                                     <div class="modal-content">
@@ -102,10 +286,11 @@
                                         </div>
                                         <div class="modal-body">
                                             <p>This process is immediate and cannot be undone. Are you sure?</p>
-                                            <!-- Button to confirm delete article -->
-                                            <form action="{{ url_for('delete_article', article_id=article._id) }}"
+                                            <!-- Button to confirm delete project -->
+                                            <form action="{{ url_for('delete_project', project_id=project._id) }}"
                                                 method="post">
-                                                <input class="btn btn-outline-primary btn-sm" type="submit"
+                                                <input id="delete-project-btn{{ loop.index }}"
+                                                    class="btn btn-outline-success btn-sm" type="submit"
                                                     value="Confirm Delete">
                                             </form>
                                         </div>
@@ -116,222 +301,37 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div>{{ article.content|safe }}</div>
-                        <div>
                             <div>
-                                <a href="#" class="comment-btn btn btn-outline-secondary btn-sm mb-1"
-                                    type="button">Comment</a>
-                                <div class="form-box">
-                                    <div class="form-group">
-                                        <div class="close-btn btn btn-outline-danger btn-sm mb-2">Close</div>
-                                        <form action="{{ url_for('add_comment', article_id=article._id) }}"
-                                            method="post">
-                                            <div class="form-group">
-                                                <textarea class="form-control mt-2" name="comment"
-                                                    id="comment{{ loop.index }}" rows="2"
-                                                    aria-describedby="commentHelpInline" required></textarea>
-                                                <small id="commentHelpInline{{ loop.index }}" class="text-muted">
-                                                    You need to be logged in to comment.
-                                                </small>
-                                            </div>
-                                            <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-1">Post
-                                                comment</button>
-                                        </form>
-                                    </div>
-                                </div>
+                                <p>Current status: {{ project.status }}</p>
                             </div>
-                            <div id="dash-article-comments">
-                                <ul>Comments:
-                                    <hr>
-                                    {% if article.comments %}
-                                    {% for comment in article.comments %}
-                                    <li>{{ comment }} </li>
-                                    {% endfor %}
-                                </ul>
-                                {%  else %}
-                                <p>There are no comments on this post.</p>
-                                {% endif %}
+                            <div>
+                                <p>Project deadline: {{ project.deadline.strftime('%d %B, %Y') }}</p>
+                            </div>
+                            <div>
+                                <p>Project description: {{ project.brief|safe }}</p>
+                            </div>
+                            <div>
+                                <p>Project files:
+                                    {% if project.file_upload %}
+                                    {{ project.file_upload }}
+                                    {% else %}
+                                    No File uploads for this project.
+                                    {% endif %}
+                                </p>
                             </div>
                         </div>
+                        {% if not loop.last %}
+                        <hr>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
                     </div>
-                    {% if not loop.last %}
-                    <hr>
-                    {% endif %}
-                    {% endfor %}
-                    {% else %}
-                    <div class="col-sm-12 text-center">
-                        <p>Your blog articles will appear here.</p>
-                    </div>
-                    {% endif %}
                 </div>
             </div>
+            <!-- End of Projects -->
+            <!-- /END OF PROJECT TAB CONTENT -->
+            <!-- /END TAB CONTENT -->
         </div>
-        <!-- /END OF ARTICLE TAB CONTENT -->
-
-        <!-- PROFILE TAB CONTENT -->
-        <!-- Profile  -->
-        <div id="profile" class="tabcontent">
-            <div class="container">
-                {% if profile %}
-                <div class="row">
-                    <div class="col-12 secondary-title text-center mt-2">
-                        <p>Last updated: {{ profile.date.strftime('%d, %B %Y') }}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <ul>Headline:
-                            <li>{{ profile.headline }}</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <ul>Bio:
-                            <li>{{ profile.bio|safe }}</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <ul>Languages:
-                            {% for lang in profile.languages %}
-                            <li>{{ lang }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="col-sm-4">
-                        <ul>Frameworks:
-                            {% for item in profile.frameworks %}
-                            <li>{{ item }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="col-sm-4">
-                        <ul>Links:
-                            {% for link in profile.personal_links %}
-                            {% for key, value in link.items() %}
-                            <li>{{ key }}: {{ value }}</li>
-                            {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-                {% else %}
-                <div class="col-sm-12 text-center">
-                    <p>If you create a profile it will appear here.</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        <!-- End of Profile -->
-
-        <div id="profileMsg" class="tabcontent">
-            <div class="container">
-                <p>Profile Messages Here.</p>
-            </div>
-        </div>
-        <!-- End of Profile Messages -->
-        <!-- /END OF PROFILE TAB CONTENT -->
-
-        <!-- PROJECT TAB CONTENT -->
-        <!-- Projects  -->
-        <div id="projects" class="tabcontent">
-            <div class="container">
-                {% if not projects %}
-                <div class="col-sm-12 text-center">
-                    <p>Your projects will appear here.</p>
-                </div>
-                {% endif %}
-                {% if projects %}
-                {% for project in projects %}
-                <div class="accordion">
-                    <div id="project-accordion" class="accordion-label"><span class="title">
-                            {{ project.title }}</span><br>
-                        <span secondary-title>Post date:
-                            {{ project.date.strftime('%d %B, %Y') }}</span>
-                    </div>
-                    <div class="accordion-content">
-                        <a href="{{ url_for('edit_project', project_id=project._id) }}"
-                            id="project-btn-edit{{ loop.index }}" type="button"
-                            class="btn btn-outline-primary btn-sm mb-1">Edit</a>
-                        <button class="btn btn-outline-danger btn-sm mb-1" type="button"
-                            id="delete-project-modal{{ loop.index }}" data-toggle="modal"
-                            data-target="#deleteProject">Delete
-                        </button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="deleteProject{{ loop.index }}" role="dialog">
-                            <div class="modal-dialog">
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title" style="color:red;">WARNING</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>This process is immediate and cannot be undone. Are you sure?</p>
-                                        <!-- Button to confirm delete project -->
-                                        <form action="{{ url_for('delete_project', project_id=project._id) }}"
-                                            method="post">
-                                            <input id="delete-project-btn{{ loop.index }}"
-                                                class="btn btn-outline-success btn-sm" type="submit"
-                                                value="Confirm Delete">
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-danger btn-sm"
-                                            data-dismiss="modal">Cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <p>Current status: {{ project.status }}</p>
-                        </div>
-                        <div>
-                            <p>Project deadline: {{ project.deadline.strftime('%d %B, %Y') }}</p>
-                        </div>
-                        <div>
-                            <p>Project description: {{ project.brief|safe }}</p>
-                        </div>
-                        <div>
-                            <p>Project files:
-                                {% if project.file_upload %}
-                                {{ project.file_upload }}
-                                {% else %}
-                                No File uploads for this project.
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-                    {% if not loop.last %}
-                    <hr>
-                    {% endif %}
-                    {% endfor %}
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        <!-- End of Projects -->
-
-        <!-- Project Pieces -->
-        <div id="pieces" class="tabcontent">
-            <div class="container">
-                <p>My Pieces here.</p>
-            </div>
-        </div>
-        <!-- End of Pieces -->
-
-        <!-- Project Messages -->
-        <div id="projectMsg" class="tabcontent">
-            <div class="container">
-                <p>Project Messages here.</p>
-            </div>
-        </div>
-        <!-- End of Projects -->
-        <!-- /END OF PROJECT TAB CONTENT -->
-        <!-- /END TAB CONTENT -->
     </section>
 </div>
 {% endblock content %}
