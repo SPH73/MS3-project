@@ -29,23 +29,17 @@ $('#deadline').datepicker({
 
 // toggle blog comment form
 
-
-function changeValue(el) {
-
-    // let form = el.parentElement.nextSibling;
-
+$(".comment-btn").click(function (event) {
+    let id = event.target.id;
     let btn = this;
-    if (btn.textContent === "Comment") {
-        btn.textContent = "Hide";
+   
+    if (btn.innerText == "Close") {
+        btn.innerText = "Comment"
     } else {
-        btn.textContent = "Comment";
+        btn.innerText = "Close"
     }
-}
 
-
-
-$('.comment-btn').on('click', function () {
-    $('.form-box').toggleClass('show');
-    $('.form-box').toggleClass('hide');
+    let form = event.target.nextElementSibling;
+    $(form).toggleClass('hide');
 
 })
