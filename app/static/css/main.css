@@ -8,11 +8,18 @@ body {
   background-color: #c3c3c3;
   font-family: 'Muli', sans-serif;
   font-weight: 400;
+  font-size: 16px;
   color: #0a3235;
   position: relative;
 }
 
-/* typography */
+/* Typography */
+.secondary-title {
+  color: #0a3235;
+  font-weight: 700;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
 
 small {
   color: #8d8d8d;
@@ -22,6 +29,12 @@ legend,
 label {
   color: #352721;
   letter-spacing: 0.03em;
+}
+
+legend {
+  font-size: 1.2rem;
+  margin: 1.3em 0;
+  padding: 0.5rem;
 }
 
 a {
@@ -46,54 +59,13 @@ a:not([href]):hover {
   text-decoration: none;
 }
 
-.secondary-title {
-  color: #0a3235;
-  font-weight: 700;
-  margin-bottom: 0;
-  font-size: 14px;
-}
 
-/* Navigation */
-
-.nav-tabs {
-  border-top-left-radius: .25rem;
-  border-top-right-radius: .25rem;
-  border-bottom: 0.5px solid rgba(0, 0, 0, .15);
-}
-
-.nav-tabs .nav-item.show .nav-link,
-.nav-tabs .nav-link.active {
-  color: #089b93;
-  background-color: rgba(0, 0, 0, .15);
-  border-color: rgba(0, 0, 0, .15) rgba(0, 0, 0, .15) rgba(0, 0, 0, .15);
-}
-
-.nav-tabs .nav-link:focus,
-.nav-tabs .nav-link:hover {
-  color: #5d5d5c;
-  font-weight: 400;
-  font-size: 1.1em;
-  border-color: rgba(0, 0, 0, .15) rgba(0, 0, 0, .15) rgba(0, 0, 0, .15);
-}
-
-.nav-tabs .nav-link:active {
-  color: #5d5d5c;
-  font-weight: 400;
-  background-color: rgba(0, 0, 0, .15);
-  border-color: rgba(0, 0, 0, .15) rgba(0, 0, 0, .15) rgba(0, 0, 0, .15);
-}
+/* Main Site Navigation and Dashboard Tabs */
 
 .navbar {
   /* maybe add border-bottom */
   background-color: #c3c3c3;
-}
-
-.dropdown-menu {
-  color: #089b93;
-  background-color: #c3c3c3;
-  background-clip: padding-box;
-  border: 0.5px solid rgba(0, 0, 0, .15);
-  border-radius: .25rem;
+  border-bottom: 0.5px solid rgba(0, 0, 0, .15);
 }
 
 .navbar-light .navbar-nav .nav-link {
@@ -105,15 +77,112 @@ a:not([href]):hover {
   border-color: #17a2b8;
 }
 
-.navbar-nav .nav-link:hover {
-  color: #5d5d5c;
-  font-weight: 400;
-  font-size: 1.1em;
+nav.dash-nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-self: flex-start;
 }
 
+.dash-nav .tab-link:active,
 .navbar-nav .nav-link.active {
   font-weight: 500;
 }
+
+.dash-tabs>li {
+  display: inline-block;
+  align-items: stretch;
+  border-color: rgba(0, 0, 0, .15) rgba(0, 0, 0, .15) rgba(0, 0, 0, .15);
+}
+
+li:hover>a {
+  cursor: pointer;
+  color: #5d5d5c;
+}
+
+.dash-nav .tabs-dropdown {
+  float: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 10rem;
+  padding: .5rem 0;
+  margin: .125rem 0 0;
+  /* font-size: 1rem; */
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  /* background-clip: padding-box; */
+  border: 1px solid rgba(0, 0, 0, .15);
+  border-radius: .25rem;
+}
+
+
+.tabs-dropdown,
+.dropdown-menu {
+  color: #089b93;
+  background-color: #c3c3c3;
+  /* background-clip: content-box; */
+  margin-left: 0;
+  border: 0.5px solid rgba(0, 0, 0, .15);
+  border-radius: .25rem;
+}
+
+.tab-item {
+  display: block;
+  width: 100%;
+  padding: .25rem 0.75rem;
+
+  /* clear: both;
+  font-weight: 400;
+  text-align: inherit;
+  white-space: nowrap; */
+  /* background-color: transparent; */
+}
+
+.tabs-dropdown {
+  position: absolute;
+  display: none;
+  z-index: 1000;
+}
+
+.tabs-dropdown li {
+  position: relative;
+}
+
+.dash-tabs>li:hover .tabs-dropdown {
+  display: block;
+  color: #5d5d5c;
+}
+
+/* .dash-tabs {
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
+  border-bottom: 0.5px solid rgba(0, 0, 0, .15);
+} */
+
+
+.dash-tabs .tab-item:hover,
+.dropdown-item:hover {
+  color: #5d5d5c;
+  background-color: #c3c3c3;
+  font-weight: 400;
+}
+
+.tabs-dropdown .tab-link:hover {
+  color: #5d5d5c;
+  font-weight: 400;
+}
+
 
 button.navbar-toggler:focus {
   outline: none;
@@ -129,17 +198,13 @@ button:focus {
   color: #089b93;
 }
 
-.dropdown-item:hover {
-  color: #5d5d5c;
-  background-color: #c3c3c3;
-  font-weight: 400;
-  font-size: 1.1em;
-}
 
 .dropdown:hover>.dropdown-menu {
   display: block;
 }
 
+.tab-item.active,
+.tab-item:active,
 .dropdown-item.active,
 .dropdown-item:active {
   color: #089b93;
@@ -164,7 +229,8 @@ button:focus {
 }
 
 .legend-border {
-  border-bottom: 0.5px solid rgba(0, 0, 0, .15)
+  border-bottom: 0.5px solid rgba(0, 0, 0, .15);
+  margin-bottom: 0.8rem;
 }
 
 /* button styling */
@@ -216,18 +282,8 @@ button:focus {
   box-shadow: 0 0 0 0.2rem rgba(53, 39, 33, 0.5);
 }
 
-.legend-border {
-  border-bottom: 0.5px solid rgba(0, 0, 0, .15)
-}
 
 /* forms */
-
-/* labels/legend */
-legend,
-label {
-  color: #352721;
-  letter-spacing: 0.03em;
-}
 
 .form-control:focus {
   color: #352721;
@@ -285,34 +341,14 @@ ul {
 
 li {
   list-style: none;
-  padding-left: 1rem;
+  padding-left: 0.3rem;
 }
-
-/* slide-in form for blog/profile/project comments/messages */
-/* .form-box {
-  position: absolute;
-  top: 12%;
-  left: -100%;
-  height: auto;
-  padding: 20px;
-  transition: 0.4s ease all;
-  background-color: #5d5d5c;
-  z-index: 10;
-} */
-
-/* .show {
-  left: 13%;
-} */
 
 .hide {
   display: none;
   transition: display 0.4s ease all;
 }
 
-.show {
-  display: block;
-  transition: display 0.4s ease all;
-}
 
 
 footer {
@@ -338,4 +374,49 @@ https://geekgoddess.com/how-to-resize-the-google-nocaptcha-recaptcha/ */
     transform-origin: 0 0;
     -webkit-transform-origin: 0 0;
   }
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, .15);
+  background-color: #c3c3c3;
+  color: #1a757c;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  align-content: flex-start;
+
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab li {
+  background-color: inherit;
+  float: left;
+  border: rgba(0, 0, 0, .15);
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab li:hover {
+  color: #5d5d5d;
+}
+
+/* Create an active/current tablink class */
+.tab li.active {
+  background-color: rgba(0, 0, 0, .15);
+  border: rgba(0, 0, 0, .15);
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  /* padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none; */
 }
