@@ -119,40 +119,43 @@
                             </div>
                             <div>{{ article.content|safe }}</div>
                             <div>
-                                <div>
-                                    <a href="#" class="comment-btn btn btn-outline-secondary btn-sm mb-1"
-                                        type="button">Comment</a>
-                                    <div class="form-box">
-                                        <div class="form-group">
-                                            <div class="close-btn btn btn-outline-danger btn-sm mb-2">Close</div>
-                                            <form action="{{ url_for('add_comment', article_id=article._id) }}"
-                                                method="post">
-                                                <div class="form-group">
-                                                    <textarea class="form-control mt-2" name="comment"
-                                                        id="comment{{ loop.index }}" rows="2"
-                                                        aria-describedby="commentHelpInline" required></textarea>
-                                                    <small id="commentHelpInline{{ loop.index }}" class="text-muted">
-                                                        You need to be logged in to comment.
-                                                    </small>
-                                                </div>
-                                                <button type="submit"
-                                                    class="btn btn-outline-primary btn-sm mt-1 mb-1">Post
-                                                    comment</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div id="dash-article-comments">
-                                    <ul>Comments:
+                                    <ul><span class="comments">Comments: </span>
                                         <hr>
                                         {% if article.comments %}
                                         {% for comment in article.comments %}
-                                        <li>{{ comment }} </li>
+                                        <li class="secondary-title">On {{ comment.date.strftime('%d, %B %Y') }},
+                                            {{ comment.username }}
+                                            wrote: <br>
+                                            <p>{{ comment.text }}</p>
+                                        </li>
+                                        {% if not loop.last %}
+                                        <hr>
+                                        {% endif %}
                                         {% endfor %}
                                     </ul>
-                                    {%  else %}
+                                    {% else %}
                                     <p>There are no comments on this post.</p>
                                     {% endif %}
+                                    <div>
+                                        <button id="dash-comment-btn{{ loop.index }}"
+                                            class="comment-btn btn btn-outline-secondary btn-sm mb-1"
+                                            type="button">Close</button>
+                                        <div class="form-box show">
+                                            <div class="form-group">
+                                                <form action="{{ url_for('add_comment', article_id=article._id) }}"
+                                                    method="post">
+                                                    <div class="form-group">
+                                                        <textarea class="form-control mt-2" name="comment"
+                                                            id="comment{{ loop.index }}" rows="2" required></textarea>
+                                                    </div>
+                                                    <button type="submit"
+                                                        class="btn btn-outline-primary btn-sm mt-1 mb-1">Post
+                                                        comment</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
