@@ -33,14 +33,16 @@ $(".comment-btn").click(function (event) {
     // let id = event.target.id;
     let btn = this;
 
-    if (btn.innerText == "Close") {
-        btn.innerText = "Comment"
-    } else {
+    if (btn.innerText == "Comment") {
         btn.innerText = "Close"
+    } else {
+        btn.innerText = "Comment"
     }
 
     let form = event.target.nextElementSibling;
+    $(form).toggleClass('show');
     $(form).toggleClass('hide');
+
 
 })
 

@@ -48,10 +48,28 @@
                 </div>
                 <div>{{ article.content|safe }}</div>
                 <div>
+                    <ul><span class="comments">Comments: </span>
+                        <hr>
+                        {% if article.comments %}
+                        {% for comment in article.comments %}
+                        <li class="secondary-title">On {{ comment.date.strftime('%d, %B %Y') }}, {{ comment.username }}
+                            wrote: <br>
+                            <p>{{ comment.text }}</p>
+                        </li>
+                        {% if not loop.last %}
+                        <hr>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>Be the first to comment!</p>
+                    {% endif %}
+                </div>
+                <div class="form-div">
                     <button id="blog-comment-btn{{ loop.index }}"
-                        class="comment-btn btn btn-outline-secondary btn-sm mb-1" type="button">Comment</button>
-                    <div class="form-box hide">
-                        <div id="blog-form-div" class="form-group">
+                        class="comment-btn btn btn-outline-secondary btn-sm mb-1" type="button">Close</button>
+                    <div class="form-box show">
+                        <div id="blog-form-div{{ loop.index }}" class="form-group">
                             <form id="blog-comment-form{{ loop.index }}"
                                 action="{{ url_for('add_comment', article_id=article._id) }}" method="post">
                                 <div class="form-group">
@@ -67,22 +85,6 @@
                             </form>
                         </div>
                     </div>
-                </div>
-                <div>
-                    <hr>
-                    <ul>Comments:
-                        {% if article.comments %}
-                        {% for comment in article.comments %}
-                        <li>By {{ comment.username }} on{{ comment.date.strftime('%d, %B %Y') }} <br> Comment:
-                            {{ comment.text }}</li>
-                        {% if not loop.last %}
-                        <hr>
-                        {% endif %}
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                    <p>Be the first to comment!</p>
-                    {% endif %}
                 </div>
             </div>
             {% if not loop.last %}

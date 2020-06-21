@@ -11,14 +11,15 @@ body {
   font-size: 16px;
   color: #0a3235;
   position: relative;
+  min-height: 100vh;
 }
 
 /* Typography */
 .secondary-title {
   color: #0a3235;
-  font-weight: 700;
+  font-weight: 300;
   margin-bottom: 0;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
 }
 
 small {
@@ -220,6 +221,8 @@ button:focus {
 .template-container {
   background-color: #c3c3c3;
   margin-top: 80px;
+  position: relative;
+  min-height: 100vh;
 }
 
 /* SECTION-CONTENT STYLING */
@@ -299,12 +302,13 @@ button:focus {
   padding: 0 20px;
   cursor: pointer;
   transition: background-color 0.2s;
+  color: #089b93;
 }
 
 span.title {
   font-weight: 500;
   font-size: 18px;
-  color: #352721;
+  color: #089b93;
   ;
 }
 
@@ -322,9 +326,13 @@ span.title {
   padding: 0 20px;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.2s ease-in-out;
+  transition: max-height 0.3s ease-in-out;
+  height: auto;
 }
 
+.comments {
+  color: #089b93;
+}
 
 /* dashboard */
 #div-profile-image img {
@@ -349,13 +357,21 @@ li {
   transition: display 0.4s ease all;
 }
 
+.show {
+  display: block;
+  height: auto;
+  transition: display 0.4s ease all;
+  overflow: scroll;
+}
+
+
 
 
 footer {
   background-color: #5d5d5c;
   color: #afbdb8;
   text-align: center;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   width: 100%;
   height: auto;
@@ -376,7 +392,7 @@ https://geekgoddess.com/how-to-resize-the-google-nocaptcha-recaptcha/ */
   }
 }
 
-/* Style the tab */
+
 .tab {
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, .15);
@@ -391,7 +407,7 @@ https://geekgoddess.com/how-to-resize-the-google-nocaptcha-recaptcha/ */
 
 }
 
-/* Style the buttons that are used to open the tab content */
+
 .tab li {
   background-color: inherit;
   float: left;
@@ -416,7 +432,4 @@ https://geekgoddess.com/how-to-resize-the-google-nocaptcha-recaptcha/ */
 /* Style the tab content */
 .tabcontent {
   display: none;
-  /* padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none; */
 }
