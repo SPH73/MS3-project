@@ -42,6 +42,10 @@ class PasswordForm(FlaskForm):
                                      validators=[DataRequired(), EqualTo('new_password')])
     recaptcha = RecaptchaField()
     submit = SubmitField('Update Password')    
+
+
+class CommentForm(FlaskForm):
+    comment = StringField('Comment')
  
 class BlogForm(FlaskForm):
     title = StringField('Title *', validators=[DataRequired()])
@@ -75,13 +79,11 @@ class ListForm(FlaskForm):
     link = StringField('Personal Links *', default="https/github.com/username") 
     
 class ProfileForm(FlaskForm):
-    posted = DateField('Post date *', default=datetime.utcnow(), 
-                          validators=[DataRequired()],format='%B %d, %Y')
     headline = StringField('Headline *', validators=[DataRequired(), Length(min=30, max=150)])
     bio = CKEditorField('Bio: *', validators=[Length(min=30, max=1000)])
     xp = IntegerField('Years experience *', validators=[NumberRange(min=0)])
     interests = TextAreaField("What type of projects are you interested in?", validators=[DataRequired()])
-    languages = FieldList(FormField(ListForm), min_entries=1)
-    frameworks = FieldList(FormField(ListForm), min_entries=1)
-    links = FieldList(FormField(ListForm), min_entries=1)
+    # languages = FieldList(FormField(ListForm), min_entries=1)
+    # frameworks = FieldList(FormField(ListForm), min_entries=1)
+    # links = FieldList(FormField(ListForm), min_entries=1)
     submit = SubmitField('Send')

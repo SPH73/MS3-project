@@ -66,25 +66,21 @@ def register():
 def login():
     """First checks if user has an active session, if not, checks the users credentials are correct, if so logs them in and adds the username to the session.
     """
-    
-    if 'username' in session:
-        flash('You are already logged in. Did you mean to go to your dashboard instead?', 'info')
-        return redirect(url_for('dashboard'))
-        
     form = LoginForm()
-    
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            user = mongo.db.user.find_one({'username':form.username.data})
-            if user and bcrypt.checkpw(request.form['password'].encode('utf-8'), user['hashed_password']):
-                session['username'] = form.username.data
-                current_user = session['username']
-                flash(f'Welcome back, {current_user}!', 'success')
-                return redirect(url_for('dashboard'))
-            
-            flash('Please check login details.', 'danger')
-       
-    return render_template('pages/login.html', title='Login', form=form)
+    if not 'username' in session:
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                user = mongo.db.user.find_one({'username':form.username.data})
+                if user and bcrypt.checkpw(request.form['password'].encode('utf-8'), user['hashed_password']):
+                    session['username'] = form.username.data
+                    current_user = session['username']
+                    flash(f'Welcome back, {current_user}!', 'success')
+                    return redirect(url_for('dashboard'))
+                
+                flash('Please check login details.', 'danger')
+        return render_template('pages/login.html', title='Login', form=form)
+    flash('You are already logged in. Did you mean to go to your dashboard instead?', 'info')
+    return redirect(url_for('dashboard'))
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
@@ -435,13 +431,18 @@ def profiles():
 
 @app.route('/add_profile', methods=['GET','POST'])
 def add_profile():
-    """Checks if the user has an active session and an exisiting profile for the user doesn't exist before renders the form. When the form is validated first retrieves the user_id to include it with the form data to the database collection with the current date and time.
+    """Checks if a logged in user has an exisiting profile before rendering the form. When the form is validated first retrieves the user_id to include it with the form data to insert into the database collection with the current date and time.
     """
     
+    form=ProfileForm()
+    list_form=ListForm(csrf_enabled=False)
+    
     if 'username' in session:
-        user = mongo.db.user.find_one({'username': session['username']})           
-        form=ProfileForm()
-        list_form=ListForm(csrf_enabled=False)
+        user = mongo.db.user.find_one({'username': session['username']})
+        pro = mongo.db.profiles.find_one({'user_id': user['_id']})
+        if pro:
+            flash('Sorry, only one profile per user permitted. You can update your profile here under the profile.', 'info')
+            return redirect(url_for('dashboard'))  
         
         if request.method == 'POST':
             if form.validate_on_submit():                    
@@ -455,13 +456,7 @@ def add_profile():
                 flash('Your profile has been created.', 'success')
                 return redirect('profiles')
             
-        elif request.method == 'GET':
-            pro = mongo.db.profiles.find_one({'user_id': user['_id']})
-            if pro:
-                flash('Sorry, only one profile per user permitted. You can update your profile here under the profile.', 'info')
-                return redirect(url_for('dashboard'))
-            
-            return render_template('pages/addprofile.html', title='Post',
+        return render_template('pages/addprofile.html', title='Post',
                                form=form, list_form=list_form, legend='Create your profile')
         
     flash('You need to be logged in to post any content.', 'info')
