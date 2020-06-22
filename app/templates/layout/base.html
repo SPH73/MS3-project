@@ -62,11 +62,11 @@
     <!-- Main content -->
     <main class="template-container">
         <!-- Flashed messages that appear on any page -->
-        <div class="row">
+        <div class="row text-center">
             <div class="col-12">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                <div class=flashes>
+                <div class="flashes">
                     {% for category, message in messages %}
                     <p class="alert alert-{{ category }}">{{ message }}</p>
                     {% endfor %}
