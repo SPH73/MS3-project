@@ -271,9 +271,39 @@
                 <div class="container">
                     {% for piece in pieces %}
                     {% if piece.assignee == session['username'] %}
-                    <p>You have been sent a piece.</p>
+                    <h5>New Pieces</h5>
+                    {% if piece.status == "pending acceptance" %}
+                    <p>These pieces are not yet accepted.</p>
+                    <hr>
+                    <h5>Accepted Pieces</h5>
+                    {% elif piece.status == "accepted" %}
+                    <p>These pieces have been accepted.</p>
+                    <hr>
+                    <h5>Pieces submitted for approval</h5>
+                    {% elif piece.status == "pending approval" %}
+                    <p>These pieces have been submitted for approval.</p>
+                    <h5>Completed Pieces </h5>
+                    {% elif piece.status == "closed" %}
+                    <p>These pieces have been closed</p>
+                    <hr>
+                    {% endif %}
                     {% elif piece.owner == session['username'] %}
-                    <p>You sent a piece.</p>
+                    <h5>New Pieces</h5>
+                    {% if piece.status == "pending acceptance" %}
+                    <p>These pieces are not yet accepted.</p>
+                    <hr>
+                    {% elif piece.status == "accepted" %}
+                    <h5>Accepted Pieces</h5>
+                    <p>These pieces have been accepted.</p>
+                    <hr>
+                    <h5>Pieces submitted for approval</h5>
+                    {% elif piece.status == "pending approval" %}
+                    <p>These pieces have been submitted for approval.</p>
+                    <hr>
+                    <h5>Completed Pieces </h5>
+                    {% elif piece.status == "closed" %}
+                    <p>These pieces have been closed</p>
+                    {% endif %}
                     {% else %}
                     <p>Your project pieces will appear here when you send or receive them.</p>
                     {% endif %}
