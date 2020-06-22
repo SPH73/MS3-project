@@ -58,7 +58,7 @@ class PieceForm(FlaskForm):
     status = StringField('Status *', default='pending acceptance', validators=[DataRequired()])
     username = StringField('Username for whom the piece has been created *', validators=[DataRequired()])
     due_date = StringField('Due date *', validators=[DataRequired()])
-    comments = StringField('Add a comment for your reference (not required)')
+    comment = StringField('Add a comment for your reference (not required)')
     add_piece = SubmitField('Send Piece')
   
     
