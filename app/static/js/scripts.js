@@ -36,9 +36,12 @@ $('#due_date').datepicker({
 });
 
 // toggle blog comment form
-$(".comment-btn").click(function (event) {
 
-    // let id = event.target.id;
+$(".comment-btn").click(function (event, target) {
+
+    let id = event.target.id;
+    console.log(id, event, target);
+
     let btn = this;
 
     if (btn.innerText == "Comment") {
@@ -48,6 +51,27 @@ $(".comment-btn").click(function (event) {
     }
 
     let form = event.target.nextElementSibling;
+    console.log(form, event, target);
+    $(form).toggleClass('show');
+    $(form).toggleClass('hide');
+
+
+})
+$(".msg-btn").click(function (event, target) {
+
+    let id = event.target.id;
+    console.log(id, event, target);
+
+    let btn = this;
+
+    if (btn.innerText == "Message") {
+        btn.innerText = "Close"
+    } else {
+        btn.innerText = "Message"
+    }
+
+    let form = event.target.nextElementSibling;
+    console.log(form, event, target);
     $(form).toggleClass('show');
     $(form).toggleClass('hide');
 

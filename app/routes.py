@@ -526,10 +526,10 @@ def delete_profile(profile_id):
     flash('Your profile has been deleted.', 'success')
     return redirect(url_for('dashboard'))
 
-@app.route('/profile_message/<profile_id>', methods=['GET', 'POST'])
-def profile_message(profile_id):
+@app.route('/profile_msg<profile_id>', methods=['GET', 'POST'])
+def profile_msg(profile_id):
 
-    """If a user is logged in, adds a message in the relevant document in messages array and creates a reference document in the profile messages collection for user dashboards.
+    """Adds a message in the relevant document to the messages field and creates a reference document in the profile_msgs collection for user dashboards.
     """
 
     if 'username' in session:
@@ -550,14 +550,50 @@ def profile_message(profile_id):
             message = mongo.db.profile_msgs
             message.insert_one({'user': user['_id'],
                                 'from_user': session['username'],
-                                'profile': profile['_id'],
+                                'profile_id': profile['_id'],
                                 'date': datetime.utcnow(),
                                 'to_user': profile['username'],
                                 'text': request.form.get('message')
             })
             
-            flash('Your message has been sent to { profile.username }.', 'success')
+            flash('Your message has been sent to {profile.username}.', 'success')
             return redirect(url_for('blog'))
         
     flash('Please login to message users.', 'info')
-    return redirect(url_for('login'))    
+    return redirect(url_for('login'))
+
+@app.route('/project_msg/<project_id>', methods=['GET', 'POST'])
+def project_msg(project_id):
+
+    """Adds a subdocument in the relevant document to messages field and creates a reference document in the profile_msgs collection for user dashboards.
+    """
+
+    if 'username' in session:
+        user = mongo.db.user.find_one({'username': session['username']})
+        
+        if request.method == 'POST':
+            projects = mongo.db.projects
+            project_msg = projects.find_one_and_update({'_id': ObjectId(project_id) },
+                                        {'$push':
+                                            {'messages':
+                                                {'username': session['username'],
+                                                 'date': datetime.utcnow(),
+                                                 'text': request.form.get('message')
+                                                 }
+                                            }
+                                        })
+            
+            message = mongo.db.project_msgs
+            message.insert_one({'user': user['_id'],
+                                'from_user': session['username'],
+                                'project_id': project_msg['_id'],
+                                'date': datetime.utcnow(),
+                                'to_user': project_msg['username'],
+                                'text': request.form.get('message')
+            })
+            
+            flash('Your message has been sent to {project.username}.', 'success')
+            return redirect(url_for('blog'))
+        
+    flash('Please login to message users.', 'info')
+    return redirect(url_for('login'))

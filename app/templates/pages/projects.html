@@ -43,14 +43,10 @@
                             </div>
                         </div>
                     </div>
-                    <a href="#" id="profile-btn-message" type="button"
+                    <a href="#" id="piece-btn-message" type="button"
                         class="btn btn-outline-primary btn-sm mt-1 mb-1">Project Piece</a>
                 </div>
-                {% else %}
-                <a href="#" id="profile-btn-message" type="button"
-                    class="btn btn-outline-primary btn-sm mt-1 mb-1">Message</a>
                 {% endif %}
-
                 <p>Current Status: {{ project.status }}
                 </p>
                 <p>Project deadline: {{ project.deadline.strftime('%d %B, %Y') }}
@@ -63,6 +59,31 @@
                 {% endif %}
                 <p>Project Description: {{ project.brief|safe }}
                 </p>
+                {% if not project.username == session['username'] %}
+                <!-- Project Message form  -->
+                <div>
+                    <button id="project-message-btn{{ loop.index }}"
+                        class="msg-btn btn btn-outline-secondary btn-sm mt-1 mb-1">Message</button>
+                    <div class="form-box show">
+                        <div id="project-message-form-div{{ loop.index }}" class="form-group">
+                            <form id="project-message-form{{ loop.index }}"
+                                action="{{ url_for('project_msg', project_id=project._id) }}" method="post">
+                                <div class="form-group">
+                                    <textarea class="form-control mt-2 msg-form" name="message"
+                                        id="message{{ loop.index }}" rows="2" aria-describedby="msgHelpInline"
+                                        required></textarea>
+                                    <small id="msgHelpInline{{ loop.index }}" class="text-muted">
+                                        Send the project owner a message if this project if you would like to work on
+                                        this project.
+                                    </small>
+                                </div>
+                                <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-1">Send
+                                    message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
             {% if not loop.last %}
             <hr>
