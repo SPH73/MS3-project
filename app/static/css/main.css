@@ -5,7 +5,7 @@ font-family: 'Montserrat', sans-serif;
 font-family: 'Muli', sans-serif; */
 
 body {
-  background-color: #c3c3c3;
+  /* background-color: #f4f4f4; */
   font-family: 'Muli', sans-serif;
   font-weight: 400;
   font-size: 16px;
@@ -38,34 +38,49 @@ legend {
   padding: 0.5rem;
 }
 
-a {
+/* used in the accordions */
+span.title {
+  font-weight: 500;
+  font-size: 18px;
   color: #089b93;
-  text-decoration: none;
-  background-color: transparent;
 }
 
-a:hover {
-  color: #089b93;
-  text-decoration: none;
-  background-color: transparent;
-}
-
+a,
 a:not([href]) {
   color: #089b93;
   text-decoration: none;
+  background-color: transparent;
 }
 
+a:hover,
 a:not([href]):hover {
-  color: #5d5d5c;
+  color: #089b93;
   text-decoration: none;
+  background-color: transparent;
 }
 
+ul {
+  padding-left: 0;
+}
+
+li {
+  list-style: none;
+}
+
+li:hover>a {
+  cursor: pointer;
+  color: #5d5d5c;
+}
+
+.comments {
+  color: #089b93;
+}
 
 /* Main Site Navigation and Dashboard Tabs */
 
 .navbar {
   /* maybe add border-bottom */
-  background-color: #c3c3c3;
+  background-color: #f4f4f4;
   border-bottom: 0.5px solid rgba(0, 0, 0, .15);
 }
 
@@ -87,6 +102,10 @@ nav.dash-nav {
   align-self: flex-start;
 }
 
+.dash-nav .tabs-dropdown {
+  float: none;
+}
+
 .dash-nav .tab-link:active,
 .navbar-nav .nav-link.active {
   font-weight: 500;
@@ -94,46 +113,25 @@ nav.dash-nav {
 
 .dash-tabs>li {
   display: inline-block;
-  align-items: stretch;
-  border-color: rgba(0, 0, 0, .15) rgba(0, 0, 0, .15) rgba(0, 0, 0, .15);
-}
-
-li:hover>a {
-  cursor: pointer;
-  color: #5d5d5c;
-}
-
-.dash-nav .tabs-dropdown {
-  float: none;
+  /* border-color: rgba(0, 0, 0, .15) rgba(0, 0, 0, .15) rgba(0, 0, 0, .15); */
 }
 
 .dropdown-menu {
-  position: absolute;
   top: 40%;
   left: 0;
   z-index: 1000;
   display: none;
-  float: left;
-  min-width: 10rem;
-  padding: .5rem 0;
-  margin: .125rem 0 0;
-  /* font-size: 1rem; */
-  color: #212529;
   text-align: left;
   list-style: none;
-  background-color: #fff;
-  /* background-clip: padding-box; */
-  border: 1px solid rgba(0, 0, 0, .15);
+  color: #089b93;
+  border: 0.5px solid rgba(0, 0, 0, .15);
   border-radius: .25rem;
+
 }
 
-
-.tabs-dropdown,
-.dropdown-menu {
+.tabs-dropdown {
   color: #089b93;
   background-color: #c3c3c3;
-  /* background-clip: content-box; */
-  margin-left: 0;
   border: 0.5px solid rgba(0, 0, 0, .15);
   border-radius: .25rem;
 }
@@ -142,12 +140,6 @@ li:hover>a {
   display: block;
   width: 100%;
   padding: .25rem 0.75rem;
-
-  /* clear: both;
-  font-weight: 400;
-  text-align: inherit;
-  white-space: nowrap; */
-  /* background-color: transparent; */
 }
 
 .tabs-dropdown {
@@ -165,13 +157,6 @@ li:hover>a {
   color: #5d5d5c;
 }
 
-/* .dash-tabs {
-  border-top-left-radius: .25rem;
-  border-top-right-radius: .25rem;
-  border-bottom: 0.5px solid rgba(0, 0, 0, .15);
-} */
-
-
 .dash-tabs .tab-item:hover,
 .dropdown-item:hover {
   color: #5d5d5c;
@@ -181,9 +166,9 @@ li:hover>a {
 
 .tabs-dropdown .tab-link:hover {
   color: #5d5d5c;
+  background-color: #f4f4f4;
   font-weight: 400;
 }
-
 
 button.navbar-toggler:focus {
   outline: none;
@@ -198,7 +183,6 @@ button:focus {
 .dropdown-item {
   color: #089b93;
 }
-
 
 .dropdown:hover>.dropdown-menu {
   display: block;
@@ -216,11 +200,56 @@ button:focus {
   outline: none;
 }
 
-/* background for templates */
+.tab {
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, .15);
+  background-color: #c3c3c3;
+  color: #1a757c;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  align-content: flex-start;
+}
+
+.tab li {
+  background-color: inherit;
+  float: left;
+  border: rgba(0, 0, 0, .15);
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+.tab li:hover {
+  color: #5d5d5d;
+}
+
+.tab li.active {
+  background-color: rgba(0, 0, 0, .15);
+  border: rgba(0, 0, 0, .15);
+}
+
+/* custom dashboard tabs from w3schools howto */
+/* hides the tab content and uses js to change when tab is active */
+.tabcontent {
+  display: none;
+}
+
+#div-profile-image img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* main templates */
 
 .template-container {
   background-color: #c3c3c3;
-  margin-top: 80px;
+  margin-top: 77px;
   position: relative;
   min-height: 100vh;
 }
@@ -286,16 +315,6 @@ button:focus {
 }
 
 
-/* forms */
-
-.form-control:focus {
-  color: #352721;
-  background-color: #fff;
-  border-color: #1a757c;
-  outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(26, 117, 124, 0.5)
-}
-
 /* accordion styling for retrieved database content */
 .accordion-label {
   width: 100%;
@@ -305,12 +324,6 @@ button:focus {
   color: #089b93;
 }
 
-span.title {
-  font-weight: 500;
-  font-size: 18px;
-  color: #089b93;
-  ;
-}
 
 .accordion-label::after {
   content: '\25BC';
@@ -321,6 +334,7 @@ span.title {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
+/* dynamic  */
 .accordion-content {
   margin-top: 5px;
   padding: 0 20px;
@@ -330,28 +344,17 @@ span.title {
   height: auto;
 }
 
-.comments {
-  color: #089b93;
-}
-
-/* dashboard */
-#div-profile-image img {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
+/* forms */
+.form-control:focus {
+  color: #352721;
+  background-color: #f4f4f4;
+  border-color: #1a757c;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(26, 117, 124, 0.5)
 }
 
 
-ul {
-  padding-left: 0;
-}
-
-li {
-  list-style: none;
-  padding-left: 0.3rem;
-}
-
+/* comment and message forms class toggled with js */
 .hide {
   display: none;
   transition: display 0.4s ease all;
@@ -364,9 +367,6 @@ li {
   overflow: scroll;
 }
 
-
-
-
 footer {
   background-color: #5d5d5c;
   color: #afbdb8;
@@ -377,6 +377,9 @@ footer {
   height: auto;
   padding: 10px 20px;
 }
+
+/* media queries */
+/* TODO ADD MEDIA QUERY FOR FLASHED MESSAGES ON MEDIUM SCREENS */
 
 /* set recaptcha widget size for mobile */
 /* taken from 
@@ -390,46 +393,4 @@ https://geekgoddess.com/how-to-resize-the-google-nocaptcha-recaptcha/ */
     transform-origin: 0 0;
     -webkit-transform-origin: 0 0;
   }
-}
-
-
-.tab {
-  overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, .15);
-  background-color: #c3c3c3;
-  color: #1a757c;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: center;
-  align-content: flex-start;
-
-}
-
-
-.tab li {
-  background-color: inherit;
-  float: left;
-  border: rgba(0, 0, 0, .15);
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-}
-
-/* Change background color of buttons on hover */
-.tab li:hover {
-  color: #5d5d5d;
-}
-
-/* Create an active/current tablink class */
-.tab li.active {
-  background-color: rgba(0, 0, 0, .15);
-  border: rgba(0, 0, 0, .15);
-}
-
-/* Style the tab content */
-.tabcontent {
-  display: none;
 }
