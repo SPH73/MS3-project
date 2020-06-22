@@ -416,7 +416,7 @@ def add_piece(project_id):
                                     })
             
             pieces = mongo.db.project_pieces
-            pieces.insert_one({'user': user['_id'],
+            pieces.insert_one({'user_id': user['_id'],
                                'project_id': project['_id'],
                                'project_title': project['title'],
                                'owner': session['username'],
@@ -426,9 +426,9 @@ def add_piece(project_id):
                                'date': datetime.utcnow(),
                                'due_date': request.form.get('due_date'),
                                'assignee': request.form.get('username'),
-                               'text': request.form.get('comment')
+                               'comment': request.form.get('comment')
             })
-            flash('Your project has been updated and the piece has been sent to the assignee.')
+            flash('Your project has been updated and the piece has been sent to the assignee.', 'sucess')
             return redirect(url_for('dashboard'))
         
         return render_template('pages/addpiece.html', form=form, project=project)         
