@@ -5,6 +5,7 @@ import pymongo
 from datetime import datetime
 from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, ListForm
 import bcrypt
+import json
 
 
 @app.route("/")
@@ -170,15 +171,17 @@ def dashboard():
     
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
-        articles = mongo.db.articles.find({'user_id': user['_id']})
+        articles = mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING)
         profile = mongo.db.profiles.find_one({'user_id': user['_id']})
-        projects = mongo.db.projects.find({'user_id': user['_id']})
+        projects = mongo.db.projects.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING)
+        pieces = mongo.db.project_pieces.find({'assignee': session['username']})
 
         return render_template('pages/dashboard.html', 
                                 title='Dashboard',
                                 articles=articles,
                                 profile=profile,
-                                projects=projects
+                                projects=projects,
+                                pieces=pieces
         )
         
     flash('You need to be logged in to access your dashboard.', 'warning')
@@ -192,14 +195,13 @@ def blog():
     """Retrieves all the documents from the articles collection and dislpay them in order of newest to oldest.
     """
     
+    
     articles = mongo.db.articles.find().sort('date',pymongo.DESCENDING)
-                     
     return render_template('pages/blog.html',
-                           title='Blog', 
-                           articles=articles, 
-                           legend='Read the latest articles'
+                            title='Blog', 
+                            articles=articles,
+                            legend='Read the latest articles'
     )
-
 
 @app.route('/add_article', methods=['GET','POST'])
 def add_article():
@@ -221,7 +223,7 @@ def add_article():
                 flash('Your blog post has been created!', 'success')
                 return redirect(url_for('blog'))
             
-        return render_template('pages/addarticle.html', title='New Article', article_form=form, legend="Create Your Blog Article")
+        return render_template('pages/addarticle.html', title='New Article', form=form, legend="Create Your Blog Article")
     
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
@@ -256,7 +258,7 @@ def update_article(article_id):
                                      'content': request.form.get('content')
                                     }
                                 })
-    flash('Your post has been updated.' 'success')
+    flash('Your post has been updated.', 'success')
     return redirect(url_for('blog'))
     
 
@@ -389,29 +391,48 @@ def delete_project(project_id):
     flash('Your project has been deleted.', 'success')
     return redirect(url_for('projects'))
 
-@app.route('/add_piece/<title>', methods=['GET', 'POST'])
-def add_piece(title):
+@app.route('/add_piece/<project_id>', methods=['GET', 'POST'])
+def add_piece(project_id):
     """TO DO WHEN function complete!!!!
     """
-    
+    form=PieceForm()
     if 'username' in session:
-        form=PieceForm()
+        project = mongo.db.projects.find_one_or_404(
+            {'_id': ObjectId(project_id)})
+        
         
         if request.method == 'POST':
-            if form.validate_on_submit():
-                project = mongo.db.projects.find_one_or_404({'title': title})
-                piece = mongo.db.pieces.insert({'task': piece.task.data,
-                                  'description': piece.description.data,
-                                  'status': piece.status.data,
-                                  'username': piece.username.data,
-                                  'due_date': piece.due_date.data,
-                                  'project_id': project._id})
-                piece_id = piece.inserted_id
-                project.pieces.insert_one({'pieces': [{piece_id}]})
-                return redirect(url_for('dashboard'))
-                
-        return render_template('pages/addproject.html', title='New Project', form=form, project_id=project)
-    
+            user = mongo.db.user.find_one({'username': session['username']})
+            projects = mongo.db.projects
+            project = projects.find_one_and_update({'_id': ObjectId(project_id) },
+                                    {'$push':
+                                        {'pieces':
+                                            {'project_id': project['_id'],
+                                             'date': datetime.utcnow(),
+                                             'status': request.form.get('status'),
+                                             'task': request.form.get('task')
+                                            }
+                                        }
+                                    })
+            
+            pieces = mongo.db.project_pieces
+            pieces.insert_one({'user': user['_id'],
+                               'project_id': project['_id'],
+                               'project_title': project['title'],
+                               'owner': session['username'],
+                               'task': request.form.get('task'),
+                               'description': request.form.get('task'),
+                               'status': request.form.get('status'),
+                               'date': datetime.utcnow(),
+                               'due_date': request.form.get('due_date'),
+                               'assignee': request.form.get('username'),
+                               'text': request.form.get('comment')
+            })
+            flash('Your project has been updated and the piece has been sent to the assignee.')
+            return redirect(url_for('dashboard'))
+        
+        return render_template('pages/addpiece.html', form=form, project=project)         
+        
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
 
@@ -441,7 +462,7 @@ def add_profile():
         user = mongo.db.user.find_one({'username': session['username']})
         pro = mongo.db.profiles.find_one({'user_id': user['_id']})
         if pro:
-            flash('Sorry, only one profile per user permitted. You can update your profile here under the profile.', 'info')
+            flash('Sorry, only one profile per user permitted. You can update your profile here under the profile tab.', 'info')
             return redirect(url_for('dashboard'))  
         
         if request.method == 'POST':
@@ -505,3 +526,38 @@ def delete_profile(profile_id):
     flash('Your profile has been deleted.', 'success')
     return redirect(url_for('dashboard'))
 
+@app.route('/profile_message/<profile_id>', methods=['GET', 'POST'])
+def profile_message(profile_id):
+
+    """If a user is logged in, adds a message in the relevant document in messages array and creates a reference document in the profile messages collection for user dashboards.
+    """
+
+    if 'username' in session:
+        user = mongo.db.user.find_one({'username': session['username']})
+        
+        if request.method == 'POST':
+            profiles = mongo.db.profiles
+            profile = profiles.find_one_and_update({'_id': ObjectId(profile_id) },
+                                        {'$push':
+                                            {'messages':
+                                                {'username': session['username'],
+                                                 'date': datetime.utcnow(),
+                                                 'text': request.form.get('message')
+                                                 }
+                                            }
+                                        })
+            
+            message = mongo.db.profile_msgs
+            message.insert_one({'user': user['_id'],
+                                'from_user': session['username'],
+                                'profile': profile['_id'],
+                                'date': datetime.utcnow(),
+                                'to_user': profile['username'],
+                                'text': request.form.get('message')
+            })
+            
+            flash('Your message has been sent to { profile.username }.', 'success')
+            return redirect(url_for('blog'))
+        
+    flash('Please login to message users.', 'info')
+    return redirect(url_for('login'))    

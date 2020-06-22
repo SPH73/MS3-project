@@ -1,65 +1,20 @@
 {% extends 'layout/base.html' %}
+
+{% from 'pages/_formhelpers.html' import render_field %}
+
 {% block content %}
 
 <div class="container mt-5">
-    <section class="section-content neu">
+    <section class="section-content">
+        <legend class="text-center legend-border mb-4">Reset Password</legend>
         <form action="{{url_for('reset_password')}}" method="post" novalidate>
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="text-center legend-border mb-4">Reset Password</legend>
-                <div class="form-group">
-                    {{ form.username.label(class="form-control-label") }}
-                    {% if form.username.errors %}
-                    {{ form.username(class="form-control form-control-md is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.username.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.username(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.passphrase.label(class="form-control-label") }}
-                    {% if form.passphrase.errors %}
-                    {{ form.passphrase(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.passphrase.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.passphrase(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.new_password.label(class="form-control-label") }}
-                    {% if form.new_password.errors %}
-                    {{ form.password(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.new_password.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.new_password(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
-                    {{ form.confirm_password.label(class="form-control-label") }}
-                    {% if form.confirm_password.errors %}
-                    {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.confirm_password.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.confirm_password(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
+                {{ render_field(form.username, autofocus=true) }}
+                {{ render_field(form.passphrase) }}
+                {{ render_field(form.username, autofocus=true) }}
+                {{ render_field(form.new_password) }}
+                {{ render_field(form.confirm_password) }}
             </fieldset>
             </fieldset>
             <div class="form-group">

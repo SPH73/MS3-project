@@ -1,4 +1,7 @@
 {% extends 'layout/base.html' %}
+
+{% from 'pages/_formhelpers.html' import render_field %}
+
 {% block content %}
 
 <div class="container mt-3">
@@ -7,58 +10,10 @@
         <form action="{{ url_for('update_profile', profile_id=profile._id) }}" method="post" novalidate>
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <div class="form-group">
-                    {{ form.headline.label(class="form-control-label") }}
-                    {% if form.headline.errors %}
-                    {{ form.headline(class="form-control form-control-md is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.headline.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.headline(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.bio.label(class="form-control-label") }}
-                    {% if form.bio.errors %}
-                    {{ form.bio(class="form-control form-control-md is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.bio.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.bio(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.xp.label(class="form-control-label") }}
-                    {% if form.xp.errors %}
-                    {{ form.xp(class="form-control form-control-md is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.xp.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.xp(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.interests.label(class="form-control-label") }}
-                    {% if form.interests.errors %}
-                    {{ form.interests(class="form-control form-control-md is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in profile_form.interests.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.interests(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
+                {{ render_field(form.headline, autofocus=true) }}
+                {{ render_field(form.bio) }}
+                {{ render_field(form.xp) }}
+                {{ render_field(form.interests) }}
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-primary btn-sm") }}

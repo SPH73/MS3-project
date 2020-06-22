@@ -13,6 +13,7 @@
             </div>
             <div class="accordion-content">
                 {% if profile.user_id == session['username'] %}
+                <!-- User edit and delete buttons -->
                 <a href="{{ url_for('edit_profile', profile_id=profile._id) }}" id="profile-btn-edit" type="button"
                     class="btn btn-outline-primary btn-sm mb-1">Edit</a>
                 <button class="btn btn-outline-danger btn-sm mb-1" type="button" id="delete-profile-modal"
@@ -25,7 +26,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title" style="color:red;">WARNING</h4>
+                                <h5 class="modal-title" style="color:red;">WARNING</h5>
                             </div>
                             <div class="modal-body">
                                 <p>This process is immediate and cannot be undone. Are you sure?</p>
@@ -43,7 +44,30 @@
                     </div>
                 </div>
                 {% else %}
-                <button id="profile-message-btn" class="btn btn-outline-primary btn-sm mt-1 mb-1">Message</button>
+                <!-- Profile Message form  -->
+                <div>
+                    <button id="profile-message-btn{{ loop.index }}"
+                        class="btn btn-outline-secondary btn-sm mt-1 mb-1">Message</button>
+                    <div class="form-box">
+                        <div id="profile-message-form-div{{ loop.index }}" class="form-group">
+                            <form id="profile-message-form{{ loop.index }}"
+                                action="{{ url_for('profile_message', profile_id=profile._id) }}" method="post">
+                                <div class="form-group">
+                                    <textarea class="form-control mt-2 msg-form" name="message"
+                                        id="message{{ loop.index }}" rows="2" aria-describedby="msgHelpInline"
+                                        required></textarea>
+                                    <small id="msgHelpInline{{ loop.index }}" class="text-muted">
+                                        Message a user you are interested in collaborating with.
+                                    </small>
+                                </div>
+                                <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-1">Send
+                                    message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
 
                 {% endif %}
                 <p>Bio: - {{ profile.bio|safe }}</p>
@@ -56,12 +80,9 @@
                         {% endfor %}
                     </li>
                 </ul>
-                <p>I have {{ profile.xp }} years experience in some or all of the above.</p>
-                <ul>I am keen to collaborate on projcts with any of the following:
-                    {% for item in profile.interests %}
-                    <li>{{ item }}</li>
-                    {% endfor %}
-                </ul>
+                <p>I have {{ profile.xp }} years experience.</p>
+
+                <p>{{ profile.interests }}</p>
 
                 <ul>My personal links:
                     {% for link in profile.personal_links %}

@@ -234,7 +234,11 @@
             <!-- Profile Messages -->
             <div id="profileMsg" class="tabcontent">
                 <div class="container">
-                    <p>Profile Messages Here.</p>
+                    {% if profile_message %}
+                    <p>You have a project piece</p>
+                    {% else %}
+                    <p>Your project messages will appear here when you send or receive them.</p>
+                    {% endif %}
                 </div>
 
             </div>
@@ -244,25 +248,34 @@
             <!-- PROJECT TAB CONTENT -->
             <!-- Project Messages -->
             <div id="projectMsg" class="tabcontent">
-                <p>Project Messages here.</p>
+                <div class="container">
+                    {% if project_messages %}
+                    <p>You have a project message.</p>
+                    {% else %}
+                    <p>Your project messages will appear here when you send or receive them.</p>
+                    {% endif %}
+                </div>
             </div>
             <!-- End of Project Messages -->
 
             <!-- Project Pieces -->
             <div id="pieces" class="tabcontent">
-                <p>My Pieces here.</p>
+                <div class="container">
+                    {% if pieces %}
+                    <p>You have a project message.</p>
+                    {% else %}
+                    <p>Your project messages will appear here when you send or receive them.</p>
+                    {% endif %}
+                </div>
+
+
             </div>
             <!-- End of Pieces -->
 
             <!-- Projects  -->
             <div id="projects" class="tabcontent">
                 <div class="container">
-                    {% if not projects %}
-                    <div class="col-sm-12 text-center">
-                        <p>Your projects will appear here.</p>
-                    </div>
-                    {% endif %}
-                    {% if projects %}
+                    {% if  projects %}
                     {% for project in projects %}
                     <div class="accordion">
                         <div id="project-accordion" class="accordion-label"><span class="title">
@@ -327,8 +340,8 @@
                         <hr>
                         {% endif %}
                         {% endfor %}
-                        {% endif %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
             <!-- End of Projects -->

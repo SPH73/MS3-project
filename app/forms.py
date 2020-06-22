@@ -53,15 +53,12 @@ class BlogForm(FlaskForm):
     submit = SubmitField('Send')
     
 class PieceForm(FlaskForm):
-    task = StringField('Task name')
-    description = StringField('Task description')
-    Domain = SelectField('Domain', choices=['Frontend', 'Backend', 'Fullstack'])
-    Language = StringField('Language')
-    Framework = StringField('Framework')
-    status = StringField('Status', default='open' )
-    username = StringField('Username (if assigned)')
-    due_date = StringField('Due date', default="January 1, 1970", validators=[DataRequired()])
-    add_piece = SubmitField('Add Piece')
+    task = StringField('Task name *',validators=[DataRequired()])
+    description = TextAreaField('Describe the task and expectations *', validators=[DataRequired()])
+    status = StringField('Status *', default='pending acceptance', validators=[DataRequired()])
+    username = StringField('Username for whom the piece has been created *', validators=[DataRequired()])
+    due_date = StringField('Due date *', validators=[DataRequired()])
+    add_piece = SubmitField('Send Piece')
   
     
 class ProjectForm(FlaskForm):

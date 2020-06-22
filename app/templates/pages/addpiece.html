@@ -1,67 +1,23 @@
 {% extends 'layout/base.html' %}
+
+{% from 'pages/_formhelpers.html' import render_field %}
+
 {% block content %}
 
 <div class="container mt-3">
     <section class="section-content">
-        <legend class="text-center legend-border mb-4">Add Project Piece</legend>
-        <form action="{{url_for('add_piece')}}" method="post" novalidate>
+        <legend class="text-center legend-border mb-4">Create a Project Piece</legend>
+        <form action="{{url_for('add_piece', project_id=project._id) }}" method="post" novalidate>
+            {{ form.hidden_tag() }}
             <fieldset>
-                {{ piece.hidden_tag() }}
-                <div class="form-group">
-                    {{ piece.task.label(class="form-control form-control-lg") }}
-                    {% if piece.task.errors %}
-                    {{ piece.task(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in piece.task.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ piece.task(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ piece.description.label(class="form-control form-control-lg") }}
-                    {% if piece.description.errors %}
-                    {{ piece.description(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in piece.description.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ piece.description(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ piece.status.label(class="form-control form-control-lg") }}
-                    {% if piece.description.errors %}
-                    {{ piece.description(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in piece.description.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ piece.status(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ piece.username.label(class="form-control form-control-lg") }}
-                    {% if piece.username.errors %}
-                    {{ piece.username(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in piece.username.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ piece.username(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
+                {{ render_field(form.task, autofocus=true) }}
+                {{ render_field(form.description) }}
+                {{ render_field(form.due_date) }}
+                {{ render_field(form.status) }}
+                {{ render_field(form.username) }}
             </fieldset>
             <div class="form-group">
-                {{ piece.add_piece(class="btn btn-outline-primary btn-sm") }}
+                {{ form.add_piece(class="btn btn-outline-primary btn-sm") }}
             </div>
         </form>
     </section>

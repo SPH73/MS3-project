@@ -1,4 +1,7 @@
 {% extends 'layout/base.html' %}
+
+{% from 'pages/_formhelpers.html' import render_field %}
+
 {% block content %}
 
 <div class="container mt-3">
@@ -6,37 +9,13 @@
         <legend class="text-center legend-border mb-4">{{ legend }}</legend>
         <div class="post-content mt-0">
             <form action="{{ url_for('add_article') }}" method="post" novalidate>
-                {{ article_form.hidden_tag() }}
+                {{ form.hidden_tag() }}
                 <fieldset class="form-group">
-                    <div class="form-group">
-                        {{ article_form.title.label(class="form-control-label") }}
-                        {% if article_form.title.errors %}
-                        {{ article_form.title(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in article_form.title.errors %}
-                            <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                        {% else %}
-                        {{ article_form.title(class="form-control form-control-lg") }}
-                        {% endif %}
-                    </div>
-                    <div class="form-group">
-                        {{ article_form.content.label(class="form-control-label") }}
-                        {% if article_form.content.errors %}
-                        {{ article_form.content(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in article_form.content.errors %}
-                            <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                        {% else %}
-                        {{ article_form.content(class="form-control form-control-lg") }}
-                        {% endif %}
-                    </div>
+                    {{ render_field(form.title, autofocus=true) }}
+                    {{ render_field(form.content) }}
                 </fieldset>
                 <div class="form-group">
-                    {{ article_form.submit(class="btn btn-outline-primary btn-sm") }}
+                    {{ form.submit(class="btn btn-outline-primary btn-sm") }}
                 </div>
             </form>
         </div>
