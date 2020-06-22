@@ -9,19 +9,18 @@
             <ul class="dash-tabs">
                 <li><a class="tab-item dropdown-toggle">Articles</a>
                     <ul class="tabs-dropdown">
+                        {% if articles %}
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'articles')">My Articles</a>
                         </li>
+                        {% endif %}
                         <li><a class="tab-item tab-link" href="{{ url_for('add_article') }}">New Article</a></li>
                     </ul>
                 </li>
                 <li><a class="tab-item dropdown-toggle">Profile</a>
                     <ul class="tabs-dropdown">
+                        {% if profile %}
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'profile')">My Profile</a>
                         </li>
-                        <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'profileMsg')">Profile
-                                messages</a>
-                        </li>
-                        {% if profile %}
                         <li><a class="tab-item tab-link"
                                 href="{{ url_for('edit_profile', profile_id=profile._id) }}">Update profile</a></li>
                         <li><a class="tab-item tab-link" id="delete-profile-modal" data-toggle="modal"
@@ -31,18 +30,43 @@
                         {% else %}
                         <li><a class="tab-item tab-link" href="{{ url_for('add_profile') }}">Add profile</a></li>
                         {% endif %}
+                        {% if snt_profile_msgs %}
+                        <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'snt_profile_msgs')">Sent
+                                Profile
+                                messages</a>
+                        </li>
+                        {% endif %}
+                        {% if rcvd_profile_msgs %}
+                        <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'rcvd_profile_msgs')">Received
+                                Profile
+                                messages</a>
+                        </li>
+                        {% endif %}
                         <li><a class="tab-item tab-link" href="{{ url_for('update_password') }}">Update password</a>
                         </li>
                     </ul>
                 </li>
                 <li><a class="tab-item dropdown-toggle">Projects</a>
                     <ul class="tabs-dropdown">
+                        {% if projects %}
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'projects')">My Projects</a>
                         </li>
-                        <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'pieces')">My Pieces</a></li>
-                        <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'projectMsg')">Project
-                                Messages</a></li>
+                        {% endif %}
                         <li><a class="tab-item tab-link" href="{{ url_for('add_project') }}">Add Project</a></li>
+                        {% if rcvd_project_msgs %}
+                        <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'rcvd_project_msgs')">Received
+                                Project
+                                Messages</a></li>
+                        {% endif %}
+                        {% if snt_project_msgs %}
+                        <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'snt_project_msgs')">Sent
+                                Project
+                                Messages</a></li>
+                        {% endif %}
+                        <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'rcvd_pieces')">Recevied
+                                Pieces</a></li>
+                        <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'snt_pieces')">Sent
+                                Pieces</a></li>
                     </ul>
                 </li>
             </ul>
@@ -121,7 +145,6 @@
                             <div>
                                 <div id="dash-article-comments">
                                     <ul><span class="comments">Comments: </span>
-                                        <hr>
                                         {% if article.comments %}
                                         {% for comment in article.comments %}
                                         <li class="secondary-title">On {{ comment.date.strftime('%d, %B %Y') }},
@@ -231,54 +254,100 @@
             </div>
             <!-- End of Profile -->
 
-            <!-- Profile Messages -->
-            <div id="profileMsg" class="tabcontent">
+            <!-- Received Profile Messages -->
+            <div id="rcvd_profile_msgs" class="tabcontent">
                 <div class="container">
-                    {% for message in profile_msgs %}
-                    {% if message.to_user == session['username'] %}
-                    <h5>Received Messages</h5>
+                    {% if rcvd_profile_msgs %}
+                    <h5>Received Profile Messages</h5>
                     <hr>
-                    <p>You have received a message.</p>
-
-                    {% elif message.from_user == session['username'] %}
-                    <h5>Sent messages</h5>
-                    <hr>
-                    <p>You sent a profile message.</p>
-                    {% else %}
-                    <p>Your profile messages will appear here when you send or receive them.</p>
-                    {% endif %}
+                    {% for message in rcvd_profile_msgs %}
+                    <ul>
+                        <li>On {{ message.date.strftime('%d, %B %Y') }}, {{ message.from_user }} wrote: <br>
+                        </li>
+                        {% if not loop.last %}
+                        <hr>
+                        {% endif %}
+                    </ul>
                     {% endfor %}
+                    {% else %}
+                    <p class="text-center">You haven't received any profile messages yet.</p>
+                    {% endif %}
                 </div>
-
+            </div>
+            <!-- Sent Profile Messages -->
+            <div id="sent_profile_msgs" class="tabcontent">
+                <div class="container">
+                    <ul>
+                        {% if snt_profile_msgs %}
+                        <h5>Sent Profile Messages</h5>
+                        <hr>
+                        {% for message in snt_profile_msgs %}
+                        <li>On {{ message.date.strftime('%d, %B %Y') }}, you wrote to {{ message.to_user }}: <br>
+                            {{ message.text }}
+                        </li>
+                        {% if not loop.last %}
+                        <hr>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-center">You haven't sent any profile messages yet.</p>
+                    {% endif %}
+                </div>
             </div>
             <!-- End of Profile Messages -->
             <!-- /END OF PROFILE TAB CONTENT -->
 
             <!-- PROJECT TAB CONTENT -->
             <!-- Project Messages -->
-            <div id="projectMsg" class="tabcontent">
+            <!-- Received Project Messages -->
+            <div id="rcvd_project_msgs" class="tabcontent">
                 <div class="container">
-                    {% for message in project_msgs %}
-                    {% if message.to_user == session['username'] %}
-                    <h5>Received Messages</h5>
-                    <hr>
-                    <p>You have received a project message.</p>
-                    {% elif message.from_user == session['username'] %}
-                    <h5>Sent messages</h5>
-                    <hr>
-                    <p>You sent a project message.</p>
+                    <ul>
+                        {% if rcvd_project_msgs %}
+                        <h5>Received Project Messages</h5>
+                        <hr>
+                        {% for message in rcvd_project_msgs %}
+                        <li>On {{ message.date.strftime('%d, %B %Y') }}, {{ message.from_user }} wrote: <br>
+                            {{ message.text }}
+                        </li>
+                        {% if not loop.last %}
+                        <hr>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
                     {% else %}
-                    <p>Your project messages will appear here when you send or receive them.</p>
+                    <p class="text-center">You haven't received any project messages yet.</p>
                     {% endif %}
-                    {% endfor %}
+                </div>
+            </div>
+            <!-- Sent Project Messages -->
+            <div id="snt_project_msgs" class="tabcontent">
+                <div class="container">
+                    <ul>
+                        {% if snt_project_msgs %}
+                        <h5>Sent Project Messages</h5>
+                        <hr>
+                        {% for message in snt_project_msgs %}
+                        <li>On {{ message.date.strftime('%d, %B %Y') }}, you wrote to {{ message.to_user }}: <br>
+                            {{ message.text }}
+                        </li>
+                        {% if not loop.last %}
+                        <hr>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-center">You have not sent any project messages yet.</p>
+                    {% endif %}
                 </div>
             </div>
             <!-- End of Project Messages -->
 
             <!-- Project Pieces -->
-            <div id="pieces" class="tabcontent">
+            <div id="snt_pieces" class="tabcontent">
                 <div class="container">
-                    {% for piece in pieces %}
+                    {% for piece in snt_pieces %}
                     {% if piece.assignee == session['username'] %}
 
                     {% if piece.status == "pending acceptance" %}
@@ -303,7 +372,7 @@
 
                     {% endif %}
 
-                    {% elif piece.owner == session['username'] %}
+                    {% elif piece.owner == current_user['username'] %}
 
                     {% if piece.status == "pending acceptance" %}
                     <h5>New Pieces</h5>
@@ -327,13 +396,11 @@
                     {% endif %}
 
                     {% else %}
-                    <p>Your project pieces will appear here when you send or receive them.</p>
+                    <p class="text-center">Your project pieces will appear here when you send or receive them.</p>
                     {% endif %}
 
                     {% endfor %}
                 </div>
-
-
             </div>
             <!-- End of Pieces -->
 

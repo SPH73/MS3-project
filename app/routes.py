@@ -171,21 +171,38 @@ def dashboard():
     
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
+        # sent
         articles = mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING)
         profile = mongo.db.profiles.find_one({'user_id': user['_id']})
-        profile_msgs = mongo.db.profile_msgs.find().sort('date',pymongo.DESCENDING)
-        projects = mongo.db.projects.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING)
-        project_msgs = mongo.db.project_msgs.find().sort('date',pymongo.DESCENDING)
-        pieces = mongo.db.project_pieces.find().sort('date',pymongo.DESCENDING)
+        projects = mongo.db.projects.find({
+            'from_user': user['username']}).sort('date',pymongo.DESCENDING)
+        snt_profile_msgs = mongo.db.profile_msgs.find({
+            'from_user': user['username']}).sort('date',pymongo.DESCENDING)
+        snt_project_msgs = mongo.db.project_msgs.find({
+            'from_user': user['username']}).sort('date',pymongo.DESCENDING)
+        snt_pieces = mongo.db.project_pieces.find({
+            'to_user': user['username']}).sort('date',pymongo.DESCENDING)
+        
+        # received
+        rcvd_profile_msgs = mongo.db.profile_msgs.find({
+            'to_user': user['username']}).sort('date',pymongo.DESCENDING)
+        rcvd_project_msgs = mongo.db.project_msgs.find({
+            'to_user': user['username']}).sort('date',pymongo.DESCENDING)        
+        rcvd_pieces = mongo.db.project_pieces.find({
+            'assignee': user['username']}).sort('date',pymongo.DESCENDING)
+        
 
         return render_template('pages/dashboard.html', 
                                 title='Dashboard',
                                 articles=articles,
                                 profile=profile,
-                                profile_msgs=profile_msgs,
                                 projects=projects,
-                                project_msgs=project_msgs,
-                                pieces=pieces,
+                                snt_profile_msgs=snt_profile_msgs,
+                                snt_project_msgs=snt_project_msgs,
+                                snt_pieces=snt_pieces,
+                                rcvd_profile_msgs=rcvd_profile_msgs,
+                                rcvd_project_msgs=rcvd_project_msgs,
+                                rcvd_pieces=rcvd_pieces,
                                 current_user=user
         )
         
@@ -553,7 +570,7 @@ def profile_msg(profile_id):
                                         })
             
             message = mongo.db.profile_msgs
-            message.insert_one({'user': user['_id'],
+            message.insert_one({'user_id': user['_id'],
                                 'from_user': session['username'],
                                 'profile_id': profile['_id'],
                                 'date': datetime.utcnow(),
@@ -561,8 +578,8 @@ def profile_msg(profile_id):
                                 'text': request.form.get('message')
             })
             
-            flash('Your message has been sent to {profile.username}.', 'success')
-            return redirect(url_for('blog'))
+            flash('Your message has been sent.', 'success')
+            return redirect(url_for('dashboard'))
         
     flash('Please login to message users.', 'info')
     return redirect(url_for('login'))
@@ -589,7 +606,7 @@ def project_msg(project_id):
                                         })
             
             message = mongo.db.project_msgs
-            message.insert_one({'user': user['_id'],
+            message.insert_one({'user_id': user['_id'],
                                 'from_user': session['username'],
                                 'project_id': project_msg['_id'],
                                 'date': datetime.utcnow(),
@@ -597,8 +614,8 @@ def project_msg(project_id):
                                 'text': request.form.get('message')
             })
             
-            flash('Your message has been sent to {project.username}.', 'success')
-            return redirect(url_for('blog'))
+            flash('Your message has been sent.', 'success')
+            return redirect(url_for('dashboard'))
         
     flash('Please login to message users.', 'info')
     return redirect(url_for('login'))
