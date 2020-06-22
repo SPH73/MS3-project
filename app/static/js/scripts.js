@@ -27,6 +27,14 @@ $('#deadline').datepicker({
     showOtherMonths: true
 });
 
+$('#due_date').datepicker({
+    minDate: today,
+    changeYear: true,
+    changeMonth: true,
+    showWeek: true,
+    showOtherMonths: true
+});
+
 // toggle blog comment form
 $(".comment-btn").click(function (event) {
 
