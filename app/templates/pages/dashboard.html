@@ -42,7 +42,7 @@
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'pieces')">My Pieces</a></li>
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'projectMsg')">Project
                                 Messages</a></li>
-                        <li><a class="tab-item tab-link" href="#">Add Project</a></li>
+                        <li><a class="tab-item tab-link" href="{{ url_for('add_project') }}">Add Project</a></li>
                     </ul>
                 </li>
             </ul>
@@ -234,11 +234,15 @@
             <!-- Profile Messages -->
             <div id="profileMsg" class="tabcontent">
                 <div class="container">
-                    {% if profile_message %}
-                    <p>You have a project piece</p>
+                    {% for message in profile_msgs %}
+                    {% if message.to_user == session['username'] %}
+                    <p>You have been sent a message.</p>
+                    {% elif message.from_user == session['username'] %}
+                    <p>You sent a message.</p>
                     {% else %}
-                    <p>Your project messages will appear here when you send or receive them.</p>
+                    <p>Your profile messages will appear here when you send or receive them.</p>
                     {% endif %}
+                    {% endfor %}
                 </div>
 
             </div>
@@ -249,11 +253,15 @@
             <!-- Project Messages -->
             <div id="projectMsg" class="tabcontent">
                 <div class="container">
-                    {% if project_messages %}
-                    <p>You have a project message.</p>
+                    {% for message in project_msgs %}
+                    {% if message.to_user == session['username'] %}
+                    <p>You have been sent a message.</p>
+                    {% elif message.from_user == session['username'] %}
+                    <p>You sent a message.</p>
                     {% else %}
                     <p>Your project messages will appear here when you send or receive them.</p>
                     {% endif %}
+                    {% endfor %}
                 </div>
             </div>
             <!-- End of Project Messages -->
@@ -261,11 +269,15 @@
             <!-- Project Pieces -->
             <div id="pieces" class="tabcontent">
                 <div class="container">
-                    {% if pieces %}
-                    <p>You have a project message.</p>
+                    {% for piece in pieces %}
+                    {% if piece.assignee == session['username'] %}
+                    <p>You have been sent a piece.</p>
+                    {% elif piece.owner == session['username'] %}
+                    <p>You sent a piece.</p>
                     {% else %}
-                    <p>Your project messages will appear here when you send or receive them.</p>
+                    <p>Your project pieces will appear here when you send or receive them.</p>
                     {% endif %}
+                    {% endfor %}
                 </div>
 
 
@@ -284,6 +296,8 @@
                                 {{ project.date.strftime('%d %B, %Y') }}</span>
                         </div>
                         <div class="accordion-content">
+                            <a href="{{ url_for('add_piece', project_id=project._id) }}" id="project-btn-piece"
+                                type="button" class="btn btn-outline-info btn-sm mb-1">Add piece</a>
                             <a href="{{ url_for('edit_project', project_id=project._id) }}"
                                 id="project-btn-edit{{ loop.index }}" type="button"
                                 class="btn btn-outline-primary btn-sm mb-1">Edit</a>

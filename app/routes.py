@@ -173,15 +173,20 @@ def dashboard():
         user = mongo.db.user.find_one({'username': session['username']})
         articles = mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING)
         profile = mongo.db.profiles.find_one({'user_id': user['_id']})
+        profile_msgs = mongo.db.profile_msgs.find().sort('date',pymongo.DESCENDING)
         projects = mongo.db.projects.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING)
-        pieces = mongo.db.project_pieces.find({'assignee': session['username']})
+        project_msgs = mongo.db.project_msgs.find().sort('date',pymongo.DESCENDING)
+        pieces = mongo.db.project_pieces.find().sort('date',pymongo.DESCENDING)
 
         return render_template('pages/dashboard.html', 
                                 title='Dashboard',
                                 articles=articles,
                                 profile=profile,
+                                profile_msgs=profile_msgs,
                                 projects=projects,
-                                pieces=pieces
+                                project_msgs=project_msgs,
+                                pieces=pieces,
+                                current_user=user
         )
         
     flash('You need to be logged in to access your dashboard.', 'warning')
