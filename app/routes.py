@@ -40,11 +40,12 @@ def register():
                 if registered_username is None:
                     h_phrase = bcrypt.hashpw(form.passphrase.data.encode('utf-8'), bcrypt.gensalt())
                     hashed_pw = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt())
-                    user.insert({'username': form.username.data, 
-                             'email': form.email.data,
-                             'passphrase': h_phrase, 
-                             'hashed_password': hashed_pw
-                    })
+                    user.insert({'created': datetime.utcnow(),
+                                 'username': form.username.data, 
+                                 'email': form.email.data,
+                                 'passphrase': h_phrase, 
+                                 'hashed_password': hashed_pw
+                     })
                     
                     flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your dashboard!','success')
                     return redirect(url_for('login'))
