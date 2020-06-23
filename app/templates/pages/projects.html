@@ -20,7 +20,7 @@
                 <button class="btn btn-outline-danger btn-sm mb-1" type="button" id="delete-project-modal"
                     data-toggle="modal" data-target="#deleteProject">Delete
                 </button>
-                <!-- Modal -->
+                <!-- Modal for project delete button -->
                 <div class="modal fade" id="deleteProject" role="dialog">
                     <div class="modal-dialog">
                         <!-- Modal content-->
@@ -63,7 +63,7 @@
                 <!-- Project Message form  -->
                 <div>
                     <button id="project-message-btn{{ loop.index }}"
-                        class="msg-btn btn btn-outline-secondary btn-sm mt-1 mb-1">Message</button>
+                        class="msg-btn btn btn-outline-secondary btn-sm mt-1 mb-1">Close</button>
                     <div class="form-box show">
                         <div id="project-message-form-div{{ loop.index }}" class="form-group">
                             <form id="project-message-form{{ loop.index }}"
@@ -73,7 +73,7 @@
                                         id="message{{ loop.index }}" rows="2" aria-describedby="msgHelpInline"
                                         required></textarea>
                                     <small id="msgHelpInline{{ loop.index }}" class="text-muted">
-                                        Send the project owner a message if this project if you would like to work on
+                                        Send {{ project.owner }} a message if you would like to work on
                                         this project.
                                     </small>
                                 </div>
