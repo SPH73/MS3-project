@@ -9,18 +9,17 @@
             <ul class="dash-tabs">
                 <li><a class="tab-item dropdown-toggle">Articles</a>
                     <ul class="tabs-dropdown">
-                        {% if articles %}
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'articles')">My Articles</a>
                         </li>
-                        {% endif %}
                         <li><a class="tab-item tab-link" href="{{ url_for('add_article') }}">New Article</a></li>
                     </ul>
                 </li>
                 <li><a class="tab-item dropdown-toggle">Profile</a>
                     <ul class="tabs-dropdown">
-                        {% if profile %}
+
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'profile')">My Profile</a>
                         </li>
+                        {% if profile %}
                         <li><a class="tab-item tab-link"
                                 href="{{ url_for('edit_profile', profile_id=profile._id) }}">Update profile</a></li>
                         <li><a class="tab-item tab-link" id="delete-profile-modal" data-toggle="modal"
@@ -30,39 +29,30 @@
                         {% else %}
                         <li><a class="tab-item tab-link" href="{{ url_for('add_profile') }}">Add profile</a></li>
                         {% endif %}
-                        {% if snt_profile_msgs %}
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'snt_profile_msgs')">Sent
                                 Profile
                                 messages</a>
                         </li>
-                        {% endif %}
-                        {% if rcvd_profile_msgs %}
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'rcvd_profile_msgs')">Received
                                 Profile
                                 messages</a>
                         </li>
-                        {% endif %}
                         <li><a class="tab-item tab-link" href="{{ url_for('update_password') }}">Update password</a>
                         </li>
                     </ul>
                 </li>
                 <li><a class="tab-item dropdown-toggle">Projects</a>
                     <ul class="tabs-dropdown">
-                        {% if projects %}
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'projects')">My Projects</a>
                         </li>
-                        {% endif %}
                         <li><a class="tab-item tab-link" href="{{ url_for('add_project') }}">Add Project</a></li>
-                        {% if rcvd_project_msgs %}
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'rcvd_project_msgs')">Received
                                 Project
                                 Messages</a></li>
-                        {% endif %}
-                        {% if snt_project_msgs %}
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'snt_project_msgs')">Sent
                                 Project
                                 Messages</a></li>
-                        {% endif %}
+
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'rcvd_pieces')">Recevied
                                 Pieces</a></li>
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'snt_pieces')">Sent
@@ -100,8 +90,8 @@
             <!-- ARTICLE TAB CONTENT -->
             <div id="articles" class="tabcontent">
                 <div class="container">
+                    {% if articles %}
                     <div class="accordion">
-                        {% if articles %}
                         {% for article in articles %}
                         <div class="accordion-label"><span class="title">
                                 {{ article.title }}
@@ -275,11 +265,11 @@
                 </div>
             </div>
             <!-- Sent Profile Messages -->
-            <div id="sent_profile_msgs" class="tabcontent">
+            <div id="snt_profile_msgs" class="tabcontent">
                 <div class="container">
                     <ul>
                         {% if snt_profile_msgs %}
-                        <h5>Sent Profile Messages</h5>
+                        <h5>Received Profile Messages</h5>
                         <hr>
                         {% for message in snt_profile_msgs %}
                         <li>On {{ message.date.strftime('%d, %B %Y') }}, you wrote to {{ message.to_user }}: <br>
@@ -474,14 +464,18 @@
                         <hr>
                         {% endif %}
                         {% endfor %}
+                        {% else %}
+                        <div class="col-sm-12 text-center">
+                            <p>Your projects will appear here.</p>
+                        </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
                 </div>
+
+                <!-- End of Projects -->
+                <!-- /END OF PROJECT TAB CONTENT -->
+                <!-- /END TAB CONTENT -->
             </div>
-            <!-- End of Projects -->
-            <!-- /END OF PROJECT TAB CONTENT -->
-            <!-- /END TAB CONTENT -->
-        </div>
     </section>
 </div>
 {% endblock content %}

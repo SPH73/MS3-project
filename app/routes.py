@@ -5,7 +5,7 @@ import pymongo
 from datetime import datetime
 from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, ListForm
 import bcrypt
-import json
+
 
 
 @app.route("/")
@@ -171,25 +171,25 @@ def dashboard():
     
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
-        # sent
-        articles = mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING)
+        # created content
+        articles = list(mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING))
         profile = mongo.db.profiles.find_one({'user_id': user['_id']})
-        projects = mongo.db.projects.find({
-            'from_user': user['username']}).sort('date',pymongo.DESCENDING)
-        snt_profile_msgs = mongo.db.profile_msgs.find({
-            'from_user': user['username']}).sort('date',pymongo.DESCENDING)
-        snt_project_msgs = mongo.db.project_msgs.find({
-            'from_user': user['username']}).sort('date',pymongo.DESCENDING)
-        snt_pieces = mongo.db.project_pieces.find({
-            'to_user': user['username']}).sort('date',pymongo.DESCENDING)
+        projects = list(mongo.db.projects.find({
+            'from_user': user['username']}).sort('date',pymongo.DESCENDING))
+        snt_profile_msgs = list(mongo.db.profile_msgs.find({
+            'from_user': user['username']}).sort('date',pymongo.DESCENDING))
+        snt_project_msgs = list(mongo.db.project_msgs.find({
+            'from_user': user['username']}).sort('date',pymongo.DESCENDING))
+        snt_pieces = list(mongo.db.project_pieces.find({
+            'to_user': user['username']}).sort('date',pymongo.DESCENDING))
         
-        # received
-        rcvd_profile_msgs = mongo.db.profile_msgs.find({
-            'to_user': user['username']}).sort('date',pymongo.DESCENDING)
-        rcvd_project_msgs = mongo.db.project_msgs.find({
-            'to_user': user['username']}).sort('date',pymongo.DESCENDING)        
-        rcvd_pieces = mongo.db.project_pieces.find({
-            'assignee': user['username']}).sort('date',pymongo.DESCENDING)
+        # received content
+        rcvd_profile_msgs = list(mongo.db.profile_msgs.find({
+            'to_user': user['username']}).sort('date',pymongo.DESCENDING))
+        rcvd_project_msgs = list(mongo.db.project_msgs.find({
+            'to_user': user['username']}).sort('date',pymongo.DESCENDING))      
+        rcvd_pieces = list(mongo.db.project_pieces.find({
+            'assignee': user['username']}).sort('date',pymongo.DESCENDING))
         
 
         return render_template('pages/dashboard.html', 
@@ -619,3 +619,7 @@ def project_msg(project_id):
         
     flash('Please login to message users.', 'info')
     return redirect(url_for('login'))
+
+@app.route('/update_pr_img', methods=['GET', 'POST'])
+def update_pr_img():
+    pass

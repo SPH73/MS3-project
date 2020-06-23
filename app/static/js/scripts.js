@@ -78,23 +78,24 @@ $(".msg-btn").click(function (event, target) {
 
 })
 
-function openTab(evt, tabName) {
+function openTab(event, tabName) {
     // Declare all variables
-    let i, tabcontent, tablinks;
+    let i, tabcontent, tablink;
 
     // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
+    tabcontent = document.querySelectorAll(".tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
 
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    // Get all elements with class="tablink" and remove the class "active"
+    tablink = document.querySelectorAll(".tablink");
+    console.log(tablink)
+    for (i = 0; i < tablink.length; i++) {
+        tablink[i].className = tablink[i].className.replace(" active", "");
     }
 
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
+    event.currentTarget.className += " active";
 }
