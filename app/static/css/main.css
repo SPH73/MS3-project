@@ -22,7 +22,8 @@ body {
   font-size: 0.7rem;
 }
 
-h5 {
+h5,
+h6 {
   color: #089b93;
 }
 
