@@ -253,6 +253,7 @@
                     {% for message in rcvd_profile_msgs %}
                     <ul>
                         <li>On {{ message.date.strftime('%d, %B %Y') }}, {{ message.from_user }} wrote: <br>
+                            {{ message.text }}
                         </li>
                         {% if not loop.last %}
                         <hr>
@@ -267,25 +268,27 @@
             <!-- Sent Profile Messages -->
             <div id="snt_profile_msgs" class="tabcontent">
                 <div class="container">
+                    {% if snt_profile_msgs %}
+                    <h5>Sent Profile Messages</h5>
+                    <hr>
+                    {% for message in snt_profile_msgs %}
                     <ul>
-                        {% if snt_profile_msgs %}
-                        <h5>Sent Profile Messages</h5>
-                        <hr>
-                        {% for message in snt_profile_msgs %}
                         <li>On {{ message.date.strftime('%d, %B %Y') }}, you wrote to {{ message.to_user }}: <br>
                             {{ message.text }}
                         </li>
                         {% if not loop.last %}
                         <hr>
                         {% endif %}
-                        {% endfor %}
+
                     </ul>
+                    {% endfor %}
                     {% else %}
                     <p class="text-center">You haven't sent any profile messages yet.</p>
                     {% endif %}
                 </div>
             </div>
-            <!-- End of Profile Messages -->
+            <!-- /End of Sent Profile Messages -->
+            <!-- /END OF PROFILE MESSAGES -->
             <!-- /END OF PROFILE TAB CONTENT -->
 
             <!-- PROJECT TAB CONTENT -->
@@ -310,7 +313,7 @@
                                 id="delete-project-modal{{ loop.index }}" data-toggle="modal"
                                 data-target="#deleteProject">Delete
                             </button>
-                            <!-- Modal -->
+                            <!-- Modal to Delete Project -->
                             <div class="modal fade" id="deleteProject{{ loop.index }}" role="dialog">
                                 <div class="modal-dialog">
                                     <!-- Modal content-->
@@ -374,8 +377,8 @@
             <!-- Received Project Messages -->
             <div id="rcvd_project_msgs" class="tabcontent">
                 <div class="container">
+                    {% if rcvd_project_msgs %}
                     <ul>
-                        {% if rcvd_project_msgs %}
                         <h5>Received Project Messages</h5>
                         <hr>
                         {% for message in rcvd_project_msgs %}
@@ -385,8 +388,9 @@
                         {% if not loop.last %}
                         <hr>
                         {% endif %}
-                        {% endfor %}
                     </ul>
+                    {% endfor %}
+
                     {% else %}
                     <p class="text-center">You haven't received any project messages yet.</p>
                     {% endif %}
@@ -413,9 +417,11 @@
                     {% endif %}
                 </div>
             </div>
-            <!-- End of Project Messages -->
+            <!-- /End of Sent Project Messages -->
+            <!-- /End of Project Messages -->
 
-            <!-- Project Pieces -->
+            <!-- PROJECT PIECES -->
+            <!-- Sent Pieces -->
             <div id="snt_pieces" class="tabcontent">
                 <div class="container">
                     {% if snt_pieces %}
@@ -429,10 +435,10 @@
                                 working on them.</em></small></p>
                     <hr>
                     <div>
-                        <ul>{% for piece in rcvd_pieces %}
+                        <ul>{% for piece in snt_pieces %}
                             <li>
-                                <p>You sent a piece of <strong>'{{ piece.project_title }}'</strong> <br>to
-                                    {{ piece.assignee }} on {{ piece.date.strftime('%d %B, %Y') }}</p>
+                                <p>You sent a piece of <strong>'{{ piece.project_title }}'</strong> <br> to
+                                    {{ piece.assignee }} on {{ piece.date.strftime('%d %B, %Y') }}.</p>
                                 <p>Task name: {{ piece.task }}</p>
                                 <p><strong>Due date: {{ piece.due_date.strftime('%d %B, %Y') }}</strong></p>
                                 <p>You provided the following brief and information regarding your
@@ -447,16 +453,16 @@
                             {% if not loop.last %}
                             <hr>
                             {% endif %}
-                            {% endfor %}
                         </ul>
+                        {% endfor %}
                     </div>
                     <hr>
 
                     <!-- sent and accepted -->
                     {% elif piece.status == "accepted" %}
                     <h5>Accepted Pieces</h5>
-                    <p><small><em>These pieces have been accepted indicating that your collaborator has commenced work
-                                on them.</em></small></p>
+                    <p><small><em>These pieces have been accepted indicating that your collaborator is preparing to
+                                commence work on them.</em></small></p>
                     <hr>
                     <div>
                         <ul>{% for piece in snt_pieces %}
@@ -478,8 +484,8 @@
                             {% if not loop.last %}
                             <hr>
                             {% endif %}
-                            {% endfor %}
                         </ul>
+                        {% endfor %}
                     </div>
                     <hr>
 
@@ -487,36 +493,38 @@
                     {% elif piece.status == "pending approval" %}
                     <h5>Pieces submitted for approval</h5>
                     <p><small><em>These pieces have been submitted and your collaborators are waiting for you to approve
-                                them by changing the status to 'Closed'. If there is still work to be done you can
-                                change the status back to 'Accepted' and they will move back to the accepted section to
-                                be continued working on. Ensure you update the description of the work to be done so
-                                that your collaborators are aware of what you still need done.</em></small>
+                                them. If you are happy to accept them change the status to 'Closed'. If there is still
+                                work to be done you can
+                                change the status back to 'Accepted' so they move back to the collaborator accepted list
+                                to for work to continue on the piece. Ensure you update the description of the work to
+                                be done so
+                                that your collaborators are aware of what you still need in order to accept their
+                                submission.</em></small>
                     </p>
                     <hr>
                     <div>
                         <ul>{% for piece in snt_pieces %}
                             <li>
-                                <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br>to
-                                    {{ piece.assignee }} sent on {{ piece.date.strftime('%d %B, %Y') }}</p>
-                                <p>Was submitted on <strong>{{ piece.submit_date }}</strong></p>
+                                <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br> for
+                                    {{ piece.assignee }} sent on {{ piece.date.strftime('%d %B, %Y') }} <br>
+                                    was submitted on <strong>{{ piece.submit_date }}</strong></p>
                                 <p>Due date: {{ piece.due_date.strftime('%d %B, %Y') }}</p>
                                 <p>Task name: {{ piece.task }}</p>
                                 <p></p>
                                 <p>As a reminder, here is the brief and information provided for {{ piece.assignee }} on
-                                    your expecations for the
-                                    piece: <br>
+                                    your expecations for the submitted work: <br>
                                     {{ piece.description }}
                                 </p>
                                 <a href="#" id="accept-piece-btn{{ loop.index }}" type="button"
                                     class="btn btn-outline-primary btn-sm mb-1">Approve</a>
-                                <a href="#" id="accept-piece-btn{{ loop.index }}" type="button"
+                                <a href="#" id="update-piece-btn{{ loop.index }}" type="button"
                                     class="btn btn-outline-primary btn-sm mb-1">Update</a>
                             </li>
                             {% if not loop.last %}
                             <hr>
                             {% endif %}
-                            {% endfor %}
                         </ul>
+                        {% endfor %}
                     </div>
                     <hr>
 
@@ -533,19 +541,17 @@
                         <ul>{% for piece in snt_pieces %}
                             <li>
                                 <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br> sent to
-                                    {{ piece.assignee }} on {{ piece.date.strftime('%d %B, %Y') }}</p>
-                                <p>Was submitted on <strong>{{ piece.submit_date }}</strong></p>
+                                    {{ piece.assignee }} on {{ piece.date.strftime('%d %B, %Y') }} <br> was submitted on
+                                    <strong>{{ piece.submit_date }}</strong></p>
                                 <p>Due date: {{ piece.due_date.strftime('%d %B, %Y') }}</p>
                                 <p>Task name: {{ piece.task }}</p>
-                                <p></p>
                                 <p>As a reminder, here is the brief and information provided for {{ piece.assignee }} on
-                                    your expecations for the
-                                    piece: <br>
+                                    your expecations for the submitted work: <br>
                                     {{ piece.description }}
                                 </p>
                                 <div><small class="text-muted">
                                         <i><a class="ml-2" href="#">Please send feedback to {{ piece.assignee }} about
-                                                their work on this piece.</a></i>
+                                                their work on this piece.</a></i>{# TODO add link to user profile #}
                                     </small></div>
                             </li>
                             {% if not loop.last %}
@@ -557,8 +563,9 @@
 
                     {% else %}
                     <p class="text-center">Your project pieces will appear here when you create and assign them to
-                        a collaborator Post your projects so that collaborators waiting for opportunites see them.
-                        Anyone that is interested will send you a message about the project. You can keep track of any
+                        a collaborator. Post your projects so that collaborators waiting for opportunites can see them.
+                        Members that are interested will send you a direct message about the project. You can keep track
+                        of any
                         messages you have received under your
                         <a href="#">Projects > Recieved Project Messages</a> tab.</p>{# TODO create a link to the tab #}
                     {% endif %}
@@ -696,10 +703,8 @@
                                     {{ piece.description }}
                                 </p>
                                 <div><small class="text-muted">
-                                        <i><a class="ml-2" href="#">Do you have a {{ piece.owner }} a question about
-                                                this
-                                                piece?</a></i>
-                                    </small></div>
+                                        <i><a class="ml-2" href="#">Do you have a question for {{ piece.owner }} about
+                                                this piece?</a></i></small></div>
                             </li>
                             {% if not loop.last %}
                             <hr>
@@ -721,7 +726,7 @@
                     {% endif %}
                 </div>
             </div>
-            
+            <!-- /End of Received Pieces -->
             <!-- /END OF PIECES -->
             <!-- /END OF PROJECT TAB CONTENT -->
             <!-- /END TAB CONTENT -->
