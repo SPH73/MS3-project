@@ -431,11 +431,12 @@
                     {% for piece in snt_pieces %}
                     {% if piece.status == "pending acceptance" %}
                     <h6>New Pieces</h6>
-                    <p><small><em>These pieces are not yet accepted. When your collaborator accepts them they will start
-                                working on them.</em></small></p>
+                    <p><small><em>These pieces are not yet accepted. When your collaborator accepts them they undertake
+                                to start working on them.</em></small></p>
                     <hr>
                     <div>
-                        <ul>{% for piece in snt_pieces %}
+                        {% for piece in snt_pieces %}
+                        <ul>
                             <li>
                                 <p>You sent a piece of <strong>'{{ piece.project_title }}'</strong> <br> to
                                     {{ piece.assignee }} on {{ piece.date.strftime('%d %B, %Y') }}.</p>
@@ -456,7 +457,7 @@
                         </ul>
                         {% endfor %}
                     </div>
-                    <hr>
+
 
                     <!-- sent and accepted -->
                     {% elif piece.status == "accepted" %}
@@ -465,7 +466,8 @@
                                 commence work on them.</em></small></p>
                     <hr>
                     <div>
-                        <ul>{% for piece in snt_pieces %}
+                        {% for piece in snt_pieces %}
+                        <ul>
                             <li>
                                 <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br>given to
                                     {{ piece.assignee }} on {{ piece.date.strftime('%d %B, %Y') }}</p>
@@ -503,7 +505,8 @@
                     </p>
                     <hr>
                     <div>
-                        <ul>{% for piece in snt_pieces %}
+                        {% for piece in snt_pieces %}
+                        <ul>
                             <li>
                                 <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br> for
                                     {{ piece.assignee }} sent on {{ piece.date.strftime('%d %B, %Y') }} <br>
@@ -538,7 +541,8 @@
                         made to their code so that they have an opportunity to learn from you.</p>
                     <hr>
                     <div>
-                        <ul>{% for piece in snt_pieces %}
+                        {% for piece in snt_pieces %}
+                        <ul>
                             <li>
                                 <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br> sent to
                                     {{ piece.assignee }} on {{ piece.date.strftime('%d %B, %Y') }} <br> was submitted on
@@ -557,8 +561,8 @@
                             {% if not loop.last %}
                             <hr>
                             {% endif %}
-                            {% endfor %}
                         </ul>
+                        {% endfor %}
                     </div>
 
                     {% else %}
@@ -588,13 +592,13 @@
 
                     <h6>New Pieces</h6>
                     <p><small><em>These pieces are not yet accepted. Accept them to let the owner know you intend
-                                to start work on them.</em></small></p>
+                                to start work on them. When you accept a piece you need to be committed to working on it
+                                and be mindful of submitting it withing the due date.</em></small></p>
                     <hr>
                     <div>
                         <ul>{% for piece in rcvd_pieces %}
                             <li>
-                                <p>You received a piece of <strong>'{{ piece.project_title }}'</strong> <br>from
-                                    {{ piece.owner }} on {{ piece.date.strftime('%d %B, %Y') }}</p>
+                                <p>{{ piece.owner }} sent you a piece of the project <strong>'{{ piece.project_title }}'</strong> <br> on {{ piece.date.strftime('%d %B, %Y') }}</p>
                                 <p>Task name: {{ piece.task }}</p>
                                 <p><strong>Due date: {{ piece.due_date.strftime('%d %B, %Y') }}</strong></p>
                                 <p>{{ piece.owner }} has provided the following brief and information regarding their

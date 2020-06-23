@@ -176,13 +176,13 @@ def dashboard():
         articles = list(mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING))
         profile = mongo.db.profiles.find_one({'user_id': user['_id']})
         projects = list(mongo.db.projects.find({
-            'from_user': user['username']}).sort('date',pymongo.DESCENDING))
+            'username': user['username']}).sort('date',pymongo.DESCENDING))
         snt_profile_msgs = list(mongo.db.profile_msgs.find({
             'from_user': user['username']}).sort('date',pymongo.DESCENDING))
         snt_project_msgs = list(mongo.db.project_msgs.find({
             'from_user': user['username']}).sort('date',pymongo.DESCENDING))
         snt_pieces = list(mongo.db.project_pieces.find({
-            'to_user': user['username']}).sort('date',pymongo.DESCENDING))
+            'owner': user['username']}).sort('date',pymongo.DESCENDING))
         
         # received content
         rcvd_profile_msgs = list(mongo.db.profile_msgs.find({
@@ -440,19 +440,19 @@ def add_piece(project_id):
                                     })
             
             pieces = mongo.db.project_pieces
-            piece = pieces.insert_one({'user_id': user['_id'],
+            pieces.insert_one({'user_id': user['_id'],
                                        'project_id': project['_id'],
                                        'project_title': project['title'],
                                        'owner': user['username'],
                                        'task': request.form.get('task'),
-                                       'description': request.form.get('task'),
+                                       'description': request.form.get('description'),
                                        'status': request.form.get('status'),
                                        'date': datetime.utcnow(),
                                        'due_date': datetime.strptime(form.due_date.data, "%d/%m/%Y"),
                                        'assignee': request.form.get('username'),
                                        'comment': request.form.get('comment')
             })
-            flash('Your project has been updated and the piece has been sent to %s.' % piece.assignee, 'success'
+            flash('Your project has been updated and the piece has been sent to the assignee.', 'success'
             )
             return redirect(url_for('dashboard'))
         
