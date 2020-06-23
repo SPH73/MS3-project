@@ -358,13 +358,14 @@ def add_project():
         if request.method == 'POST':
             if form.validate_on_submit():
                 user = mongo.db.user.find_one({'username': session['username']})
-                mongo.db.projects.insert_one({'username': session['username'],
+                mongo.db.projects.insert_one({'username': user['username'],
                                     'date': datetime.utcnow(),
                                     'title': form.title.data,
                                     'deadline': datetime.strptime(form.deadline.data, "%d/%m/%Y"),
                                     'brief': form.brief.data,
                                     'status': form.status.data,
-                                    'user_id': user['_id']})
+                                    'user_id': user['_id']
+                })
                 
                 flash('Your project has been created.', 'success')
                 return redirect(url_for('projects'))
@@ -439,19 +440,20 @@ def add_piece(project_id):
                                     })
             
             pieces = mongo.db.project_pieces
-            pieces.insert_one({'user_id': user['_id'],
-                               'project_id': project['_id'],
-                               'project_title': project['title'],
-                               'owner': session['username'],
-                               'task': request.form.get('task'),
-                               'description': request.form.get('task'),
-                               'status': request.form.get('status'),
-                               'date': datetime.utcnow(),
-                               'due_date': request.form.get('due_date'),
-                               'assignee': request.form.get('username'),
-                               'comment': request.form.get('comment')
+            piece = pieces.insert_one({'user_id': user['_id'],
+                                       'project_id': project['_id'],
+                                       'project_title': project['title'],
+                                       'owner': user['username'],
+                                       'task': request.form.get('task'),
+                                       'description': request.form.get('task'),
+                                       'status': request.form.get('status'),
+                                       'date': datetime.utcnow(),
+                                       'due_date': datetime.strptime(form.due_date.data, "%d/%m/%Y"),
+                                       'assignee': request.form.get('username'),
+                                       'comment': request.form.get('comment')
             })
-            flash('Your project has been updated and the piece has been sent to the assignee.', 'sucess')
+            flash('Your project has been updated and the piece has been sent to %s.' % piece.assignee, 'success'
+            )
             return redirect(url_for('dashboard'))
         
         return render_template('pages/addpiece.html', form=form, project=project)         
@@ -572,7 +574,7 @@ def profile_msg(profile_id):
             
             message = mongo.db.profile_msgs
             message.insert_one({'user_id': user['_id'],
-                                'from_user': session['username'],
+                                'from_user': user['username'],
                                 'profile_id': profile['_id'],
                                 'date': datetime.utcnow(),
                                 'to_user': profile['username'],
@@ -606,9 +608,9 @@ def project_msg(project_id):
                                             }
                                         })
             
-            message = mongo.db.project_msgs
-            message.insert_one({'user_id': user['_id'],
-                                'from_user': session['username'],
+            messages = mongo.db.project_msgs
+            messages.insert_one({'user_id': user['_id'],
+                                'from_user': user['username'],
                                 'project_id': project_msg['_id'],
                                 'date': datetime.utcnow(),
                                 'to_user': project_msg['username'],
