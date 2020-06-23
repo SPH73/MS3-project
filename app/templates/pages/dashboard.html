@@ -420,7 +420,6 @@
                 <div class="container">
                     {% if snt_pieces %}
                     <h6>You have sent these project pieces to collaborators</h6>
-                    {% for piece in snt_pieces %}
 
                     <!-- sent new not yet accepted -->
                     {% for piece in snt_pieces %}
@@ -555,8 +554,6 @@
                             {% endfor %}
                         </ul>
                     </div>
-                    {% endif %}
-                    {% endfor %}
 
                     {% else %}
                     <p class="text-center">Your project pieces will appear here when you create and assign them to
@@ -565,16 +562,23 @@
                         messages you have received under your
                         <a href="#">Projects > Recieved Project Messages</a> tab.</p>{# TODO create a link to the tab #}
                     {% endif %}
+                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
-            <!-- /END OF SENT PIECES -->
+            <!-- /END OF SENT PIECES TAB-->
+
+
+            <!-- RECEIVED PIECES TAB -->
             <div id="rcvd_pieces" class="tabcontent">
                 <div class="container">
                     {% if rcvd_pieces %}
+
                     <h5>Received Pieces</h5>
                     <!-- received new not yet accepted -->
                     {% for piece in rcvd_pieces %}
                     {% if piece.status == "pending acceptance" %}
+
                     <h6>New Pieces</h6>
                     <p><small><em>These pieces are not yet accepted. Accept them to let the owner know you intend
                                 to start work on them.</em></small></p>
@@ -703,7 +707,6 @@
                             {% endfor %}
                         </ul>
                     </div>
-                    {% endfor %}
 
                     {% else %}
                     <div class="text-center">
@@ -714,12 +717,15 @@
                             <a href="#">Projects > Sent Project Messages</a> tab.</p>{# TODO create a link to the tab #}
                     </div>
                     {% endif %}
+                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
-            <!-- /End of Received Pieces -->
+            
             <!-- /END OF PIECES -->
             <!-- /END OF PROJECT TAB CONTENT -->
             <!-- /END TAB CONTENT -->
+        </div>
     </section>
 </div>
 {% endblock content %}
