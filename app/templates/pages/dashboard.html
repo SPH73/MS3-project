@@ -269,7 +269,7 @@
                 <div class="container">
                     <ul>
                         {% if snt_profile_msgs %}
-                        <h5>Received Profile Messages</h5>
+                        <h5>Sent Profile Messages</h5>
                         <hr>
                         {% for message in snt_profile_msgs %}
                         <li>On {{ message.date.strftime('%d, %B %Y') }}, you wrote to {{ message.to_user }}: <br>
