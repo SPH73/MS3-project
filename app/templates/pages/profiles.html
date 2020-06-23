@@ -73,7 +73,7 @@
                 <!-- Profile Message form  -->
                 <div>
                     <button id="profile-message-btn{{ loop.index }}"
-                        class="msg-btn btn btn-outline-secondary btn-sm mt-1 mb-1">Message</button>
+                        class="msg-btn btn btn-outline-secondary btn-sm mt-1 mb-1">Close</button>
                     <div class="form-box show">
                         <div id="profile-message-form-div{{ loop.index }}" class="form-group">
                             <form id="profile-message-form{{ loop.index }}"
@@ -83,7 +83,8 @@
                                         id="message{{ loop.index }}" rows="2" aria-describedby="msgHelpInline"
                                         required></textarea>
                                     <small id="msgHelpInline{{ loop.index }}" class="text-muted">
-                                        Message this member if you are interested in collaborating with them.
+                                        Message {{ profile.username }} if you are interested in collaborating with
+                                        them.
                                     </small>
                                 </div>
                                 <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-1">Send
@@ -103,9 +104,3 @@
 </div>
 
 {% endblock content %}
-
-<script>
-    $("#profile-message-btn").click(function () {
-        $("#message-form").toggle();
-    });
-</script>
