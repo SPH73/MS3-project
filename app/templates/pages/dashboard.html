@@ -403,8 +403,8 @@
             <!-- Sent Project Messages -->
             <div id="snt_project_msgs" class="tabcontent">
                 <div class="container">
+                    {% if snt_project_msgs %}
                     <ul>
-                        {% if snt_project_msgs %}
                         <h5>Sent Project Messages</h5>
                         <hr>
                         {% for message in snt_project_msgs %}
@@ -571,6 +571,8 @@
                         </ul>
                         {% endfor %}{# closed status endfor #}
                     </div>
+                    {% endif %} {# inner if elif status check #}
+                    {% endfor %} {# outer for loop #}
 
                     {% else %} {# outer if check else clause that should run if the collection if empty #}
                     <p class="text-center">Your project pieces will appear here when you create and assign them to
@@ -579,9 +581,6 @@
                         of any
                         messages you have received under your
                         <a href="#rcd_project_msgs">Projects > Recieved Project Messages</a> tab.</p>
-
-                    {% endif %} {# inner if elif status check #}
-                    {% endfor %} {# outer for loop #}
                     {% endif %} {# outer if collection not empty check #}
                 </div>
             </div>
@@ -730,6 +729,8 @@
                         </ul>
                         {% endfor %}{# closed status endfor #}
                     </div>
+                    {% endif %} {# inner if elif status check #}
+                    {% endfor %} {# outer for loop #}
                     {% else %}{# outer if check else clause that should run if the collection if empty #}
                     <div class="text-center">
                         <p>Your project pieces will appear here when you receive them. If you see a
@@ -738,8 +739,6 @@
                             message via the projects page. You can keep track of any messages you have sent under your
                             <a href="#snt_project_msgs">Projects > Sent Project Messages</a> tab.</p>
                     </div>
-                    {% endif %} {# inner if elif status check #}
-                    {% endfor %} {# outer for loop #}
                     {% endif %} {# outer if collection not empty check #}
                 </div>
             </div>
