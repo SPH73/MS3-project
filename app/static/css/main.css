@@ -44,6 +44,7 @@ legend {
 }
 
 /* used in the accordions */
+span.field,
 span.title {
   font-weight: 500;
   font-size: 18px;

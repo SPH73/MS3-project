@@ -439,10 +439,11 @@ def add_piece(project_id):
             project = projects.find_one_and_update({'_id': ObjectId(project_id) },
                                     {'$push':
                                         {'pieces':
-                                            {'project_id': project['_id'],
-                                             'date': datetime.utcnow(),
+                                            {'date': datetime.utcnow(),
+                                             'username': request.form.get['username'],
                                              'status': request.form.get('status'),
-                                             'task': request.form.get('task')
+                                             'task': request.form.get('task'),
+                                             'submitted': False
                                             }
                                         }
                                     })
@@ -457,9 +458,10 @@ def add_piece(project_id):
                                        'status': request.form.get('status'),
                                        'date': datetime.utcnow(),
                                        'due_date': datetime.strptime(form.due_date.data, "%d/%m/%Y"),
+                                       'submit_date': datetime.utcnow(),
                                        'assignee': request.form.get('username'),
                                        'comment': request.form.get('comment')
-            })
+            })            
             flash('Your project has been updated and the piece has been sent to the assignee.', 'success'
             )
             return redirect(url_for('dashboard'))
