@@ -707,29 +707,28 @@
                     <div>
                         {% for piece in rcvd_pieces %}{# closed status for loop #}
                         <ul>
-                            <ul>
-                                <li>
-                                    <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br>from
-                                        {{ piece.owner }} received on {{ piece.date.strftime('%d %B, %Y') }}</p>
-                                    <p>Was submitted on <strong>{{ piece.submit_date }}</strong></p>
-                                    <p>Due date: {{ piece.due_date.strftime('%d %B, %Y') }}</p>
-                                    <p>Task name: {{ piece.task }}</p>
-                                    <p></p>
-                                    <p>As a reminder, here is the brief and information {{ piece.owner }} provided for
-                                        the
-                                        piece: <br>
-                                        {{ piece.description }}
-                                    </p>
-                                    <div><small class="text-muted">
-                                            <i><a class="ml-2" href="#">Do you have a question for {{ piece.owner }}
-                                                    about
-                                                    this piece?</a></i></small></div>
-                                </li>
-                                {% if not loop.last %}
-                                <hr>
-                                {% endif %}
-                            </ul>
-                            {% endfor %}{# closed status endfor #}
+                            <li>
+                                <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br>from
+                                    {{ piece.owner }} received on {{ piece.date.strftime('%d %B, %Y') }}</p>
+                                <p>Was submitted on <strong>{{ piece.submit_date }}</strong></p>
+                                <p>Due date: {{ piece.due_date.strftime('%d %B, %Y') }}</p>
+                                <p>Task name: {{ piece.task }}</p>
+                                <p></p>
+                                <p>As a reminder, here is the brief and information {{ piece.owner }} provided for
+                                    the
+                                    piece: <br>
+                                    {{ piece.description }}
+                                </p>
+                                <div><small class="text-muted">
+                                        <i><a class="ml-2" href="#">Do you have a question for {{ piece.owner }}
+                                                about
+                                                this piece?</a></i></small></div>
+                            </li>
+                            {% if not loop.last %}
+                            <hr>
+                            {% endif %}
+                        </ul>
+                        {% endfor %}{# closed status endfor #}
                     </div>
                     {% else %}{# outer if check else clause that should run if the collection if empty #}
                     <div class="text-center">
