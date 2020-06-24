@@ -6,6 +6,10 @@
         <legend class="legend-border text-center">{{ session['username'] }}'s Dashboard</legend>
 
         <nav class="dash-nav">
+            <div id="div-profile-image"><a class="navbar-brand ml-4" href="{{ url_for('add_profile_img') }}"><img
+                        src="{{ url_for('static', filename='uploads/gear-avatar.png') }}" alt="user-profile-image"
+                        width="50" height="50"></a>
+            </div>
             <ul class="dash-tabs">
                 <li><a class="tab-item dropdown-toggle">Articles</a>
                     <ul class="tabs-dropdown">
@@ -16,7 +20,6 @@
                 </li>
                 <li><a class="tab-item dropdown-toggle">Profile</a>
                     <ul class="tabs-dropdown">
-
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'profile')">My Profile</a>
                         </li>
                         {% if profile %}
@@ -39,6 +42,7 @@
                         </li>
                         <li><a class="tab-item tab-link" href="{{ url_for('update_password') }}">Update password</a>
                         </li>
+
                     </ul>
                 </li>
                 <li><a class="tab-item dropdown-toggle">Projects</a>
@@ -424,18 +428,18 @@
             <!-- Sent Pieces -->
             <div id="snt_pieces" class="tabcontent">
                 <div class="container">
-                    {% if snt_pieces %}
-                    <h6>You have sent these project pieces to collaborators</h6>
+                    {% if snt_pieces|length > 0 %}{# outer if else collection not empty check #}
+                    <h4>You have sent these project pieces to collaborators</h4>
 
                     <!-- sent new not yet accepted -->
-                    {% for piece in snt_pieces %}
-                    {% if piece.status == "pending acceptance" %}
-                    <h6>New Pieces</h6>
+                    {% for piece in snt_pieces %} {# outer for loop #}
+                    {% if piece.status == "pending acceptance" %}{# pending approval status inner if elif check #}
+                    <h5>New Pieces</h5>
                     <p><small><em>These pieces are not yet accepted. When your collaborator accepts them they undertake
                                 to start working on them.</em></small></p>
                     <hr>
                     <div>
-                        {% for piece in snt_pieces %}
+                        {% for piece in snt_pieces %}{# pending accpetance status for loop #}
                         <ul>
                             <li>
                                 <p>You sent a piece of <strong>'{{ piece.project_title }}'</strong> <br> to
@@ -455,18 +459,18 @@
                             <hr>
                             {% endif %}
                         </ul>
-                        {% endfor %}
+                        {% endfor %}{# pending acceptance status endfor #}
                     </div>
 
 
                     <!-- sent and accepted -->
-                    {% elif piece.status == "accepted" %}
+                    {% elif piece.status == "accepted" %}{# accepted status inner if elif check #}
                     <h5>Accepted Pieces</h5>
                     <p><small><em>These pieces have been accepted indicating that your collaborator is preparing to
                                 commence work on them.</em></small></p>
                     <hr>
                     <div>
-                        {% for piece in snt_pieces %}
+                        {% for piece in snt_pieces %}{# accepted status for loop #}
                         <ul>
                             <li>
                                 <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br>given to
@@ -487,12 +491,12 @@
                             <hr>
                             {% endif %}
                         </ul>
-                        {% endfor %}
+                        {% endfor %}{# accepted status endfor #}
                     </div>
                     <hr>
 
                     <!-- sent submitted -->
-                    {% elif piece.status == "pending approval" %}
+                    {% elif piece.status == "pending approval" %}{# pending approval status inner if elif check #}
                     <h5>Pieces submitted for approval</h5>
                     <p><small><em>These pieces have been submitted and your collaborators are waiting for you to approve
                                 them. If you are happy to accept them change the status to 'Closed'. If there is still
@@ -505,7 +509,7 @@
                     </p>
                     <hr>
                     <div>
-                        {% for piece in snt_pieces %}
+                        {% for piece in snt_pieces %}{# pending approval status for loop #}
                         <ul>
                             <li>
                                 <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br> for
@@ -527,24 +531,27 @@
                             <hr>
                             {% endif %}
                         </ul>
-                        {% endfor %}
+                        {% endfor %}{# pending approval status endfor #}
                     </div>
                     <hr>
 
                     <!-- sent closed -->
-                    {% elif piece.status == "closed" %}
+                    {% elif piece.status == "closed" %}{# closed status inner if elif check #}
                     <h5>Completed Pieces </h5>
-                    <p><small><em></em></small>Great! you have closed these pieces inidicating that you have accepted
-                        the submission from the collaborator. As they are closed they will expire soon. Be sure to send
-                        feedback to the collaborator to help them understand how they did (e.g what they did well and
-                        what they could have done better). It would be helpful to let them know of any changes you have
-                        made to their code so that they have an opportunity to learn from you.</p>
+                    <p><small><em>Great! you have closed these pieces inidicating that you have accepted
+                                the submission from the collaborator. As they are closed they will expire soon. Be sure
+                                to send
+                                feedback to the collaborator to help them understand how they did (e.g what they did
+                                well and
+                                what they could have done better). It would be helpful to let them know of any changes
+                                you have
+                                made to their code so that they have an opportunity to learn from you.</em></small></p>
                     <hr>
                     <div>
-                        {% for piece in snt_pieces %}
+                        {% for piece in snt_pieces %} {# closed status for loop #}
                         <ul>
                             <li>
-                                <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br> sent to
+                                <p>The piece of <strong>'{{ piece.project_title }}'</strong> <br> sent to
                                     {{ piece.assignee }} on {{ piece.date.strftime('%d %B, %Y') }} <br> was submitted on
                                     <strong>{{ piece.submit_date }}</strong></p>
                                 <p>Due date: {{ piece.due_date.strftime('%d %B, %Y') }}</p>
@@ -562,19 +569,20 @@
                             <hr>
                             {% endif %}
                         </ul>
-                        {% endfor %}
+                        {% endfor %}{# closed status endfor #}
                     </div>
 
-                    {% else %}
+                    {% else %} {# outer if check else clause that should run if the collection if empty #}
                     <p class="text-center">Your project pieces will appear here when you create and assign them to
-                        a collaborator. Post your projects so that collaborators waiting for opportunites can see them.
+                        a collaborator. Post your projects so that collaborators looking for opportunites can see them.
                         Members that are interested will send you a direct message about the project. You can keep track
                         of any
                         messages you have received under your
-                        <a href="#">Projects > Recieved Project Messages</a> tab.</p>{# TODO create a link to the tab #}
-                    {% endif %}
-                    {% endfor %}
-                    {% endif %}
+                        <a href="#rcd_project_msgs">Projects > Recieved Project Messages</a> tab.</p>
+
+                    {% endif %} {# inner if elif status check #}
+                    {% endfor %} {# outer for loop #}
+                    {% endif %} {# outer if collection not empty check #}
                 </div>
             </div>
             <!-- /END OF SENT PIECES TAB-->
@@ -583,22 +591,24 @@
             <!-- RECEIVED PIECES TAB -->
             <div id="rcvd_pieces" class="tabcontent">
                 <div class="container">
-                    {% if rcvd_pieces %}
+                    {% if rcvd_pieces|length > 0 %}{# outer if collection not empty check #}
+                    <h4>You have receieved these project pieces</h4>
 
-                    <h5>Received Pieces</h5>
                     <!-- received new not yet accepted -->
-                    {% for piece in rcvd_pieces %}
-                    {% if piece.status == "pending acceptance" %}
-
-                    <h6>New Pieces</h6>
+                    {% for piece in rcvd_pieces %}{# outer for loop #}
+                    {% if piece.status == "pending acceptance" %}{# pending approval status inner if elif check #}
+                    <h5>New Pieces</h5>
                     <p><small><em>These pieces are not yet accepted. Accept them to let the owner know you intend
                                 to start work on them. When you accept a piece you need to be committed to working on it
                                 and be mindful of submitting it withing the due date.</em></small></p>
                     <hr>
                     <div>
-                        <ul>{% for piece in rcvd_pieces %}
+                        {% for piece in rcvd_pieces %}{# pending accpetance status for loop #}
+                        <ul>
                             <li>
-                                <p>{{ piece.owner }} sent you a piece of the project <strong>'{{ piece.project_title }}'</strong> <br> on {{ piece.date.strftime('%d %B, %Y') }}</p>
+                                <p>{{ piece.owner }} sent you a piece of the project
+                                    <strong>'{{ piece.project_title }}'</strong> <br> on
+                                    {{ piece.date.strftime('%d %B, %Y') }}</p>
                                 <p>Task name: {{ piece.task }}</p>
                                 <p><strong>Due date: {{ piece.due_date.strftime('%d %B, %Y') }}</strong></p>
                                 <p>{{ piece.owner }} has provided the following brief and information regarding their
@@ -614,19 +624,20 @@
                             {% if not loop.last %}
                             <hr>
                             {% endif %}
-                            {% endfor %}
                         </ul>
+                        {% endfor %}{# pending acceptance status endfor #}
                     </div>
                     <hr>
 
                     <!-- received accepted -->
-                    {% elif piece.status == "accepted" %}
-                    <h6>Accepted Pieces</h6>
+                    {% elif piece.status == "accepted" %}{# accepted status inner if elif check #}
+                    <h5>Accepted Pieces</h5>
                     <p><small><em>You have accepted these pieces so the owner is waiting for you to submit
                                 them.</em></small></p>
                     <hr>
                     <div>
-                        <ul>{% for piece in rcvd_pieces %}
+                        {% for piece in rcvd_pieces %}{# accepted status forloop #}
+                        <ul>
                             <li>
                                 <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br>from
                                     {{ piece.owner }} received on {{ piece.date.strftime('%d %B, %Y') }}</p>
@@ -646,21 +657,22 @@
                             {% if not loop.last %}
                             <hr>
                             {% endif %}
-                            {% endfor %}
                         </ul>
+                        {% endfor %}{# accepted status endfor #}
                     </div>
                     <hr>
 
                     <!-- received and submitted -->
-                    {% elif piece.status == "pending approval" %}
-                    <h6>Pieces submitted for approval</h6>
+                    {% elif piece.status == "pending approval" %}{# pending approval status inner if elif check #}
+                    <h5>Pieces submitted for approval</h5>
                     <p><small><em>As these pieces are accepted by the owner they will move to the 'closed'
                                 section for a short while for your reference. If there is still work to be done they
                                 will move back to the accepted section for you to continue working on them.</em></small>
                     </p>
                     <hr>
                     <div>
-                        <ul>{% for piece in rcvd_pieces %}
+                        {% for piece in rcvd_pieces %}{# pending approval status forloop #}
+                        <ul>
                             <li>
                                 <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br>from
                                     {{ piece.owner }} received on {{ piece.date.strftime('%d %B, %Y') }}</p>
@@ -681,53 +693,55 @@
                             {% if not loop.last %}
                             <hr>
                             {% endif %}
-                            {% endfor %}
                         </ul>
+                        {% endfor %}{# pending approval status endfor #}
                     </div>
                     <hr>
 
                     <!-- received and closed -->
-                    {% elif piece.status == "closed" %}
-                    <h6>Completed Pieces </h6>
-
+                    {% elif piece.status == "closed" %}{# closed status inner if elif check #}
+                    <h5>Completed Pieces </h5>
                     <p><small><em></em></small>Great! These pieces have been accepted and are closed; they
                         will expire soon. Be sure to ask for feedback from the owner.</p>
                     <hr>
                     <div>
-                        <ul>{% for piece in rcvd_pieces %}
-                            <li>
-                                <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br>from
-                                    {{ piece.owner }} received on {{ piece.date.strftime('%d %B, %Y') }}</p>
-                                <p>Was submitted on <strong>{{ piece.submit_date }}</strong></p>
-                                <p>Due date: {{ piece.due_date.strftime('%d %B, %Y') }}</p>
-                                <p>Task name: {{ piece.task }}</p>
-                                <p></p>
-                                <p>As a reminder, here is the brief and information {{ piece.owner }} provided for the
-                                    piece: <br>
-                                    {{ piece.description }}
-                                </p>
-                                <div><small class="text-muted">
-                                        <i><a class="ml-2" href="#">Do you have a question for {{ piece.owner }} about
-                                                this piece?</a></i></small></div>
-                            </li>
-                            {% if not loop.last %}
-                            <hr>
-                            {% endif %}
-                            {% endfor %}
-                        </ul>
+                        {% for piece in rcvd_pieces %}{# closed status for loop #}
+                        <ul>
+                            <ul>
+                                <li>
+                                    <p>Your piece of <strong>'{{ piece.project_title }}'</strong> <br>from
+                                        {{ piece.owner }} received on {{ piece.date.strftime('%d %B, %Y') }}</p>
+                                    <p>Was submitted on <strong>{{ piece.submit_date }}</strong></p>
+                                    <p>Due date: {{ piece.due_date.strftime('%d %B, %Y') }}</p>
+                                    <p>Task name: {{ piece.task }}</p>
+                                    <p></p>
+                                    <p>As a reminder, here is the brief and information {{ piece.owner }} provided for
+                                        the
+                                        piece: <br>
+                                        {{ piece.description }}
+                                    </p>
+                                    <div><small class="text-muted">
+                                            <i><a class="ml-2" href="#">Do you have a question for {{ piece.owner }}
+                                                    about
+                                                    this piece?</a></i></small></div>
+                                </li>
+                                {% if not loop.last %}
+                                <hr>
+                                {% endif %}
+                            </ul>
+                            {% endfor %}{# closed status endfor #}
                     </div>
-
-                    {% else %}
+                    {% else %}{# outer if check else clause that should run if the collection if empty #}
                     <div class="text-center">
                         <p>Your project pieces will appear here when you receive them. If you see a
                             project that you are interested in collaborating on, let the owner know by sending them a
                             direct
                             message via the projects page. You can keep track of any messages you have sent under your
-                            <a href="#">Projects > Sent Project Messages</a> tab.</p>{# TODO create a link to the tab #}
+                            <a href="#snt_project_msgs">Projects > Sent Project Messages</a> tab.</p>
                     </div>
-                    {% endif %}
-                    {% endfor %}
-                    {% endif %}
+                    {% endif %} {# inner if elif status check #}
+                    {% endfor %} {# outer for loop #}
+                    {% endif %} {# outer if collection not empty check #}
                 </div>
             </div>
             <!-- /End of Received Pieces -->
