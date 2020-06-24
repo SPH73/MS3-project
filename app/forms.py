@@ -2,6 +2,8 @@ from flask_wtf import FlaskForm, RecaptchaField
 from flask_ckeditor import CKEditorField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, FileField, IntegerField, SelectField, FieldList, FormField, DateField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, NumberRange, ValidationError
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+from werkzeug.utils import secure_filename
 from datetime import datetime 
 
 
@@ -43,6 +45,9 @@ class PasswordForm(FlaskForm):
     recaptcha = RecaptchaField()
     submit = SubmitField('Update Password')    
 
+class AccountImageForm(FlaskForm):
+    image = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg', 'jpeg', 'png'])])
+    submit = SubmitField('Upload Photo') 
 
 class CommentForm(FlaskForm):
     comment = StringField('Comment')

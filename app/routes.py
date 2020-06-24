@@ -1,15 +1,23 @@
-from flask import render_template, url_for, flash, redirect, request, session
-from app import app, mongo
-from bson.objectid import ObjectId
+import os
 import pymongo
-from datetime import datetime
-from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, ListForm
 import bcrypt
+from werkzeug.utils import secure_filename
+from app import app, mongo
+from flask import render_template, url_for, flash, redirect, request, session
+from bson.objectid import ObjectId
+from datetime import datetime
+from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, ListForm, AccountImageForm
 
 
+@app.route('/add_profile_img')
+def add_profile_img():
+    form = AccountImageForm()
+    if 'username' in session:
+        
+        return render_template('pages/addprofileimg.html', form=form, title='Profile Image')  
 
-@app.route("/")
-@app.route("/home")
+@app.route('/')
+@app.route('/home')
 def home():
    
     return render_template('pages/home.html')
@@ -176,7 +184,7 @@ def dashboard():
         articles = list(mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING))
         profile = mongo.db.profiles.find_one({'user_id': user['_id']})
         projects = list(mongo.db.projects.find({
-            'username': user['username']}).sort('date',pymongo.DESCENDING))
+            'user_id': user['_id']}).sort('date',pymongo.DESCENDING))
         snt_profile_msgs = list(mongo.db.profile_msgs.find({
             'from_user': user['username']}).sort('date',pymongo.DESCENDING))
         snt_project_msgs = list(mongo.db.project_msgs.find({
@@ -204,7 +212,7 @@ def dashboard():
                                 rcvd_profile_msgs=rcvd_profile_msgs,
                                 rcvd_project_msgs=rcvd_project_msgs,
                                 rcvd_pieces=rcvd_pieces,
-                                current_user=user
+                                user=user
         )
         
     flash('You need to be logged in to access your dashboard.', 'warning')
@@ -623,6 +631,5 @@ def project_msg(project_id):
     flash('Please login to message users.', 'info')
     return redirect(url_for('login'))
 
-@app.route('/update_pr_img', methods=['GET', 'POST'])
-def update_pr_img():
-    pass
+
+    
