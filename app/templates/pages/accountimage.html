@@ -1,0 +1,50 @@
+{% extends 'layout/base.html' %}
+
+<!-- {% from 'pages/_formhelpers.html' import render_field %} -->
+
+{% block content %}
+
+<div class="container mt-5">
+    <section class="section-content">
+        <legend class="text-center legend-border mb-4">Update Your Account Image
+        </legend>
+        <!-- <div id="image">
+            <form action="" method="POST" enctype="multipart/form-data" id="upload-file">
+                <div class="form-group">
+                    <label>Select file</label>
+                    <div class="custom-file">
+                        <input id="project-piece" type="file" name="file" accept="upload/profile_images/*">
+                    </div>
+                </div>
+                <input type="submit" value="Upload">
+            </form>
+        </div> -->
+        <form action="{{url_for('insert_account_image', user_id=user_id)}}" method="POST" enctype="multipart/form-data"
+            accept="image/*" id="upload-image" novalidate>
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <div class="form-group">
+                    <label>Select image</label>
+                    {% if form.image.errors %}
+                    {{ form.image(class="custom-file is-invalid",) }}
+                    <div id="msg" class="invalid-feedback">
+                        {% for error in form.image.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="form-group">
+                        {{ form.image(class="custom-file") }}
+                    </div>
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-primary btn-sm") }}
+            </div>
+        </form>
+    </section>
+</div>
+
+
+{% endblock content %}
