@@ -1,20 +1,14 @@
 import os
 import pymongo
 import bcrypt
-from werkzeug.utils import secure_filename
-from app import app, mongo
+from app import app, mongo, APP_ROOT
 from flask import render_template, url_for, flash, redirect, request, session
 from bson.objectid import ObjectId
 from datetime import datetime
 from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, ListForm, AccountImageForm
+from werkzeug.utils import secure_filename
 
-
-@app.route('/add_profile_img')
-def add_profile_img():
-    form = AccountImageForm()
-    if 'username' in session:
-        
-        return render_template('pages/addprofileimg.html', form=form, title='Profile Image')  
+# APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 @app.route('/')
 @app.route('/home')
@@ -58,13 +52,13 @@ def register():
                     flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your dashboard!','success')
                     return redirect(url_for('login'))
                 
-                flash('Sorry, that username is not available, please try another.', 'info')
+                flash(f'Sorry, {form.username.data} is not available, please try another.', 'info')
                 return render_template('pages/register.html',
                                        title='Register', 
                                        form=form
                 )            
                         
-            flash('That email is already registered. Please login.', 'info')
+            flash(f'That {form.email.data} is already registered. Please login.', 'info')
             return redirect(url_for('login'))
         
     return render_template('pages/register.html', 
@@ -172,6 +166,47 @@ def logout():
     flash('You have logged out.', 'success')
     return redirect(url_for('home'))
     
+@app.route('/add_account_image')
+def add_account_image():
+    form = AccountImageForm()
+    if 'username' in session:
+        
+        return render_template('pages/accountimage.html',form=form, title='Update Profile Image')
+    
+    flash('You need to be logged in to access accounst settings.', 'warning')
+    return redirect(url_for('login'))
+
+@app.route('/insert_account_image', methods=['GET', 'POST'])
+def insert_account_image():
+   
+    if 'username' in session:
+        
+        if request.method == 'POST' and 'image' in request.files:
+                image = request.files['image']
+                filename = image.filename
+                target = os.path.join(APP_ROOT, 'static/uploads/accountimage')
+                username = session['username']   
+                url = "/".join([target, f'{username}-{filename}'])
+                image_file = "-".join([username, filename])
+                image.save(url)
+                user = mongo.db.user.find_one({'username': username})
+                user_id = user['_id']
+                print(user_id)
+                mongo.db.user.find_one_and_update({'_id': ObjectId(user_id)},
+                                {'$set':{'profile_image': 
+                                    {'image_file': image_file,
+                                     'url': url
+                                     }
+                                    }
+                                }
+                )
+                flash(f'Your profile image has been updated to {filename}.', 'success')
+                return redirect(url_for('dashboard')) 
+            
+    flash('You need to be logged in to access account settings.', 'warning')
+    return redirect(url_for('login'))            
+                
+
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
@@ -180,6 +215,8 @@ def dashboard():
     
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
+        # profile_image = mongo.db.user.find_one({'profile_image': user['profile_image']})
+        
         # created content
         articles = list(mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING))
         profile = mongo.db.profiles.find_one({'user_id': user['_id']})
@@ -213,8 +250,9 @@ def dashboard():
                                 rcvd_project_msgs=rcvd_project_msgs,
                                 rcvd_pieces=rcvd_pieces,
                                 user=user
+                                # profile_image=profile_image
         )
-        
+
     flash('You need to be logged in to access your dashboard.', 'warning')
     return redirect(url_for('login'))
 

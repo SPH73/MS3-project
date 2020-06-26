@@ -17,3 +17,11 @@ class Config(object):
         'host': 'localhost',
         'port': 27017
     }
+    
+    # Uploads
+    
+    IMAGE_UPLOADS_ = os.environ.get('IMAGE_UPLOADS')
+   
+    FILE_UPLOADS = os.environ.get('FILE_UPLOADS')
+   
+    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
