@@ -64,16 +64,15 @@
                 </li>
             </ul>
             {% if user.profile_image %}
-            {% for part in profile_image %}
             <div id="div-profile-image"><a class="navbar-image mr-4" href="{{ url_for('add_account_image') }}"><img
-                        src="{{ url_for('static', filename='uploads/account_image/'+'part.image_file' ) }}"
-                        alt="{{ part.image_file }}" width="50" height="50"></a>
+                        src="{{ image_file }}" alt="{{ user.profile_image }}" width="50"
+                        height="50"></a>
             </div>
-            {% endfor %}
             {% else %}
+
             <div id="div-profile-image"><a class="navbar-image mr-4" href="{{ url_for('add_account_image') }}"><img
-                        src="{{ url_for('static', filename='uploads/accountimage/gear-avatar.png' ) }}"
-                        alt="defualt-image" width="50" height="50"></a>
+                        src="{{ url_for('static', filename='uploads/accountimage/gear-avatar.png') }}"
+                        alt="{{ image_file }}" width="50" height="50"></a>
             </div>
             {% endif %}
         </nav>

@@ -1,7 +1,7 @@
 import os
 import pymongo
 import bcrypt
-from app import app, mongo, APP_ROOT
+from app import app, mongo, APP_ROOT, ALLOWED_IMAGE_EXTENSIONS
 from flask import render_template, url_for, flash, redirect, request, session
 from bson.objectid import ObjectId
 from datetime import datetime
@@ -178,30 +178,56 @@ def add_account_image():
     flash('You need to be logged in to access accounst settings.', 'warning')
     return redirect(url_for('login'))
 
+
+def allowed_image(filename):
+    """Splits the file filename at the last dot and compares the file extention to the list in ALLOWED_IMAGE_EXTENSIONS. Prevents upload if not supported.
+    """
+    
+    if not '.' in filename:
+        return False
+    
+    ext = filename.rsplit('.', 1)[1]
+    
+    if ext.lower() in ALLOWED_IMAGE_EXTENSIONS:
+        return True
+    else:
+        return False
+
 @app.route('/insert_account_image', methods=['GET', 'POST'])
 def insert_account_image():
+    """Takes a users uploaded images, checks the file extension and sanitizes the file. Converts the filename to match the users username and saves it to the accountimage folder and updates the user profile image in the user collection.
+    """
    
     if 'username' in session:
         
         if request.method == 'POST' and 'image' in request.files:
                 image = request.files['image']
-                filename = image.filename
-                target = os.path.join(APP_ROOT, 'static/uploads/accountimage')
-                username = session['username']   
-                url = "/".join([target, f'{username}.png'])
-                profile_image = f'{username}.png'
-                print(f'image file = {profile_image}')
-                image.save(url)
-                user = mongo.db.user.find_one({'username': username})
-                user_id = user['_id']
-                print(user_id)
-                mongo.db.user.find_one_and_update({'_id': ObjectId(user_id)},
-                                {'$set':{'profile_image': profile_image
+                if image.filename == '':
+                    flash('Your image is missing a filename', 'warning')
+                    return redirect(request.url)
+                if not allowed_image(image.filename):
+                    flash('Supported file types are "png", "jpg" or "jpeg"', 'warning')
+                    return redirect(request.url)
+                else:
+                    filename = secure_filename(image.filename)
+
+                    target = os.path.join(APP_ROOT, 'static/uploads/accountimage')
+                    username = session['username']
+                    url = "/".join([target, f'{username}.png'])
+                    image.save(url)
+                    
+                    profile_image = f'{username}.png'
+                   
+                    user = mongo.db.user.find_one({'username': username})
+                    user_id = user['_id']
+                
+                    mongo.db.user.find_one_and_update({'_id': ObjectId(user_id)},
+                                    {'$set':{'profile_image': profile_image
+                                        }
                                     }
-                                }
-                )
-                flash(f'Your profile image has been updated to {filename}.', 'success')
-                return redirect(url_for('dashboard')) 
+                    )
+                    flash(f'Your profile image has been updated to {filename}.', 'success')
+                    return redirect(url_for('dashboard')) 
             
     flash('You need to be logged in to access account settings.', 'warning')
     return redirect(url_for('login'))            
@@ -217,6 +243,7 @@ def dashboard():
         user = mongo.db.user.find_one({'username': session['username']})
         
         image_file = url_for('static', filename='uploads/accountimage/'+ user['profile_image'])
+        print(image_file)
         
         # created content
         articles = list(mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING))
