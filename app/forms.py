@@ -47,7 +47,7 @@ class PasswordForm(FlaskForm):
 
 class AccountImageForm(FlaskForm):
     image = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg', 'jpeg', 'png'])])
-    submit = SubmitField('Upload Photo') 
+    submit = SubmitField('Upload') 
 
 class CommentForm(FlaskForm):
     comment = StringField('Comment')
