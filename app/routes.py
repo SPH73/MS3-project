@@ -30,6 +30,7 @@ def register():
         return redirect(url_for('dashboard'))
         
     form = RegistrationForm()
+    default_image = 'gear-avatar.png'
     
     if request.method == 'POST':
         if form.validate_on_submit():            
@@ -46,7 +47,8 @@ def register():
                                  'username': form.username.data, 
                                  'email': form.email.data,
                                  'passphrase': h_phrase, 
-                                 'hashed_password': hashed_pw
+                                 'hashed_password': hashed_pw,
+                                 'profile-image': default_image
                      })
                     
                     flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your dashboard!','success')
@@ -186,17 +188,15 @@ def insert_account_image():
                 filename = image.filename
                 target = os.path.join(APP_ROOT, 'static/uploads/accountimage')
                 username = session['username']   
-                url = "/".join([target, f'{username}-{filename}'])
-                image_file = "-".join([username, filename])
+                url = "/".join([target, f'{username}.png'])
+                profile_image = f'{username}.png'
+                print(f'image file = {profile_image}')
                 image.save(url)
                 user = mongo.db.user.find_one({'username': username})
                 user_id = user['_id']
                 print(user_id)
                 mongo.db.user.find_one_and_update({'_id': ObjectId(user_id)},
-                                {'$set':{'profile_image': 
-                                    {'image_file': image_file,
-                                     'url': url
-                                     }
+                                {'$set':{'profile_image': profile_image
                                     }
                                 }
                 )
@@ -215,7 +215,8 @@ def dashboard():
     
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
-        # profile_image = mongo.db.user.find_one({'profile_image': user['profile_image']})
+        
+        image_file = url_for('static', filename='uploads/accountimage/'+ user['profile_image'])
         
         # created content
         articles = list(mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING))
@@ -249,8 +250,8 @@ def dashboard():
                                 rcvd_profile_msgs=rcvd_profile_msgs,
                                 rcvd_project_msgs=rcvd_project_msgs,
                                 rcvd_pieces=rcvd_pieces,
-                                user=user
-                                # profile_image=profile_image
+                                user=user,
+                                image_file=image_file
         )
 
     flash('You need to be logged in to access your dashboard.', 'warning')

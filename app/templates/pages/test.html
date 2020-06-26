@@ -1,0 +1,19 @@
+            <!-- Sent Pieces -->
+
+
+
+            <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data" id="upload-image">
+                <div class="form-group">
+                    <label for="image">Select image</label>
+                    <input id="account_image" type="file" name="image" accept="upload/profile_images/*" multiple>
+                    <input type="submit" value="Upload image">
+                </div>
+            </form>
+
+
+            <form action="{{ url_for('submit_piece') }}" method="POST" enctype="multipart/form-data" id="upload-form">
+                <div class="form-group">
+                    <input id="project_piece" type="file" name="file" accept="upload/pieces/*" multiple>
+                    <input type="submit" value="Upload piece">
+                </div>
+            </form>
