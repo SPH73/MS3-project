@@ -1,12 +1,13 @@
 import os
 import pymongo
 import bcrypt
-from app import app, mongo, APP_ROOT, ALLOWED_IMAGE_EXTENSIONS
+from app import app, mongo, APP_ROOT
 from flask import render_template, url_for, flash, redirect, request, session
 from bson.objectid import ObjectId
 from datetime import datetime
 from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, ListForm, AccountImageForm
 from werkzeug.utils import secure_filename
+ALLOWED_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg']
 
 # APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
