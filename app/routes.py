@@ -180,7 +180,7 @@ def add_account_image():
 
 
 def allowed_image(filename):
-    """Splits the file filename at the last dot and compares the file extention to the list in ALLOWED_IMAGE_EXTENSIONS. Prevents upload if not supported.
+    """Splits the file filename at the last dot (if there is one) and compares the file extension to the list in ALLOWED_IMAGE_EXTENSIONS. Prevents upload if not supported or lacks an extension.
     """
     
     if not '.' in filename:
@@ -192,6 +192,8 @@ def allowed_image(filename):
         return True
     else:
         return False
+    
+    
 
 @app.route('/insert_account_image', methods=['GET', 'POST'])
 def insert_account_image():
@@ -204,10 +206,10 @@ def insert_account_image():
                 image = request.files['image']
                 if image.filename == '':
                     flash('Your image is missing a filename', 'warning')
-                    return redirect(request.url)
+                    return redirect(url_for('add_account_image'))
                 if not allowed_image(image.filename):
                     flash('Supported file types are "png", "jpg" or "jpeg"', 'warning')
-                    return redirect(request.url)
+                    return redirect(url_for('add_account_image'))
                 else:
                     filename = secure_filename(image.filename)
 
