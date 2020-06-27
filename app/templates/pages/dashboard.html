@@ -6,15 +6,15 @@
         <legend class="legend-border text-center">{{ session['username'] }}'s Dashboard</legend>
 
         <nav class="dash-nav">
-            <ul class="dash-tabs">
-                <li><a class="tab-item dropdown-toggle">Articles</a>
+            <ul class="dash-tabs" role="tablist">
+                <li><a class="tab-item dropdown-toggle" role="tab" data-toggle="collapse">Articles</a>
                     <ul class="tabs-dropdown">
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'articles')">My Articles</a>
                         </li>
                         <li><a class="tab-item tab-link" href="{{ url_for('add_article') }}">New Article</a></li>
                     </ul>
                 </li>
-                <li><a class="tab-item dropdown-toggle">Profile</a>
+                <li><a class="tab-item data-toggle dropdown-toggle" role="tab" data-toggle="collapse">Profile</a>
                     <ul class="tabs-dropdown">
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'profile')">My Profile</a>
                         </li>
@@ -44,7 +44,7 @@
 
                     </ul>
                 </li>
-                <li><a class="tab-item dropdown-toggle">Projects</a>
+                <li><a class="tab-item dropdown-toggle" role="tab" data-toggle="collapse">Projects</a>
                     <ul class="tabs-dropdown">
                         <li><a class="tablink tab-item tab-link" onclick="openTab(event, 'projects')">My Projects</a>
                         </li>
@@ -65,8 +65,7 @@
             </ul>
             {% if user.profile_image %}
             <div id="div-profile-image"><a class="navbar-image mr-4" href="{{ url_for('add_account_image') }}"><img
-                        src="{{ image_file }}" alt="{{ user.profile_image }}" width="50"
-                        height="50"></a>
+                        src="{{ image_file }}" alt="{{ user.profile_image }}" width="50" height="50"></a>
             </div>
             {% else %}
 
@@ -670,7 +669,6 @@
                 </div>
                 <hr>
                 <div class="mb-2 border-bottom">
-                    {% for piece in rcvd_pieces %}{# accepted status forloop #}
                     <ul>
                         <li>
                             <p>You have accepted this piece from {{ piece.owner }}.</p>
@@ -693,7 +691,6 @@
                             {% endif %}
                         </li>
                     </ul>
-                    {% endfor %}{# accepted status endfor #}
                 </div>
 
 
