@@ -13,6 +13,24 @@
     {{ field_name(class="form-control form-control-lg", **kwargs)|safe }}
     {% endif %}
 </div>
+{% endmacro %}
 
+{% macro render_file_field(file_field_name) %}
+
+<div class="form-group">
+    {% if file_field_name.errors %}
+    {{ file_field_name(class="form-control-file is-invalid") }}
+    <div id="msg" class="invalid-feedback">
+        {% for error in file_field_name.errors %}
+        <span>{{ error }}</span>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="form-group">
+        {{ file_field_name(class="form-control-file", **kwargs)|safe }}
+        {{ file_field_name.label(class="custom-file-label")}}
+    </div>
+    {% endif %}
+</div>
 
 {% endmacro %}

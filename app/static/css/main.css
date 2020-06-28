@@ -83,6 +83,14 @@ li:hover>a {
 }
 
 /* Main Site Navigation and Dashboard Tabs */
+.navbar-image {
+  display: block;
+  padding-top: .3125rem;
+  padding-bottom: .3125rem;
+  margin-left: 1rem;
+  line-height: inherit;
+  white-space: nowrap;
+}
 
 .navbar {
   /* maybe add border-bottom */
@@ -258,6 +266,7 @@ button:focus {
   margin-top: 77px;
   position: relative;
   min-height: 100vh;
+  padding-bottom: 20px;
 }
 
 /* SECTION-CONTENT STYLING */
@@ -351,12 +360,19 @@ button:focus {
 }
 
 /* forms */
+.custom-file-input:focus,
 .form-control:focus {
   color: #352721;
   background-color: #f4f4f4;
   border-color: #1a757c;
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(26, 117, 124, 0.5)
+}
+
+.custom-file-label::after {
+  color: #1a757c;
+  content: "Browse";
+  background-color: #f4f4f4;
 }
 
 
