@@ -453,8 +453,8 @@
                     <!-- sent new not yet accepted -->
                     <div class="text-center mt-3">
                         <h5>New Pieces</h5>
-                        <p><small><em>Pieces that appear here have not yet been accepted. When your collaborator accepts
-                                    them they undertake to start working on them.</em></small></p>
+                        <p><small><em>Pieces that appear here have not yet been accepted. When your collaborators accept
+                                    them they have committed to complete and submit on them.</em></small></p>
                     </div>
                     <hr>
 
@@ -489,7 +489,7 @@
                             </li>
                         </ul>
                         {% else %}
-                        <p>Currently, you don't have any pieces pending acceptance.</p>
+                        <p class="text-center">Currently, you don't have any pieces pending acceptance.</p>
                         {%- endfor %}
                     </div>
 
@@ -545,14 +545,14 @@
                         <p><small><em>Pieces that appear here have collaborators waiting for you to
                                     approve them. If you are satisfied, change the status to 'closed'. If
                                     there is still work needed to complete the piece you can update the status
-                                    to 'accepted', and work can continue. If so, ensure you update the brief so that
+                                    to 'accepted' and work can continue. If so, ensure you update the brief so that
                                     the collaborator is aware of what is still required.</em></small>
                         </p>
                     </div>
                     <hr>
 
                     <div class="mb-2 border-bottom">
-                        {% for piece in snt_pieces if piece.status == 'pending approval' %}
+                        {% for piece in snt_pieces if piece.status == 'submitted' %}
                         <ul>{{ loop.index }}.
                             <li>
                                 <p>{{ piece.assignee }} has submitted this project piece.</p>
@@ -603,11 +603,10 @@
                         <h5>Completed Pieces </h5>
                         <p><small><em>Pieces appearing here have a 'closed' status indicating that you have
                                     accepted the submission. As they are closed they will expire soon. Be
-                                    sure to send feedback to your collaborator to help them understand how they did
-                                    (e.g. what they did well and areas you recommend focusing on). It would be
-                                    helpful to share any changes you made to their code so they have an opportunity
-                                    to learn from you and a clear idea of what you would have
-                                    preferred.</em></small></p>
+                                    sure to send feedback to your collaborators to help them understand how they did
+                                    (e.g. what they did well and any areas to focus on). It would be
+                                    helpful to share any changes you made to their code so they have an opportunity to
+                                    learn from you and a better understanding of what you expected.</em></small></p>
                     </div>
                     <hr>
 
@@ -642,18 +641,17 @@
                         </ul>
                         {% else %}
                         <p class="text-center">Currently, you don't have any closed pieces.</p>
-                        {%- endfor %}
+                        {% endfor %}
                     </div>
-
+                    {% else %}
                     <div class="mb-2">
-                        {% else %}
                         <p class="text-center">Your project pieces will appear here when you create them for a
                             collaborator. Post your projects so that collaborators looking for opportunities will
                             see them. Interested members will send you a direct message about the project. You
                             can keep track of any messages you have received under your
-                            Recieved Project Messages tab.
-                            {% endif %}
+                            Recieved Project Messages tab.</p>
                     </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -665,7 +663,7 @@
                 <div class="container">
                     {% if rcvd_pieces %}
                     <div class="text-center mb-3 border-bottom">
-                        <h5>You have currently have project pieces assigned to you</h5>
+                        <h5>You have project pieces assigned to you</h5>
                     </div>
 
                     <!-- received new not yet accepted -->
@@ -691,7 +689,8 @@
                                     their expectations for this piece: <br>
                                     {{ piece.description }}
                                 </p>
-                                <a href="#" id="accept-piece-btn{{ loop.index }}" type="button"
+                                <a href="{{ url_for('accept_piece', piece_id=piece._id) }}"
+                                    id="accept-piece-btn{{ loop.index }}" type="button"
                                     class="btn btn-outline-primary btn-sm mb-1">Accept Now</a>
                                 <div><small class="text-muted">
                                         <i><a class="ml-2" href="">Ask {{ piece.owner }} a question?</a></i>
@@ -702,8 +701,8 @@
                             </li>
                         </ul>
                         {% else %}
-                        <p class="text-center">Currently, you don't have any pieces pending acceptance.</p>
-                        {%- endfor %}
+                        <p class="text-center">Currently, you don't have any pieces to accept.</p>
+                        {% endfor %}
                     </div>
 
                     <!-- received accepted -->
@@ -728,7 +727,9 @@
                                     the piece: <br>
                                     {{ piece.description }}
                                 </p>
-                                <a href="" id="submit-piece-btn{{ loop.index }}" type="button"
+                                <p>Piece Id : {{piece._id}}</p>
+                                <a href="{{ url_for('submit_piece', piece_id=piece._id) }}"
+                                    id="submit-piece-btn{{ loop.index }}" type="button"
                                     class="btn btn-outline-primary btn-sm mb-1">Submit Now</a>
                                 <div><small class="text-muted">
                                         <i><a class="ml-2" href="">Ask
@@ -740,7 +741,7 @@
                         </ul>
                         {% else %}
                         <p class="text-center">Currently, you don't have any accepted pieces.</p>
-                        {%- endfor %}
+                        {% endfor %}
                     </div>
 
 
@@ -756,7 +757,7 @@
                     <hr>
 
                     <div class="mb-2 border-bottom">
-                        {% for piece in rcvd_pieces if piece.status == 'pending approval' %}
+                        {% for piece in rcvd_pieces if piece.status == 'submitted' %}
                         <ul>{{ loop.index }}.
                             <li>
                                 <p>You have submitted this piece to {{ piece.owner }} for approval.</p>
@@ -782,8 +783,8 @@
                             </li>
                         </ul>
                         {% else %}
-                        <p class="text-center">Currently, you don't have any pieces waiting for aproval.</p>
-                        {%- endfor %}
+                        <p class="text-center">Currently, you don't have any submitted pieces.</p>
+                        {% endfor %}
                     </div>
 
 
@@ -820,20 +821,18 @@
                                 </li>
                             </ul>
                             {% else %}
-                            <p class="text-center">Currently, you don't have any closed pieces.</p>
-                            {%- endfor %}
+                            <p class="text-center">Currently, you don't have any recently accepted pieces.</p>
+                            {% endfor %}
                     </div>
 
-                    <div class="mb-2">
-                        {% else %}{# outer if check else clause that should run if the collection if empty #}
-                        <div class="text-center">
-                            <p>Your project pieces will appear here when you receive them. If you see a
-                                project that you are interested in collaborating on, let the owner know by sending them
-                                a direct message via the message button below the project listing. A copy of your
-                                messages will be saved in your Sent Project Messages tab.
-                        </div>
+                    {% else %}
+                    <div class="text-center">
+                        <p class="text-center">Your project pieces will appear here when you receive them. If you see a
+                            project that you are interested in collaborating on, let the owner know by sending them
+                            a direct message via the message button below the project listing. A copy of your
+                            messages will be saved in your Sent Project Messages tab.</p>
                     </div>
-                    {% endif %} {# outer if collection not empty check #}
+                    {% endif %}
                 </div>
             </div>
             <!-- /End of Received Pieces -->
@@ -841,6 +840,7 @@
             <!-- /END OF PROJECT TAB CONTENT -->
             <!-- /END TAB CONTENT -->
         </div>
-    </section>
+</div>
+</section>
 </div>
 {% endblock content %}
