@@ -387,7 +387,7 @@
                         {% endfor %}
                         {% else %}
                         <div class="col-sm-12 text-center">
-                            <p>Your projects will appear here.</p>
+                            <p>All your project pieces will appear here when you create them.</p>
                         </div>
                         {% endif %}
                     </div>
@@ -448,288 +448,279 @@
             <div id="snt_pieces" class="tabcontent">
                 <div class="container mt-2">
                     {% if snt_pieces %}{# outer if else collection not empty check #}
-                    <h4>You currently have these active pieces</h4>
+                    <h5 class="text-center mb-2">Your current project pieces with collaborators</h5>
 
                     <!-- sent new not yet accepted -->
-                    <h5>New Pieces</h5>
-                    <p><small><em>These pieces are not yet accepted. When your collaborator accepts them they
-                                undertake to start working on them.</em></small></p>
-                    <hr>
-
-                    <div class="mt-3 mb-2">
-
-                        <div class="mb-2 border-bottom">
-                            {% for piece in snt_pieces if piece.status == 'pending acceptance' %} {# outer for loop #}
-                            <ul> {{ loop.index }}.
-                                <li>
-                                    <p>You sent a project piece to {{ piece.assignee }}, on
-                                        {{ piece.date.strftime('%d %B, %Y') }}.</p>
-                                    <p><span class='field'>'{{ piece.project_title }}'</span></p>
-                                    <p><span class='field'>Task name:</span> {{ piece.task }}</p>
-                                    <p><span class="field">Due date:</span> {{ piece.due_date.strftime('%d %B, %Y') }}
-                                    </p>
-                                    <p><span class='field'>Task Brief: </span> <br>
-                                        You provided the following brief and information regarding your
-                                        expectations for this piece:<br>
-                                        {{ piece.description }}
-                                    </p>
-                                    {% if piece.comment %}
-                                    <p><span class='field'>Comment: </span> <br>
-                                        You created a personal comment for this piece:<br>
-                                        {{ piece.comment }}
-                                    </p>
-                                    {% endif %}
-
-                                    <div><small class="text-muted">
-                                            <i><a class="ml-2" href="#">Do you want to send a message to
-                                                    {{ piece.assignee }}?</a></i>
-                                        </small></div>
-                                    {% if not loop.last %}
-                                    <hr>
-                                    {% endif %}
-                                </li>
-                            </ul>
-                            {% else %}
-                            <p>You don't have any pieces pending acceptance from collaborators.</p>
-                            {%- endfor %}
-                        </div>
-
-                        <!-- sent and accepted -->
-                        <div class="mt-3 mb-2">
-                            <h5>Accepted Pieces</h5>
-                            <p>
-                                <small><em>These pieces have been accepted indicating that your collaborator is
-                                        preparing to
-                                        commence work on them.</em></small>
-                            </p>
-                        </div>
-                        <hr>
-
-                        <div class="mb-2 border-bottom">
-                            {% for piece in snt_pieces if piece.status == 'accepted' %} {# outer for loop #}
-                            <ul>{{ loop.index }}.
-                                <li>
-                                    <p>{{ piece.assignee }} has accepted a piece of your project assigned on
-                                        {{ piece.date.strftime('%d %B, %Y') }}</p>
-                                    </p>
-                                    <p><span class="field">'{{ piece.project_title }}'</span></p>
-                                    <p><span class='field'>Due date:
-                                        </span>{{ piece.due_date.strftime('%d %B, %Y') }}
-                                    </p>
-                                    <p><span class='field'>Task name: </span>{{ piece.task }}</p>
-                                    <p><span class='field'>Task Brief: </span>As a reminder, here is the brief and
-                                        information provided:<br>
-                                        {{ piece.description }}</p>
-                                    {% if piece.comment %}
-                                    <p><span class='field'>Comment: </span> <br>
-                                        You created a personal comment for this piece:<br>
-                                        {{ piece.comment }}
-                                    </p>
-                                    {% endif %}
-                                    <div>
-                                        <small class="text-muted">
-                                            <i><a class="ml-2" href="#">Do you want to send a message to
-                                                    {{ piece.assignee }}?</a></i></small>
-                                    </div>
-                                    {% if not loop.last %}
-                                    <hr>
-                                    {% endif %}
-                                </li>
-                            </ul>
-                            {% else %}
-                            <p>Currently, you don't have any accepted pieces.</p>
-                            {%- endfor %}
-                        </div>
-
-
-                        <!-- sent submitted -->
-                        <div class="mt-3 mb-2">
-                            <h5>Pieces submitted for approval</h5>
-                            <p><small><em>These pieces have been submitted and your collaborators are waiting for you to
-                                        approve them. If you are happy to accept them, change the status to 'Closed'. If
-                                        there is still work needed to complete the piece you can uodate the status back
-                                        to 'Accepted', for work can continue.
-                                        Ensure you update the brief so that the collaborator is aware of what is still
-                                        required.</em></small>
-                            </p>
-                        </div>
-                        <hr>
-
-                        <div class="mb-2 border-bottom">
-                            {% for piece in snt_pieces if piece.status == 'pending approval' %} {# outer for loop #}
-                            <ul>{{ loop.index }}.
-                                <li>
-                                    <p>{{ piece.assignee }} has submitted a piece for your project.</p>
-                                    <p><span class="field">'{{ piece.project_title }}'</span></p>
-                                    <p><span class='field'>Due date:
-                                        </span>{{ piece.due_date.strftime('%d %B, %Y') }}
-                                    </p>
-                                    <p><span class='field'>Task name: </span>{{ piece.task }}</p>
-                                    <p><span class='field'>Submitted:
-                                        </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
-                                    <p><span class='field'>Task Brief: </span><br>
-                                        As a reminder, here is the brief and
-                                        information provided:<br>
-                                        {{ piece.description }}</p>
-                                    {% if piece.comment %}
-                                    <p><span class='field'>Comment: </span> <br>
-                                        You created a personal comment for this piece:<br>
-                                        {{ piece.comment }}
-                                    </p>
-                                    {% endif %}
-                                    <div>
-                                        <div>
-                                            {% if piece.file_upload %}
-                                            <ul>
-                                                Files:
-                                                {%  for file in piece.file_upload %}
-                                                <li>
-                                                    {{ piece.file_upload }}</p>
-                                                </li>
-                                                {% endfor %}
-                                            </ul>
-                                            {% endif %}
-                                        </div>
-                                        <a href="{{ url_for('edit_snt_piece', piece_id=piece._id) }}"
-                                            id="update-piece-btn{{ loop.index }}" type="button"
-                                            class="btn btn-outline-primary btn-sm mb-1">Update Status</a>
-                                        {% if not loop.last %}
-                                        <hr>
-                                        {% endif %}
-                                </li>
-                            </ul>
-                            {% else %}
-                            <p>Currently, you don't have any pieces waiting for aproval.</p>
-                            {%- endfor %}
-                        </div>
-
-
-                        <!-- sent closed -->
-                        <div class="mt-3 mb-2">
-                            <h5>Completed Pieces </h5>
-
-                            <p><small><em>Great! You have closed these pieces inidicating that you have accepted
-                                        the submission. As they are closed they will expire soon. Be
-                                        sure to send feedback to the collaborator to help them understand how they did
-                                        (e.g
-                                        what they did well and areas you recommend focusing on). It would be helpful to
-                                        let
-                                        them know what changes (if any) you made to their
-                                        code so that they have an opportunity to learn from you.</em></small></p>
-                        </div>
-                        <hr>
-
-                        <div class="mb-2 border-bottom">
-                            {% for piece in snt_pieces if piece.status == 'closed' %} {# outer for loop #}
-                            <ul>{{ loop.index }}.
-                                <li>
-                                    <p>You accepted a piece submited by {{ piece.assignee }} that was assigned on
-                                        {{ piece.date.strftime('%d %B, %Y') }}</p>
-                                    <p><span class="field">'{{ piece.project_title }}'</span></p>
-                                    <p><span class='field'>Task name: </span>{{ piece.task }}</p>
-                                    <p><span class='field'>Submitted:
-                                        </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
-                                    <p><span class='field'>Task Brief: </span><br>
-                                        As a reminder, here is the brief and
-                                        information provided:<br>
-                                        {{ piece.description }}</p>
-                                    {% if piece.comment %}
-                                    <p><span class='field'>Comment: </span> <br>
-                                        You created a personal comment for this piece:<br>
-                                        {{ piece.comment }}
-                                    </p>
-                                    {% endif %}
-
-                                    <div><small class="text-muted">
-                                            <i><a class="ml-2" href="#">Send feedback to {{ piece.assignee }}
-                                                    about
-                                                    their work on this
-                                                    piece.</a></i>{# TODO add link to user profile #}
-                                        </small></div>
-                                    {% if not loop.last %}
-                                    <hr>
-                                    {% endif %}
-                                </li>
-                            </ul>
-                            {% else %}
-                            <p>Currently, you don't have any closed pieces.</p>
-                            {%- endfor %}
-                        </div>
-
-                        <div class="mb-2">
-                            {% else %} {# outer if check else clause that should run if the collection if empty #}
-                            <p class="text-center">Your project pieces will appear here when you create them for a
-                                collaborator. Post your projects so that collaborators looking for opportunities will
-                                see
-                                them. Any interested members will send you a direct message about the project. You can
-                                keep
-                                track of any messages you have received under your
-                                <a href="#rcd_project_msgs">Projects > Recieved Project Messages tab.</a></p>
-                            {% endif %} {# outer if collection not empty check #}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /END OF SENT PIECES TAB-->
-
-
-            <!-- RECEIVED PIECES TAB -->
-            <div id="rcvd_pieces" class="tabcontent">
-                <div class="container">
-                    {% if rcvd_pieces %}{# outer if collection not empty check #}
-                    <h4>You have currently have these project pieces</h4>
-
-                    <!-- received new not yet accepted -->
-                    {% for piece in rcvd_pieces %}{# outer for loop #}
-                    <div class="mt-3 mb-2">
-                        {% if piece.status == "pending acceptance" %}{# pending approval status inner if elif check #}
+                    <div class="text-center mt-3">
                         <h5>New Pieces</h5>
-                        <p><small><em>These pieces are not yet accepted. Accept them to let the owner know you intend to
-                                    start work on them. When you accept a piece you need to be committed to working on
-                                    it and be mindful of submitting it withing the due date.</em></small></p>
+                        <p><small><em>Pieces that appear here have not yet been accepted. When your collaborator accepts
+                                    them they undertake to start working on them.</em></small></p>
                     </div>
                     <hr>
+
                     <div class="mb-2 border-bottom">
-                        <ul>
+                        {% for piece in snt_pieces if piece.status == 'pending acceptance' %} {# outer for loop #}
+                        <ul> {{ loop.index }}.
                             <li>
-                                <p>{{ piece.owner }} sent you a piece of the their project on
-                                    {{ piece.date.strftime('%d %B, %Y') }}</p>
+                                <p>You assigned this project piece to {{ piece.assignee }}, on
+                                    {{ piece.date.strftime('%d %B, %Y') }}.</p>
                                 <p><span class='field'>'{{ piece.project_title }}'</span></p>
                                 <p><span class='field'>Task name:</span> {{ piece.task }}</p>
-                                <p><span class="field">Due date:</span> {{ piece.due_date.strftime('%d %B, %Y') }}</p>
+                                <p><span class="field">Due date:</span> {{ piece.due_date.strftime('%d %B, %Y') }}
+                                </p>
                                 <p><span class='field'>Task Brief: </span> <br>
-                                    {{ piece.owner }} has provided the following brief and information regarding
-                                    their
-                                    expectations for this piece: <br>
+                                    You provided the following brief and information regarding your
+                                    expectations for this piece:<br>
                                     {{ piece.description }}
                                 </p>
-                                <a href="#" id="accept-piece-btn{{ loop.index }}" type="button"
-                                    class="btn btn-outline-primary btn-sm mb-1">Accept Now</a>
+                                {% if piece.comment %}
+                                <p><span class='field'>Personal Note: </span> <br>
+                                    {{ piece.comment }}
+                                </p>
+                                {% endif %}
+
                                 <div><small class="text-muted">
-                                        <i><a class="ml-2" href="">Ask
-                                                {{ piece.owner }} a question?</a></i>
+                                        <i><a class="ml-2" href="#">Do you want to send a message to
+                                                {{ piece.assignee }}?</a></i>
                                     </small></div>
                                 {% if not loop.last %}
                                 <hr>
                                 {% endif %}
                             </li>
                         </ul>
+                        {% else %}
+                        <p>Currently, you don't have any pieces pending acceptance.</p>
+                        {%- endfor %}
                     </div>
 
-                    <!-- received accepted -->
-                    <div class="mt-3 mb-2">
-                        {% elif piece.status == "accepted" %}{# accepted status inner if elif check #}
+                    <!-- sent and accepted -->
+                    <div class=" text-center mt-3 mb-2">
                         <h5>Accepted Pieces</h5>
-                        <p><small><em>You have accepted these pieces so the owner is waiting for you to submit
-                                    them.</em></small></p>
+                        <p><small><em>Pieces here have been accepted indicating that your collaborator is prepared to
+                                    commence work on them.</em></small>
+                        </p>
+                    </div>
+                    <hr>
+
+                    <div class="mb-2 border-bottom">
+                        {% for piece in snt_pieces if piece.status == 'accepted' %}
+
+                        <ul>{{ loop.index }}.
+                            <li>
+                                <p>{{ piece.assignee }} has accepted this project piece assigned on
+                                    {{ piece.date.strftime('%d %B, %Y') }}</p>
+                                </p>
+                                <p><span class="field">'{{ piece.project_title }}'</span></p>
+                                <p><span class='field'>Due date:
+                                    </span>{{ piece.due_date.strftime('%d %B, %Y') }}
+                                </p>
+                                <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
+                                <p><span class='field'>Task Brief: </span>As a reminder, here is the brief and
+                                    information you provided:<br>
+                                    {{ piece.description }}</p>
+                                {% if piece.comment %}
+                                <p><span class='field'>Your Personal Note: </span> <br>
+                                    {{ piece.comment }}
+                                </p>
+                                {% endif %}
+                                <div>
+                                    <small class="text-muted">
+                                        <i><a class="ml-2" href="#">Do you want to send a message to
+                                                {{ piece.assignee }}?</a></i></small>
+                                </div>
+                                {% if not loop.last %}
+                                <hr>
+                                {% endif %}
+                            </li>
+                        </ul>
+                        {% else %}
+                        <p class="text-center">Currently, you don't have any accepted pieces.</p>
+                        {%- endfor %}
+                    </div>
+
+
+                    <!-- sent submitted -->
+                    <div class="text-center mt-3 mb-2">
+                        <h5>Pieces submitted for approval</h5>
+                        <p><small><em>Pieces that appear here have collaborators waiting for you to
+                                    approve them. If you are satisfied, change the status to 'closed'. If
+                                    there is still work needed to complete the piece you can update the status
+                                    to 'accepted', and work can continue. If so, ensure you update the brief so that
+                                    the collaborator is aware of what is still required.</em></small>
+                        </p>
+                    </div>
+                    <hr>
+
+                    <div class="mb-2 border-bottom">
+                        {% for piece in snt_pieces if piece.status == 'pending approval' %}
+                        <ul>{{ loop.index }}.
+                            <li>
+                                <p>{{ piece.assignee }} has submitted this project piece.</p>
+                                <p><span class="field">'{{ piece.project_title }}'</span></p>
+                                <p><span class='field'>Due date:
+                                    </span>{{ piece.due_date.strftime('%d %B, %Y') }}
+                                </p>
+                                <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
+                                <p><span class='field'>Submitted on:
+                                    </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
+                                <p><span class='field'>Task Brief: </span><br>
+                                    As a reminder, here is the brief and
+                                    information you provided:<br>
+                                    {{ piece.description }}</p>
+                                {% if piece.comment %}
+                                <p><span class='field'>Personal Note: </span> <br>
+                                    {{ piece.comment }}
+                                </p>
+                                {% endif %}
+                                <div>
+                                    {% if piece.file_upload %}
+                                    <ul>
+                                        Files:
+                                        {%  for file in piece.file_upload %}
+                                        <li>
+                                            {{ piece.file_upload }}</p>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}
+                                </div>
+                                <a href="{{ url_for('edit_snt_piece', piece_id=piece._id) }}"
+                                    id="update-piece-btn{{ loop.index }}" type="button"
+                                    class="btn btn-outline-primary btn-sm mb-1">Update Status</a>
+                                {% if not loop.last %}
+                                <hr>
+                                {% endif %}
+                            </li>
+                        </ul>
+                        {% else %}
+                        <p class="text-center">Currently, you don't have any pieces waiting for aproval.</p>
+                        {%- endfor %}
+                    </div>
+
+
+                    <!-- sent closed -->
+                    <div class="text-center mt-3 mb-2">
+                        <h5>Completed Pieces </h5>
+                        <p><small><em>Pieces appearing here have a 'closed' status indicating that you have
+                                    accepted the submission. As they are closed they will expire soon. Be
+                                    sure to send feedback to your collaborator to help them understand how they did
+                                    (e.g. what they did well and areas you recommend focusing on). It would be
+                                    helpful to share any changes you made to their code so they have an opportunity
+                                    to learn from you and a clear idea of what you would have
+                                    preferred.</em></small></p>
+                    </div>
+                    <hr>
+
+                    <div class="mb-2 border-bottom">
+                        {% for piece in snt_pieces if piece.status == 'closed' %}
+                        <ul>{{ loop.index }}.
+                            <li>
+                                <p>You have accepted this piece from {{ piece.assignee }} that was assigned on
+                                    {{ piece.date.strftime('%d %B, %Y') }}</p>
+                                <p><span class="field">'{{ piece.project_title }}'</span></p>
+                                <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
+                                <p><span class='field'>Date Submitted:
+                                    </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
+                                <p><span class='field'>Task Brief: </span><br>
+                                    As a reminder, here is the brief and
+                                    information you provided:<br>
+                                    {{ piece.description }}</p>
+                                {% if piece.comment %}
+                                <p><span class='field'>Personal Note: </span> <br>
+                                    {{ piece.comment }}
+                                </p>
+                                {% endif %}
+
+                                <div><small class="text-muted">
+                                        <i><a class="ml-2" href="#">Send feedback to {{ piece.assignee }}
+                                                about their work on this piece.</a></i>
+                                    </small></div>
+                                {% if not loop.last %}
+                                <hr>
+                                {% endif %}
+                            </li>
+                        </ul>
+                        {% else %}
+                        <p class="text-center">Currently, you don't have any closed pieces.</p>
+                        {%- endfor %}
+                    </div>
+
+                    <div class="mb-2">
+                        {% else %}
+                        <p class="text-center">Your project pieces will appear here when you create them for a
+                            collaborator. Post your projects so that collaborators looking for opportunities will
+                            see them. Interested members will send you a direct message about the project. You
+                            can keep track of any messages you have received under your
+                            Recieved Project Messages tab.
+                            {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- /END OF SENT PIECES TAB-->
+
+
+            <!-- RECEIVED PIECES TAB -->
+            <div id="rcvd_pieces" class="tabcontent">
+                <div class="container">
+                    {% if rcvd_pieces %}
+                    <div class="text-center mb-3 border-bottom">
+                        <h5>You have currently have project pieces assigned to you</h5>
+                    </div>
+
+                    <!-- received new not yet accepted -->
+
+                    <div class="text-center mt-3 mb-2">
+                        <h5>New Pieces</h5>
+                        <p><small><em>Pieces appearing here are not yet accepted. Accept them as soon as possible to let
+                                    the project owners know you intend to start work on them. Acceptance is an
+                                    indicatation of your commitment to complete and submit the piece by the due
+                                    date.</em></small></p>
                     </div>
                     <hr>
                     <div class="mb-2 border-bottom">
-                        <ul>
+                        {% for piece in rcvd_pieces if piece.status == "pending acceptance" %}
+                        <ul>{{ loop.index }}.
                             <li>
-                                <p>You have accepted this piece from {{ piece.owner }}.</p>
+                                <p>{{ piece.owner }} sent you this piece on {{ piece.date.strftime('%d %B, %Y') }}</p>
                                 <p><span class='field'>'{{ piece.project_title }}'</span></p>
-                                <p><span class='field'>Task name:</span> {{ piece.task }}</p>
+                                <p><span class='field'>Task Name:</span> {{ piece.task }}</p>
+                                <p><span class="field">Due date:</span> {{ piece.due_date.strftime('%d %B, %Y') }}</p>
+                                <p><span class='field'>Task Brief: </span> <br>
+                                    {{ piece.owner }} has provided the following brief and information regarding
+                                    their expectations for this piece: <br>
+                                    {{ piece.description }}
+                                </p>
+                                <a href="#" id="accept-piece-btn{{ loop.index }}" type="button"
+                                    class="btn btn-outline-primary btn-sm mb-1">Accept Now</a>
+                                <div><small class="text-muted">
+                                        <i><a class="ml-2" href="">Ask {{ piece.owner }} a question?</a></i>
+                                    </small></div>
+                                {% if not loop.last %}
+                                <hr>
+                                {% endif %}
+                            </li>
+                        </ul>
+                        {% else %}
+                        <p class="text-center">Currently, you don't have any pieces pending acceptance.</p>
+                        {%- endfor %}
+                    </div>
+
+                    <!-- received accepted -->
+                    <div class="text-center mt-3 mb-2">
+                        <h5>Accepted Pieces</h5>
+                        <p><small><em>Pieces listed here have been accepted by you and the project owner is waiting for
+                                    you to submit them.</em></small></p>
+                    </div>
+                    <hr>
+
+                    <div class="mb-2 border-bottom">
+                        {% for piece in rcvd_pieces if piece.status == 'accepted' %}
+                        <ul>{{ loop.index }}.
+                            <li>
+                                <p>You accepted this piece from {{ piece.owner }}.</p>
+                                <p><span class='field'>'{{ piece.project_title }}'</span></p>
+                                <p><span class='field'>Task Name:</span> {{ piece.task }}</p>
                                 <p><span class="field">Due date:</span> {{ piece.due_date.strftime('%d %B, %Y') }}
                                 </p>
                                 <p><span class='field'>Task Brief: </span> </p>
@@ -737,39 +728,43 @@
                                     the piece: <br>
                                     {{ piece.description }}
                                 </p>
-                                <a href="" id="accept-piece-btn{{ loop.index }}" type="button"
+                                <a href="" id="submit-piece-btn{{ loop.index }}" type="button"
                                     class="btn btn-outline-primary btn-sm mb-1">Submit Now</a>
                                 <div><small class="text-muted">
                                         <i><a class="ml-2" href="">Ask
-                                                {{ piece.owner }} a question about the task</a></i></small></div>
+                                                {{ piece.owner }} a question about this piece?</a></i></small></div>
                                 {% if not loop.last %}
                                 <hr>
                                 {% endif %}
                             </li>
                         </ul>
+                        {% else %}
+                        <p class="text-center">Currently, you don't have any accepted pieces.</p>
+                        {%- endfor %}
                     </div>
 
 
                     <!-- received and submitted -->
-                    <div class="mt-3 mb-2">
-                        {% elif piece.status == "pending approval" %}{# pending approval status inner if elif check #}
+                    <div class="text-center mt-3 mb-2">
                         <h5>Pieces submitted for approval</h5>
-                        <p><small><em>As these pieces are accepted by the owner they will move to the 'closed'
-                                    section for a short while for your reference. If there is still work to be done they
-                                    will move back to the accepted section for you to continue working on
-                                    them.</em></small>
-                        </p>
+                        <p><small><em>Pieces appearing here are pending acceptance by the project owner and thereafter
+                                    they will move to your Completed Pieces list for a short while for your reference.
+                                    If there is still work to be done they will move back to the accepted section for
+                                    you to continue working on them and the brief will be updated accordingly.
+                                </em></small></p>
                     </div>
                     <hr>
+
                     <div class="mb-2 border-bottom">
-                        <ul>
+                        {% for piece in rcvd_pieces if piece.status == 'pending approval' %}
+                        <ul>{{ loop.index }}.
                             <li>
-                                <p>You have submitted this piece for approval.</p>
+                                <p>You have submitted this piece to {{ piece.owner }} for approval.</p>
                                 <p><span class="field">'{{ piece.project_title }}'</span></p>
                                 <p><span class='field'>Due date:
                                     </span>{{ piece.due_date.strftime('%d %B, %Y') }}
                                 </p>
-                                <p><span class='field'>Task name: </span>{{ piece.task }}</p>
+                                <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
                                 <p><span class='field'>Submitted on:
                                     </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
                                 <p><span class='field'>Task Brief: </span><br>
@@ -786,52 +781,56 @@
                                 {% endif %}
                             </li>
                         </ul>
+                        {% else %}
+                        <p class="text-center">Currently, you don't have any pieces waiting for aproval.</p>
+                        {%- endfor %}
                     </div>
 
 
                     <!-- received and closed -->
                     <div class="mt-3 mb-2">
-                        {% elif piece.status == "closed" %}{# closed status inner if elif check #}
                         <h5>Completed Pieces </h5>
-                        <p><small><em></em></small>Great! These pieces have been accepted and are closed; they
-                            will expire soon. Be sure to ask for feedback from the owner.</p>
+                        <p><small><em>Pieces listed here have been accepted and are now closed. They will expire soon.
+                                    Be sure to ask for feedback from the owner if you haven't received any.
+                                </em></small></p>
                     </div>
                     <hr>
                     <div class="mb-2 border-bottom">
-                        <ul>
-                            <li>
-                                <p>Awesome! {{ piece.owner }} has accepted this piece!</p>
-                                <p><span class="field">'{{ piece.project_title }}'</span></p>
-                                <p><span class='field'>Task name: </span>{{ piece.task }}</p>
-                                <p><span class='field'>Submitted:
-                                    </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
-                                <p><span class='field'>Task Brief: </span><br>
-                                    As a reminder, here is the brief and
-                                    information that was provided:<br>
-                                    {{ piece.description }}</p>
+                        {% for piece in rcvd_pieces if piece.status == 'closed' %} {# outer for loop #}
+                        <ul>{{ loop.index }}.
+                            <ul>
+                                <li>
+                                    <p>{{ piece.owner }} has accepted this piece!</p>
+                                    <p><span class="field">'{{ piece.project_title }}'</span></p>
+                                    <p><span class='field'>Task name: </span>{{ piece.task }}</p>
+                                    <p><span class='field'>Submitted:
+                                        </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
+                                    <p><span class='field'>Task Brief: </span><br>
+                                        As a reminder, here is the brief and
+                                        information that was provided:<br>
+                                        {{ piece.description }}</p>
 
-                                <div><small class="text-muted">
-                                        <i><a class="ml-2" href="">You can ask
-                                                for feedback on your work
-                                                here.</a></i></small></div>
-                                {% if not loop.last %}
-                                <hr>
-                                {% endif %}
-                            </li>
-                        </ul>
+                                    <div><small class="text-muted">
+                                            <i><a class="ml-2" href="">You can ask
+                                                    for feedback on your work
+                                                    here.</a></i></small></div>
+                                    {% if not loop.last %}
+                                    <hr>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            {% else %}
+                            <p class="text-center">Currently, you don't have any closed pieces.</p>
+                            {%- endfor %}
                     </div>
-                    {% endif %} {# inner if elif status check #}
-                    {% endfor %} {# outer for loop #}
+
                     <div class="mb-2">
                         {% else %}{# outer if check else clause that should run if the collection if empty #}
                         <div class="text-center">
                             <p>Your project pieces will appear here when you receive them. If you see a
                                 project that you are interested in collaborating on, let the owner know by sending them
-                                a
-                                direct message via the message button under the project. You can keep track of any
-                                messages
-                                you have sent under your
-                                <a href="#snt_project_msgs">Projects > Sent Project Messages tab.</a></p>
+                                a direct message via the message button below the project listing. A copy of your
+                                messages will be saved in your Sent Project Messages tab.
                         </div>
                     </div>
                     {% endif %} {# outer if collection not empty check #}
