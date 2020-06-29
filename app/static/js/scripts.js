@@ -99,3 +99,10 @@ function openTab(event, tabName) {
     document.getElementById(tabName).style.display = "block";
     event.currentTarget.className += " active";
 }
+
+
+// taken from pythonise.com
+// saves the filesize as a cookie
+function filesize(elem) {
+    document.cookie = `filesize=${elem.files[0].size}`
+}
