@@ -473,6 +473,13 @@
                                         expectations for this piece:<br>
                                         {{ piece.description }}
                                     </p>
+                                    {% if piece.comment %}
+                                    <p><span class='field'>Comment: </span> <br>
+                                        You created a personal comment for this piece:<br>
+                                        {{ piece.comment }}
+                                    </p>
+                                    {% endif %}
+
                                     <div><small class="text-muted">
                                             <i><a class="ml-2" href="#">Do you want to send a message to
                                                     {{ piece.assignee }}?</a></i>
@@ -483,7 +490,7 @@
                                 </li>
                             </ul>
                             {% else %}
-                            <p>You don't have any pieces here.</p>
+                            <p>You don't have any pieces pending acceptance from collaborators.</p>
                             {%- endfor %}
                         </div>
 
@@ -513,6 +520,12 @@
                                     <p><span class='field'>Task Brief: </span>As a reminder, here is the brief and
                                         information provided:<br>
                                         {{ piece.description }}</p>
+                                    {% if piece.comment %}
+                                    <p><span class='field'>Comment: </span> <br>
+                                        You created a personal comment for this piece:<br>
+                                        {{ piece.comment }}
+                                    </p>
+                                    {% endif %}
                                     <div>
                                         <small class="text-muted">
                                             <i><a class="ml-2" href="#">Do you want to send a message to
@@ -524,7 +537,7 @@
                                 </li>
                             </ul>
                             {% else %}
-                            <p>You don't have any pieces here.</p>
+                            <p>Currently, you don't have any accepted pieces.</p>
                             {%- endfor %}
                         </div>
 
@@ -543,7 +556,7 @@
                         <hr>
 
                         <div class="mb-2 border-bottom">
-                            {% for piece in snt_pieces if piece.status == 'pending acceptance' %} {# outer for loop #}
+                            {% for piece in snt_pieces if piece.status == 'pending approval' %} {# outer for loop #}
                             <ul>{{ loop.index }}.
                                 <li>
                                     <p>{{ piece.assignee }} has submitted a piece for your project.</p>
@@ -558,14 +571,14 @@
                                         As a reminder, here is the brief and
                                         information provided:<br>
                                         {{ piece.description }}</p>
+                                    {% if piece.comment %}
+                                    <p><span class='field'>Comment: </span> <br>
+                                        You created a personal comment for this piece:<br>
+                                        {{ piece.comment }}
+                                    </p>
+                                    {% endif %}
                                     <div>
                                         <div>
-                                            <p>
-                                                Piece id: {{ piece._id}}
-                                            </p>
-                                            <p>
-                                                Project id: {{piece.project_id}}
-                                            </p>
                                             {% if piece.file_upload %}
                                             <ul>
                                                 Files:
@@ -586,7 +599,7 @@
                                 </li>
                             </ul>
                             {% else %}
-                            <p>You don't have any pieces here.</p>
+                            <p>Currently, you don't have any pieces waiting for aproval.</p>
                             {%- endfor %}
                         </div>
 
@@ -595,7 +608,7 @@
                         <div class="mt-3 mb-2">
                             <h5>Completed Pieces </h5>
 
-                            <p><small><em>Great! you have closed these pieces inidicating that you have accepted
+                            <p><small><em>Great! You have closed these pieces inidicating that you have accepted
                                         the submission. As they are closed they will expire soon. Be
                                         sure to send feedback to the collaborator to help them understand how they did
                                         (e.g
@@ -620,6 +633,12 @@
                                         As a reminder, here is the brief and
                                         information provided:<br>
                                         {{ piece.description }}</p>
+                                    {% if piece.comment %}
+                                    <p><span class='field'>Comment: </span> <br>
+                                        You created a personal comment for this piece:<br>
+                                        {{ piece.comment }}
+                                    </p>
+                                    {% endif %}
 
                                     <div><small class="text-muted">
                                             <i><a class="ml-2" href="#">Send feedback to {{ piece.assignee }}
@@ -633,7 +652,7 @@
                                 </li>
                             </ul>
                             {% else %}
-                            <p>You don't have any pieces here.</p>
+                            <p>Currently, you don't have any closed pieces.</p>
                             {%- endfor %}
                         </div>
 
