@@ -1,0 +1,27 @@
+{% extends 'layout/base.html' %}
+
+{% from 'pages/_formhelpers.html' import render_file_field %}
+{% from 'pages/_formhelpers.html' import render_field %}
+
+{% block content %}
+
+<div class="container mt-3">
+    <section class="section-content">
+        <legend class="text-center legend-border mb-4">{{ legend }}</legend>
+        <p>You are submitting files for '{{ piece.task }}'</p>
+        <form action="" method="POST"
+            enctype="multipart/form-data" accept="" id="upload-piece-files" novalidate>
+            {{ form.hidden_tag() }}
+            <fieldset class="input-group">
+                {{ render_file_field(form.file_uploads, oninput="filesize(this)") }}
+            </fieldset>
+            <div class="input-group mt-2">
+                {{ form.add_piece(class="btn btn-outline-primary btn-sm") }}
+                <a type="button" class="btn btn-outline-danger btn-sm ml-2" id="cancel-image"
+                    href="{{ url_for('dashboard') }}">Cancel</a>
+            </div>
+        </form>
+    </section>
+</div>
+
+{% endblock %}

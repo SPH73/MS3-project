@@ -1,12 +1,13 @@
 import os
 import pymongo
 import bcrypt
-from app import app, mongo, APP_ROOT, ALLOWED_IMAGE_EXTENSIONS
+from app import app, mongo, APP_ROOT, ALLOWED_IMAGE_EXTENSIONS, MAX_IMAGE_SIZE
 from flask import render_template, url_for, flash, redirect, request, session
 from bson.objectid import ObjectId
 from datetime import datetime
-from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, ListForm, AccountImageForm
+from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, AccountImageForm
 from werkzeug.utils import secure_filename
+from PIL import Image
 
 
 @app.route('/')
@@ -177,7 +178,7 @@ def add_account_image():
     flash('You need to be logged in to access accounst settings.', 'warning')
     return redirect(url_for('login'))
 
-
+# taken from pythonise.com
 def allowed_image(filename):
     """Splits the file filename at the last dot (if there is one) and compares the file extension to the list in ALLOWED_IMAGE_EXTENSIONS. Prevents upload if not supported or lacks an extension.
     """
@@ -192,7 +193,14 @@ def allowed_image(filename):
     else:
         return False
     
+# taken from pythonise.com (see credits)    
+def allowed_image_filesize(filesize):
     
+    if int(filesize) <= MAX_IMAGE_SIZE:
+        return True
+    else:
+        return False
+
 
 @app.route('/insert_account_image', methods=['GET', 'POST'])
 def insert_account_image():
@@ -202,16 +210,25 @@ def insert_account_image():
     if 'username' in session:
         
         if request.method == 'POST' and 'image' in request.files:
+            
+            if "filesize" in request.cookies:
+                
+                if not allowed_image_filesize(request.cookies["filesize"]):
+                    flash(f'Exceeds file size limit of 5MB', 'warning')
+                    return redirect(url_for('add_account_image'))
+                
                 image = request.files['image']
+                
                 if image.filename == '':
                     flash('Your image is missing a filename', 'warning')
                     return redirect(url_for('add_account_image'))
+                
                 if not allowed_image(image.filename):
                     flash('Supported file types are "png", "jpg" or "jpeg"', 'warning')
                     return redirect(url_for('add_account_image'))
                 else:
                     filename = secure_filename(image.filename)
-
+                  
                     target = os.path.join(APP_ROOT, 'static/uploads/accountimage')
                     username = session['username']
                     url = "/".join([target, f'{username}.png'])
@@ -228,12 +245,14 @@ def insert_account_image():
                                     }
                     )
                     flash(f'Your profile image has been updated to {filename}.', 'success')
-                    return redirect(url_for('dashboard')) 
+                    return redirect(url_for('dashboard'))
+                
+            flash('Something has gone wrong, please try again when you next login', 'info')
+            return redirect(url_for('dashboard'))
             
     flash('You need to be logged in to access account settings.', 'warning')
     return redirect(url_for('login'))            
                 
-
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
@@ -244,7 +263,6 @@ def dashboard():
         user = mongo.db.user.find_one({'username': session['username']})
         
         image_file = url_for('static', filename='uploads/accountimage/'+ user['profile_image'])
-        print(image_file)
         
         # created content
         articles = list(mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING))
@@ -265,7 +283,6 @@ def dashboard():
             'to_user': user['username']}).sort('date',pymongo.DESCENDING))      
         rcvd_pieces = list(mongo.db.project_pieces.find({
             'assignee': user['username']}).sort('date',pymongo.DESCENDING))
-        
 
         return render_template('pages/dashboard.html', 
                                 title='Dashboard',
@@ -408,20 +425,6 @@ def add_comment(article_id):
 
 # PROJECT VIEWS
 
-@app.route("/projects")
-def projects():
-    """First check that the user is logged in, then display all the projects in the database sorted by newest first.
-    """
-    
-    if 'username' in session:
-        current_user = mongo.db.user.find_one({'username': session['username']})      
-        projects = mongo.db.projects.find().sort('date',pymongo.DESCENDING)
-        return render_template('pages/projects.html', title='Projects', projects=projects, current_user=current_user)
-    
-    flash('Please login to view user projects.', 'warning')
-    return redirect(url_for('login'))
-
-                 
 @app.route('/add_project', methods=['GET','POST'])
 def add_project():
     """First checks that the user is logged in before rendering the form. When the form is validated, the users user_id is retireved and add with the form content with the current date and time to the collection.
@@ -439,6 +442,7 @@ def add_project():
                                     'deadline': datetime.strptime(form.deadline.data, "%d/%m/%Y"),
                                     'brief': form.brief.data,
                                     'status': form.status.data,
+                                    'note': form.note.data,
                                     'user_id': user['_id']
                 })
                 
@@ -451,6 +455,20 @@ def add_project():
     return redirect(url_for('login'))        
             
 
+@app.route("/projects")
+def projects():
+    """First check that the user is logged in, then display all the projects in the database sorted by newest first.
+    """
+    
+    if 'username' in session:
+        current_user = mongo.db.user.find_one({'username': session['username']})      
+        projects = mongo.db.projects.find().sort('date',pymongo.DESCENDING)
+        return render_template('pages/projects.html', title='Projects', projects=projects, current_user=current_user)
+    
+    flash('Please login to view user projects.', 'warning')
+    return redirect(url_for('login'))
+
+            
 @app.route('/edit_project<project_id>')
 def edit_project(project_id):
     """First checks that the user is logged in then renders the form with the data from the collection document. (Edit button only appears if there is a match with the user id in the database for the particular document id and the users session data).
@@ -492,8 +510,9 @@ def delete_project(project_id):
 
 @app.route('/add_piece/<project_id>', methods=['GET', 'POST'])
 def add_piece(project_id):
-    """TO DO WHEN function complete!!!!
+    """Gets a users project and adds a subdocument to the pieces field of the document. Then creates a document in the project_pieces collection with a project_id reference . A user must be logged in to access the template.
     """
+    
     form=PieceForm()
     if 'username' in session:
         project = mongo.db.projects.find_one_or_404(
@@ -502,14 +521,22 @@ def add_piece(project_id):
         
         if request.method == 'POST':
             user = mongo.db.user.find_one({'username': session['username']})
+            username = user['username']
+            
+            assignee = request.form.get('username')
+            task = request.form.get('task')
+            status = request.form.get('status')
+            description = request.form.get('description')
+            comment = request.form.get('comment')
+            
             projects = mongo.db.projects
             project = projects.find_one_and_update({'_id': ObjectId(project_id) },
                                     {'$push':
                                         {'pieces':
                                             {'date': datetime.utcnow(),
-                                             'username': request.form.get['username'],
-                                             'status': request.form.get('status'),
-                                             'task': request.form.get('task'),
+                                             'username': assignee,
+                                             'status': status,
+                                             'task': task,
                                              'submitted': False
                                             }
                                         }
@@ -519,17 +546,19 @@ def add_piece(project_id):
             pieces.insert_one({'user_id': user['_id'],
                                        'project_id': project['_id'],
                                        'project_title': project['title'],
-                                       'owner': user['username'],
-                                       'task': request.form.get('task'),
-                                       'description': request.form.get('description'),
-                                       'status': request.form.get('status'),
+                                       'owner': username,
+                                       'task': task,
+                                       'description': description,
+                                       'status': status,
                                        'date': datetime.utcnow(),
                                        'due_date': datetime.strptime(form.due_date.data, "%d/%m/%Y"),
                                        'submit_date': datetime.utcnow(),
-                                       'assignee': request.form.get('username'),
-                                       'comment': request.form.get('comment')
-            })            
-            flash('Your project has been updated and the piece has been sent to the assignee.', 'success'
+                                       'assignee': assignee,
+                                       'comment': comment
+                                       
+            }) 
+                       
+            flash(f'{username}, your project has been updated and the piece, "{task}" has been sent to {assignee}.', 'success'
             )
             return redirect(url_for('dashboard'))
         
@@ -538,19 +567,96 @@ def add_piece(project_id):
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
 
-# PROFILE VIEWS
 
-@app.route("/profiles")
-def profiles():
-    """Checks if is the user is logged in first and then renders page with profile collection data.
+@app.route('/accept_piece/<piece_id>', methods=['GET', 'POST'])
+def accept_piece(piece_id):
+    """Retrieves the document from the database and updates the status of the piece with the relevant _id via a button on the user's dashboard.
     """
     
     if 'username' in session:
-        profiles = mongo.db.profiles.find()
-        return render_template('pages/profiles.html', title='Profiles', profiles = profiles)
-    flash('Please login to view user profiles.', 'warning')
+                
+        user = mongo.db.user.find_one({'username': session['username']})
+        username = user['username']
+        
+        piece = mongo.db.project_pieces.find_one_or_404({'_id': ObjectId(piece_id)})
+        project_title = piece['project_title']
+        task = piece['task']         
+        
+        status = 'accepted'
+        mongo.db.project_pieces.find_one_and_update({'_id': ObjectId(piece_id)},
+                                            {'$set':
+                                                {'status': status}
+                                            }
+        )
+        
+        flash(f'{username}, you have successfully accepted the piece, "{task}", for the project " {project_title}".', 'success'
+        )
+        return redirect(url_for('dashboard'))
+    flash('You need to be logged in to accept a piece.', 'info')
     return redirect(url_for('login'))
 
+
+@app.route('/submit_piece/<piece_id>')
+def submit_piece(piece_id):
+    
+    if 'username' in session:
+        form = PieceForm()
+        piece = mongo.db.project_pieces.find_one_or_404({'_id': ObjectId(piece_id)})
+        form.task.data = piece['task']
+        
+      
+    return render_template('pages/submitpiece.html', form=form, piece=piece, legend='Upload piece files')
+
+@app.route('/edit_snt_piece/<piece_id>')
+def edit_snt_piece(piece_id):
+    
+    if 'username' in session:
+        
+        piece = mongo.db.project_pieces.find_one_or_404({'_id': ObjectId(piece_id)})
+
+        form = PieceForm()
+        form.task.data = piece['task']
+        form.status.data = piece['status']
+        form.due_date.data = piece['due_date'].strftime('%d/%m/%Y')
+        form.description.data = piece['description']
+        
+        return render_template('pages/updatepiece.html', form=form, piece=piece, legend='Edit your project')    
+    
+
+@app.route('/update_piece/<piece_id>', methods=['POST'])
+def update_snt_piece(piece_id):
+    """First checks that the user is logged in then renders the form with the data from the collection document. (Edit button only appears if there is a match with the user id in the database for the particular document id and the users session data).
+    """
+    
+    if 'username' in session and request.method == 'POST':
+       
+        username = session['username']
+        task = request.form.get('task')
+        status = request.form.get('status')
+        description = request.form.get('description')
+        due_date = request.form.get('due_date')
+        comment = request.form.get('comment')
+        
+        pieces = mongo.db.project_pieces
+        pieces.find_one_and_update({'_id': ObjectId(piece_id) },
+                                {'$set':
+                                    {'task': task,
+                                     'status': status,
+                                     'due_date': datetime.strptime(due_date, '%d/%m/%Y'),
+                                     'description': description,
+                                     'comment': comment
+                                     }
+                                }
+        )
+             
+
+        flash(f'{username}, the status of the piece, "{task}" has been updated to "{status}".', 'success')
+        return redirect(url_for('dashboard'))
+    
+    flash('You need to be logged in to update your pieces.', 'info')
+    return redirect(url_for('login'))
+
+# PROFILE VIEWS
 
 @app.route('/add_profile', methods=['GET','POST'])
 def add_profile():
@@ -558,7 +664,6 @@ def add_profile():
     """
     
     form=ProfileForm()
-    list_form=ListForm(csrf_enabled=False)
     
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
@@ -575,15 +680,33 @@ def add_profile():
                                               'date': datetime.utcnow(),
                                               'xp': form.xp.data,
                                               'interests': form.interests.data,
+                                              'skills': form.skills.data,
+                                              'languages': form.languages.data,
+                                              'frameworks': form.frameworks.data,
+                                              'links': form.links.data,
                                               'user_id': user['_id']})
                 flash('Your profile has been created.', 'success')
                 return redirect('profiles')
             
         return render_template('pages/addprofile.html', title='Post',
-                               form=form, list_form=list_form, legend='Create your profile')
+                               form=form, legend='Create your profile')
         
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
+
+@app.route("/profiles")
+def profiles():
+    """Checks if is the user is logged in first and then renders page with profile collection data.
+    """
+    
+    if 'username' in session:
+        profiles = mongo.db.profiles.find()
+        return render_template('pages/profiles.html', title='Profiles', profiles = profiles)
+    flash('Please login to view user profiles.', 'warning')
+    return redirect(url_for('login'))
+
+
+
     
 @app.route('/edit_profile/<profile_id>', methods=['GET', 'POST'])
 def edit_profile(profile_id):
@@ -666,8 +789,8 @@ def profile_msg(profile_id):
 
 @app.route('/project_msg/<project_id>', methods=['GET', 'POST'])
 def project_msg(project_id):
-
-    """Adds a subdocument in the relevant document to messages field and creates a reference document in the profile_msgs collection for user dashboards.
+    
+    """Adds a subdocument in the relevant document to messages field and creates a reference document in the project_msgs collection for user dashboards.
     """
 
     if 'username' in session:
@@ -700,5 +823,3 @@ def project_msg(project_id):
     flash('Please login to message users.', 'info')
     return redirect(url_for('login'))
 
-
-    
