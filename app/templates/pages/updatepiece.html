@@ -1,0 +1,26 @@
+{% extends 'layout/base.html' %}
+
+{% from 'pages/_formhelpers.html' import render_field %}
+
+{% block content %}
+
+<div class="container mt-3">
+    <section class="section-content">
+        <legend class="text-center legend-border mb-4">{{ legend }}</legend>
+        <form action="{{ url_for('update_snt_piece', piece_id=piece._id) }}" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <fieldset>
+                {{ render_field(form.task, autofocus=true) }}
+                {{ render_field(form.description) }}
+                {{ render_field(form.due_date) }}
+                {{ render_field(form.status) }}
+                {{ render_field(form.comment) }}
+            </fieldset>
+            <div class="form-group">
+                {{ form.add_piece(class="btn btn-outline-primary btn-sm") }}
+            </div>
+        </form>
+    </section>
+</div>
+
+{% endblock %}
