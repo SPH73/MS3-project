@@ -1,22 +1,23 @@
 {% extends 'layout/base.html' %}
 
 {% from 'pages/_formhelpers.html' import render_file_field %}
-{% from 'pages/_formhelpers.html' import render_field %}
+
 
 {% block content %}
 
 <div class="container mt-3">
     <section class="section-content">
         <legend class="text-center legend-border mb-4">{{ legend }}</legend>
-        <p>You are submitting files for '{{ piece.task }}'</p>
-        <form action="" method="POST"
-            enctype="multipart/form-data" accept="" id="upload-piece-files" novalidate>
+        <p>{{ username }}, you are submitting files for '{{ piece.task }}' of '{{ piece.project_title }}'</p>
+        <p>Please name your files appropriately (i.e. {{ piece.task }}-1 and so on) and export your files to .txt format
+            before uploading.</p>
+        <form action="" method="POST" enctype="multipart/form-data" accept=".txt" id="upload-piece-files" novalidate>
             {{ form.hidden_tag() }}
             <fieldset class="input-group">
-                {{ render_file_field(form.file_uploads, oninput="filesize(this)") }}
+                {{ render_file_field(form.piece_files, autocomplete="off", multiple="true") }}
             </fieldset>
             <div class="input-group mt-2">
-                {{ form.add_piece(class="btn btn-outline-primary btn-sm") }}
+                {{ form.submit(class="btn btn-outline-primary btn-sm") }}
                 <a type="button" class="btn btn-outline-danger btn-sm ml-2" id="cancel-image"
                     href="{{ url_for('dashboard') }}">Cancel</a>
             </div>

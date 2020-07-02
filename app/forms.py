@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_ckeditor import CKEditorField
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, FileField, IntegerField, SelectField, FieldList, FormField, DateField, Form
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, FileField, IntegerField, SelectField, SelectMultipleField, FieldList, FormField, DateField, Form, MultipleFileField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, NumberRange, ValidationError
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from datetime import datetime 
@@ -55,6 +55,11 @@ class BlogForm(FlaskForm):
     title = StringField('Title *', validators=[DataRequired()])
     content = CKEditorField('Content *', validators=[DataRequired()])
     submit = SubmitField('Send')
+
+class UploadForm(FlaskForm):
+    piece_files = MultipleFileField('Select files to upload', validators=[FileAllowed(['txt']), FileRequired()])
+    submit = SubmitField('Upload') 
+    
     
 class PieceForm(FlaskForm):
     task = StringField('Task name *',validators=[DataRequired()])
@@ -63,10 +68,9 @@ class PieceForm(FlaskForm):
     username = StringField('Username for whom the piece has been created *', validators=[DataRequired()])
     due_date = StringField('Due date *', validators=[DataRequired()])
     comment = StringField('Add a comment for your reference (recommended)')
-    file_uploads = FileField('Upload a file (.pdf, .txt ,  .rtf )',validators=[FileAllowed(['pdf', 'txt', 'rtf'])])
     add_piece = SubmitField('Send Piece')
   
-    
+        
 class ProjectForm(FlaskForm):
     title = StringField('Title *', validators=[DataRequired()])
     status = SelectField('Status *', choices=[('open', 'closed')], validators=[DataRequired()] )
@@ -74,24 +78,16 @@ class ProjectForm(FlaskForm):
     brief = CKEditorField('Project description *', validators=[DataRequired()])
     note = StringField('Add a personal note (only visible on your dashboard)', validators=[Length(max=250, message='Must be a maximum of %d characters long (approximately 40 words).' % (250))])
     submit = SubmitField('Post Project')
-       
+
+
 class LanguageForm(Form):
-    language = StringField('Add language', validators=[DataRequired()])
-
-class FramworkForm(Form):
-    frameworks = StringField('Add framework', validators=[DataRequired()])
-
-class LinkForm(Form):
-    name = StringField('Link name', description='e.g. GitHub')
-    url = StringField('Link URL',description='e.g. https://github.com/yourusername')
-    
+    language_name = SelectMultipleField('Choose your languages', choices=[])
+        
 class ProfileForm(FlaskForm):
     headline = StringField('Headline *', validators=[DataRequired(), Length(min=30, max=150)])
     bio = CKEditorField('Bio: *', validators=[Length(min=30, max=1000)])
     xp = IntegerField('Years experience *', validators=[NumberRange(min=0)])
     interests = TextAreaField("What type of projects are you interested in?", validators=[DataRequired()])
-    skills = SelectField('Select', choices=['Frontend', 'Backend', 'FullStack'])
-    languages = FieldList(FormField(LanguageForm), min_entries=1)
-    frameworks = FieldList(FormField(FramworkForm), min_entries=1)
-    links = FieldList(FormField(LinkForm), min_entries=1)
+    stack = SelectField('Stack preference', coerce=int)
+    languages = FieldList(FormField(LanguageForm))
     submit = SubmitField('Send')

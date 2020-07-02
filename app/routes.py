@@ -1,11 +1,11 @@
 import os
 import pymongo
 import bcrypt
-from app import app, mongo, APP_ROOT, ALLOWED_IMAGE_EXTENSIONS, MAX_IMAGE_SIZE
+from app import app, mongo, ckeditor, ALLOWED_IMAGE_EXTENSIONS, MAX_IMAGE_SIZE, ALLOWED_FILE_EXTENSIONS
 from flask import render_template, url_for, flash, redirect, request, session
 from bson.objectid import ObjectId
 from datetime import datetime
-from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, AccountImageForm
+from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, AccountImageForm, UploadForm
 from werkzeug.utils import secure_filename
 from PIL import Image
 
@@ -229,9 +229,9 @@ def insert_account_image():
                 else:
                     filename = secure_filename(image.filename)
                   
-                    target = os.path.join(APP_ROOT, 'static/uploads/accountimage')
+                    target = app.config['IMAGE_UPLOADS']
                     username = session['username']
-                    url = "/".join([target, f'{username}.png'])
+                    url = "/".join([target, f'{username}.jpg'])
                     image.save(url)
                     
                     profile_image = f'{username}.png'
@@ -589,23 +589,65 @@ def accept_piece(piece_id):
                                             }
         )
         
-        flash(f'{username}, you have successfully accepted the piece, "{task}", for the project " {project_title}".', 'success'
+        flash(f'{username}, you have accepted the piece, "{task}", for the project " {project_title}".', 'success'
         )
         return redirect(url_for('dashboard'))
+    
     flash('You need to be logged in to accept a piece.', 'info')
     return redirect(url_for('login'))
 
 
-@app.route('/submit_piece/<piece_id>')
+def allowed_file(filename):
+    """Splits the file filename at the last dot (if there is one) and compares the file extension to the list in ALLOWED_FILE_EXTENSIONS. Prevents upload if not supported or lacks an extension.
+    """
+    
+    if not '.' in filename:
+        return False
+    
+    ext = filename.rsplit('.', 1)[1]
+    
+    if ext.lower() in ALLOWED_FILE_EXTENSIONS:
+        return True
+    else:
+        return False
+ 
+@app.route('/submit_piece/<piece_id>', methods=['GET', 'POST'])
 def submit_piece(piece_id):
     
     if 'username' in session:
-        form = PieceForm()
+        form = UploadForm()
         piece = mongo.db.project_pieces.find_one_or_404({'_id': ObjectId(piece_id)})
-        form.task.data = piece['task']
+        username = session['username']
         
+        if request.method == 'POST' and 'piece_files' in request.files:
+            pieces = []            
+            for file in form.piece_files.data:
+                if file.filename == '':
+                    flash('Your file is missing a filename; upload unsuccessful', 'warning')
+                    return redirect(request.url)
+                if not allowed_file(file.filename):
+                    flash('Sorry, only plain text files are supported for piece uploads; upload unsuccessful', 'warning')
+                    return redirect(request.url)
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['FILE_UPLOADS'], filename))
+                pieces.append(filename)
+                username = session['username']
+                status = 'submitted'
+                
+                mongo.db.project_pieces.find_one_and_update({'_id': ObjectId(piece_id)},
+                                                            {'$push': {'file_uploads': pieces},'$set': {'status': status},
+                                                            '$currentDate': {'submit_date': True}},upsert = True
+                )
+                
+            flash(f'{username}, your upload of {pieces}, was successful', 'info')
+            return redirect(url_for('dashboard'))
+                    
+                            
       
-    return render_template('pages/submitpiece.html', form=form, piece=piece, legend='Upload piece files')
+        return render_template('pages/submitpiece.html', username=username, form=form, piece=piece, legend='Upload piece files')
+    
+    flash('You need to be logged in to submit your pieces.', 'info')
+    return redirect(url_for('login'))
 
 @app.route('/edit_snt_piece/<piece_id>')
 def edit_snt_piece(piece_id):
@@ -665,12 +707,16 @@ def add_profile():
     
     form=ProfileForm()
     
+    form.lanaguages = [list(mongo.db.languages.find())]
+    
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
         pro = mongo.db.profiles.find_one({'user_id': user['_id']})
         if pro:
-            flash('Sorry, only one profile per user permitted. You can update your profile here under the profile tab.', 'info')
-            return redirect(url_for('dashboard'))  
+            flash('Sorry, only one profile per user permitted. You can update your profile on your dashboard under the profile tab.', 'info')
+            return redirect(url_for('dashboard'))
+        
+        
         
         if request.method == 'POST':
             if form.validate_on_submit():                    
@@ -680,16 +726,14 @@ def add_profile():
                                               'date': datetime.utcnow(),
                                               'xp': form.xp.data,
                                               'interests': form.interests.data,
-                                              'skills': form.skills.data,
-                                              'languages': form.languages.data,
-                                              'frameworks': form.frameworks.data,
-                                              'links': form.links.data,
+                                              'stack': form.stack.data,
+                                              
                                               'user_id': user['_id']})
                 flash('Your profile has been created.', 'success')
                 return redirect('profiles')
             
         return render_template('pages/addprofile.html', title='Post',
-                               form=form, legend='Create your profile')
+                               form=form,  legend='Create your profile')
         
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
@@ -705,7 +749,8 @@ def profiles():
     flash('Please login to view user profiles.', 'warning')
     return redirect(url_for('login'))
 
-
+def get_fields(dict):
+    return dict.keys
 
     
 @app.route('/edit_profile/<profile_id>', methods=['GET', 'POST'])
@@ -719,11 +764,14 @@ def edit_profile(profile_id):
     if chck:                
         profile = mongo.db.profiles.find_one(
             {'_id': ObjectId(profile_id)})
+               
         form=ProfileForm()
         form.headline.data = profile['headline']
         form.bio.data = profile['bio']
         form.xp.data = profile['xp']
         form.interests.data = profile['interests']
+        form.stack.data = profile['stack']
+        
     return render_template('pages/editprofile.html', form=form, profile=profile, legend='Edit your Profile')
     
 @app.route('/update_profile/<profile_id>', methods=['POST'])
@@ -737,7 +785,14 @@ def update_profile(profile_id):
                                           'headline': request.form.get('headline'),
                                           'bio': request.form.get('bio'),
                                           'xp': request.form.get('xp'),
-                                          'interests': request.form.get('interests')}})
+                                          'interests': request.form.get('interests'),
+                                          'stack': request.form.get('stack'),
+                                          'languages': request.form.get('languages'),
+                                          'frameworks': request.form.get('frameworks'),
+                                          'links': request.form.get('links')
+                                          }
+                                 }
+    )
     return redirect(url_for('dashboard'))
 
 
