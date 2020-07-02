@@ -2,7 +2,7 @@ import os
 import pymongo
 import bcrypt
 from app import app, mongo, ckeditor, ALLOWED_IMAGE_EXTENSIONS, MAX_IMAGE_SIZE, ALLOWED_FILE_EXTENSIONS
-from flask import render_template, url_for, flash, redirect, request, session
+from flask import render_template, url_for, flash, redirect, request, session, send_from_directory
 from bson.objectid import ObjectId
 from datetime import datetime
 from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, AccountImageForm, UploadForm
@@ -240,7 +240,8 @@ def insert_account_image():
                     user_id = user['_id']
                 
                     mongo.db.user.find_one_and_update({'_id': ObjectId(user_id)},
-                                    {'$set':{'profile_image': profile_image
+                                    {'$set':
+                                        {'profile_image': profile_image
                                         }
                                     }
                     )
@@ -619,8 +620,7 @@ def submit_piece(piece_id):
         piece = mongo.db.project_pieces.find_one_or_404({'_id': ObjectId(piece_id)})
         username = session['username']
         
-        if request.method == 'POST' and 'piece_files' in request.files:
-            pieces = []            
+        if request.method == 'POST' and 'piece_files' in request.files:         
             for file in form.piece_files.data:
                 if file.filename == '':
                     flash('Your file is missing a filename; upload unsuccessful', 'warning')
@@ -630,23 +630,67 @@ def submit_piece(piece_id):
                     return redirect(request.url)
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['FILE_UPLOADS'], filename))
-                pieces.append(filename)
+                
                 username = session['username']
                 status = 'submitted'
                 
                 mongo.db.project_pieces.find_one_and_update({'_id': ObjectId(piece_id)},
-                                                            {'$push': {'file_uploads': pieces},'$set': {'status': status},
-                                                            '$currentDate': {'submit_date': True}},upsert = True
+                                                            {'$push': {
+                                                                'file_uploads': {
+                                                                    'filename': filename
+                                                                    }
+                                                                },
+                                                                '$set': {
+                                                                    'status': status
+                                                                    },
+                                                                '$currentDate': 
+                                                                    {'submit_date': True }}, upsert = True
                 )
                 
-            flash(f'{username}, your upload of {pieces}, was successful', 'info')
+            flash(f'{username}, your upload was successful', 'info')
             return redirect(url_for('dashboard'))
                     
-                            
-      
         return render_template('pages/submitpiece.html', username=username, form=form, piece=piece, legend='Upload piece files')
     
     flash('You need to be logged in to submit your pieces.', 'info')
+    return redirect(url_for('login'))
+
+
+@app.route('/get_piece_file/<filename>')
+def get_piece_file(filename):
+    """Uses the filename stored in the database to find the file in the uploads/files directory.
+    """
+    
+    if 'username' in session:
+        return send_from_directory(app.config['FILE_UPLOADS'], 
+                                   filename=filename, as_attachment=True
+        )
+    flash('You need to be logged in to download files.', 'info')
+    return redirect(url_for('login'))
+
+@app.route('/close_piece/<piece_id>')
+def close_piece(piece_id):
+    """Finds the project piece in the database and updates the status field to closed and sends feedback to the user if successful otherwise redirects them to login.
+    """
+    
+    if 'username' in session:
+        username = session['username']
+        piece = mongo.db.project_pieces.find_one_or_404({'_id': ObjectId(piece_id)})
+        project_title = piece['project_title']
+        task = piece['task']         
+
+        status = 'closed'
+        mongo.db.project_pieces.find_one_and_update({'_id': ObjectId(piece_id)},
+                                            {'$set':
+                                                {'status': status}
+                                            }
+        )
+
+        flash(f'{username}, you have accepted the piece, "{task}", for the project " {project_title}" and chnaged the status.', 'success'
+        )
+        return redirect(url_for('dashboard'))
+    
+    flash('Please login and try again.', 'info')
     return redirect(url_for('login'))
 
 @app.route('/edit_snt_piece/<piece_id>')

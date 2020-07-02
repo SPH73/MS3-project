@@ -241,7 +241,7 @@
                         </div>
                         <div class="col-sm-4">
                             <ul>Links:
-                                {% for link in profile.personal_links %}
+                                {% for link in profile.links %}
                                 {% for key, value in link.items() %}
                                 <li>{{ key }}: {{ value }}</li>
                                 {% endfor %}
@@ -561,8 +561,10 @@
                                     </span>{{ piece.due_date.strftime('%d %B, %Y') }}
                                 </p>
                                 <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
+                                {% if piece.submit_date %}
                                 <p><span class='field'>Submitted on:
                                     </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
+                                {% endif %}
                                 <p><span class='field'>Task Brief: </span><br>
                                     As a reminder, here is the brief and
                                     information you provided:<br>
@@ -573,13 +575,18 @@
                                 </p>
                                 {% endif %}
                                 <div>
-                                    {% if piece.file_upload %}
+                                    {% if piece.file_uploads %}
                                     <ul>
-                                        Files:
-                                        {%  for file in piece.file_upload %}
+                                        <span class='field'>Piece Uploads: </span>
+                                        {%  for file in piece.file_uploads %}
+                                        {% for key, value in file.items() %}
                                         <li>
-                                            {{ piece.file_upload }}</p>
+                                            <p><span>{{ value }} &emsp;</span>
+                                                <a href="{{ url_for('get_piece_file', filename=file.filename) }}"
+                                                    id="get-piece-btn{{ loop.index }}" type="button"
+                                                    class="btn btn-outline-secondary btn-sm mb-1">Download</a></p>
                                         </li>
+                                        {% endfor %}
                                         {% endfor %}
                                     </ul>
                                     {% endif %}
@@ -587,6 +594,9 @@
                                 <a href="{{ url_for('edit_snt_piece', piece_id=piece._id) }}"
                                     id="update-piece-btn{{ loop.index }}" type="button"
                                     class="btn btn-outline-primary btn-sm mb-1">Update Status</a>
+                                <a href="{{ url_for('close_piece', piece_id=piece._id) }}"
+                                    id="close-piece-btn{{ loop.index }}" type="button"
+                                    class="btn btn-outline-primary btn-sm mb-1">Accept Submission</a>
                                 {% if not loop.last %}
                                 <hr>
                                 {% endif %}
@@ -618,8 +628,10 @@
                                     {{ piece.date.strftime('%d %B, %Y') }}</p>
                                 <p><span class="field">'{{ piece.project_title }}'</span></p>
                                 <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
+                                {% if piece.submit_date %}
                                 <p><span class='field'>Date Submitted:
                                     </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
+                                {% endif %}
                                 <p><span class='field'>Task Brief: </span><br>
                                     As a reminder, here is the brief and
                                     information you provided:<br>
@@ -727,7 +739,7 @@
                                     the piece: <br>
                                     {{ piece.description }}
                                 </p>
-                                <p>Piece Id : {{piece._id}}</p>
+
                                 <a href="{{ url_for('submit_piece', piece_id=piece._id) }}"
                                     id="submit-piece-btn{{ loop.index }}" type="button"
                                     class="btn btn-outline-primary btn-sm mb-1">Submit Now</a>
