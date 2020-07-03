@@ -48,7 +48,7 @@ def register():
                                  'email': form.email.data,
                                  'passphrase': h_phrase, 
                                  'hashed_password': hashed_pw,
-                                 'profile-image': default_image
+                                 'profile_image': default_image
                      })
                     
                     flash(f'Thank you for creating an account, {form.username.data}, you may now login to access your dashboard!','success')
