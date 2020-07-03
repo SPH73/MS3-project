@@ -234,7 +234,7 @@ def insert_account_image():
                     url = "/".join([target, f'{username}.jpg'])
                     image.save(url)
                     
-                    profile_image = f'{username}.png'
+                    profile_image = f'{username}.jpg'
                    
                     user = mongo.db.user.find_one({'username': username})
                     user_id = user['_id']
@@ -850,7 +850,7 @@ def delete_profile(profile_id):
     flash('Your profile has been deleted.', 'success')
     return redirect(url_for('dashboard'))
 
-@app.route('/profile_msg<profile_id>', methods=['GET', 'POST'])
+@app.route('/profile_msg<profile_id>', methods=['POST'])
 def profile_msg(profile_id):
 
     """Adds a message in the relevant document to the messages field and creates a reference document in the profile_msgs collection for user dashboards.
