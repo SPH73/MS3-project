@@ -1,7 +1,7 @@
 import os
 import pymongo
 import bcrypt
-from app import app, mongo, ckeditor, ALLOWED_IMAGE_EXTENSIONS, MAX_IMAGE_SIZE, ALLOWED_FILE_EXTENSIONS
+from app import app, mongo, ckeditor, IMAGE_UPLOADS, ALLOWED_IMAGE_EXTENSIONS, MAX_IMAGE_SIZE, FILE_UPLOADS, ALLOWED_FILE_EXTENSIONS
 from flask import render_template, url_for, flash, redirect, request, session, send_from_directory
 from bson.objectid import ObjectId
 from datetime import datetime
