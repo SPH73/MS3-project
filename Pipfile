@@ -22,6 +22,7 @@ bcrypt = "*"
 flask-ckeditor = "*"
 bleach = "*"
 werkzeug = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.7"
