@@ -231,10 +231,10 @@ def insert_account_image():
                   
                     target = os.path.join(APP_ROOT, 'static/uploads/accountimages')
                     username = session['username']
-                    url = "/".join([target, f'{username}.jpg'])
+                    url = "/".join([target, f'{username}.png'])
                     image.save(url)
                     
-                    profile_image = f'{username}.jpg'
+                    profile_image = f'{username}.png'
                    
                     user = mongo.db.user.find_one({'username': username})
                     user_id = user['_id']
