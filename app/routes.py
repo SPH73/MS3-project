@@ -231,10 +231,10 @@ def insert_account_image():
                   
                     target = os.path.join(APP_ROOT, 'static/uploads/accountimages')
                     username = session['username']
-                    url = "/".join([target, f'{username}.png'])
+                    url = "/".join([target, f'{username}.jpg'])
                     image.save(url)
                     
-                    profile_image = f'{username}.png'
+                    profile_image = f'{username}.jpg'
                    
                     user = mongo.db.user.find_one({'username': username})
                     user_id = user['_id']
@@ -263,7 +263,7 @@ def dashboard():
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
         
-        image_file = url_for('static', filename='uploads/accountimage/'+ user['profile_image'])
+        image_file = url_for('static', filename='uploads/accountimages/'+ user['profile_image'])
         
         # created content
         articles = list(mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING))
