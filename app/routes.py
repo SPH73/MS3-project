@@ -1,7 +1,7 @@
 import os
 import pymongo
 import bcrypt
-from app import app, mongo, ckeditor, IMAGE_UPLOADS, ALLOWED_IMAGE_EXTENSIONS, MAX_IMAGE_SIZE, FILE_UPLOADS, ALLOWED_FILE_EXTENSIONS
+from app import app, mongo, ckeditor, APP_ROOT, ALLOWED_IMAGE_EXTENSIONS, MAX_IMAGE_SIZE, ALLOWED_FILE_EXTENSIONS
 from flask import render_template, url_for, flash, redirect, request, session, send_from_directory
 from bson.objectid import ObjectId
 from datetime import datetime
@@ -229,7 +229,7 @@ def insert_account_image():
                 else:
                     filename = secure_filename(image.filename)
                   
-                    target = app.config['IMAGE_UPLOADS']
+                    target = os.path.join(APP_ROOT, 'static/uploads/accountimages')
                     username = session['username']
                     url = "/".join([target, f'{username}.jpg'])
                     image.save(url)
@@ -628,8 +628,9 @@ def submit_piece(piece_id):
                 if not allowed_file(file.filename):
                     flash('Sorry, only plain text files are supported for piece uploads; upload unsuccessful', 'warning')
                     return redirect(request.url)
+                target = os.path.join(APP_ROOT, 'static/uploads/files')
                 filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['FILE_UPLOADS'], filename))
+                file.save(os.path.join(target, filename))
                 
                 username = session['username']
                 status = 'submitted'
