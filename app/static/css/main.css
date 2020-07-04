@@ -16,12 +16,25 @@ body {
   width: 100%;
   margin: 0;
   scroll-behavior: smooth;
-  display: grid;
-
+  overscroll-behavior: none;
 }
 
 main {
   margin-top: 77px;
+  width: 100%;
+  height: auto;
+}
+
+.flashed {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  margin-top: 77px;
+  z-index: 100;
+  width: 100%;
 }
 
 /* Typography */
@@ -141,7 +154,7 @@ nav.dash-nav {
 }
 
 .dropdown-menu {
-  top: 40%;
+  /* top: 40%; */
   left: 0;
   z-index: 1000;
   display: none;
@@ -150,6 +163,7 @@ nav.dash-nav {
   color: #089b93;
   border: 0.5px solid rgba(0, 0, 0, .15);
   border-radius: .25rem;
+  background-color: #f4f4f4;
 
 }
 
@@ -400,10 +414,10 @@ footer {
   background-color: #5d5d5c;
   color: #afbdb8;
   text-align: center;
-  position: sticky;
+  position: fixed;
   bottom: 0;
   width: 100%;
-  padding: 20px 10px;
+  padding: 10px;
 }
 
 /* media queries */
@@ -434,7 +448,7 @@ https://geekgoddess.com/how-to-resize-the-google-nocaptcha-recaptcha/ */
   height: 70vh;
   margin: 0;
   background-color: #352721;
-  background: url('../images/joseph-barrientos-Ji_G7Bu1MoM-unsplash.jpg') no-repeat center;
+  background: url('../images/hero.jpg') no-repeat center;
   background-size: cover;
   background-attachment: fixed;
   font-size: 24px;
@@ -464,15 +478,6 @@ https://geekgoddess.com/how-to-resize-the-google-nocaptcha-recaptcha/ */
   margin-top: 30%;
 }
 
-#upsell {
-  background-color: #11a1a8;
-  color: #f4f4f4;
-  font-size: 20px;
-  font-family: 'Montserrat', sans-serif;
-  text-transform: uppercase;
-}
-
-
 ul#impact {
 
   list-style-type: none;
@@ -483,7 +488,15 @@ ul#impact {
   justify-content: center;
   align-items: middle;
   place-items: center;
-  height: 50vh;
+  height: 30vh;
+}
+
+#upsell {
+  background-color: #11a1a8;
+  color: #f4f4f4;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  font-size: 0.9em;
 }
 
 span.upsell-logo {

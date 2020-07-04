@@ -60,21 +60,24 @@
     {% include 'layout/nav.html' %}
 
     <!-- Main content -->
-    <main class="template-container">
+    <main>
         <!-- Flashed messages that appear on any page -->
-        <div class="row text-center">
-            <div class="col-12">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                <div class="flashes">
-                    {% for category, message in messages %}
-                    <p class="alert alert-{{ category }}">{{ message }}</p>
-                    {% endfor %}
+        <div class="container-fluid flashed">
+            <div class="row text-center">
+                <div class="col-12">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    <div class="flashes">
+                        {% for category, message in messages %}
+                        <p class="alert alert-{{ category }}">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
                 </div>
-                {% endif %}
-                {% endwith %}
             </div>
         </div>
+
         <!-- individual page content -->
         {% block content %}{% endblock %}
     </main>
@@ -99,7 +102,7 @@
     <!-- Internal JS -->
     <script src="{{ url_for('static', filename='js/scripts.js')}}"></script>
 
-
+    {% block scripts %}{% endblock %}
 </body>
 
 </html>
