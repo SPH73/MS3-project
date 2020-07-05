@@ -45,22 +45,29 @@
                 </div>
                 {% endif %}
 
-                <p>Bio: - {{ profile.bio|safe }}</p>
-                <ul>I have experience with the following:
+                <p>Bio: <br>
+                    {{ profile.bio|safe }}</p>
+                <ul>
                     <li>
-                        Languages - {% for item in profile.languages %}{{ lang }}
-                        {% endfor %}</li>
+                        Languages: <br>
+                        {% for lang in profile.languages %}
+                        {{ lang }},
+                        {% endfor %}
+                    </li> <br>
                     <li>
-                        Frameworks - {% for item in frameworks %} {{ item }}
+                        Frameworks: <br>
+                        {% for item in frameworks %}
+                        {{ item }},
                         {% endfor %}
                     </li>
                 </ul>
-                <p>I have {{ profile.xp }} years experience.</p>
+                <p>Stack preference: {{ profile.stack }}</p>
+                <p>Experience: {{ profile.xp }} years</p>
 
-                <p>{{ profile.interests }}</p>
+                <p>Projects: <br> {{ profile.interests }}</p>
 
                 <ul>My personal links:
-                    {% for link in profile.personal_links %}
+                    {% for link in profile.links %}
                     {% for key, value in link.items() %}
                     <li>{{ key }}: {{ value }} </li>
                     {% endfor %}
@@ -101,6 +108,7 @@
             {% endfor %}
         </div>
     </section>
+    <div class="bottom"></div>
 </div>
 
 {% endblock content %}

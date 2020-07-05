@@ -1,7 +1,8 @@
 {% extends 'layout/base.html' %}
 {% block content %}
 
-<div class="container mt-3" id="dashboard">
+<div class="container" id="dashboard">
+    <div class="top"></div>
     <section id="dashboard">
         <legend class="legend-border text-center">{{ session['username'] }}'s Dashboard</legend>
 
@@ -102,7 +103,7 @@
         <!-- DASHBAORD TAB CONTENT -->
         <div id="dash-tabs">
             <!-- ARTICLE TAB CONTENT -->
-            <div id="articles" class="tabcontent">
+            <div id="articles" class="tabcontent show active">
                 <div class="container">
                     {% if articles %}
                     <div class="accordion">
@@ -856,6 +857,7 @@
             <!-- /END TAB CONTENT -->
         </div>
     </section>
+    <div class="bottom"></div>
 </div>
 
 {% endblock content %}

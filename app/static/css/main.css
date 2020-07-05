@@ -15,14 +15,24 @@ body {
   height: 100%;
   width: 100%;
   margin: 0;
-  scroll-behavior: smooth;
   overscroll-behavior: none;
 }
 
 main {
   margin-top: 77px;
   width: 100%;
-  height: auto;
+}
+
+.bottom {
+  width: 100vw;
+  height: 8vh;
+  background-color: #c3c3c3;
+}
+
+.top {
+  width: 100vw;
+  height: 2vh;
+  background-color: #c3c3c3;
 }
 
 .flashed {
@@ -60,10 +70,89 @@ label {
   letter-spacing: 0.03em;
 }
 
+.hero-text {
+  position: relative;
+  text-align: center;
+  color: #f4f4f4;
+  z-index: 2;
+  margin-top: 20%;
+}
+
+blockquote {
+  font-size: 1.5em;
+  font-weight: 300;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.09em;
+  word-wrap: break-word;
+}
+
+
+
+blockquote>p::before {
+  content: open-quote;
+  font-size: 2em;
+  color: #11a1a8;
+}
+
+blockquote>p::after {
+  content: close-quote;
+  font-size: 1em;
+  color: #11a1a8;
+}
+
+.block-span {
+  color: #11a1a8;
+  text-transform: uppercase;
+  outline-color: black;
+}
+
+ul#impact {
+
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: center;
+  align-items: middle;
+  place-items: center;
+  height: 50vh;
+}
+
+#upsell {
+  background-color: #11a1a8;
+  color: #f4f4f4;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  font-size: 1.1em;
+
+}
+
+.dot::after {
+  content: ".";
+  background-color: #352721;
+
+}
+
+span.upsell-logo {
+  width: 100px;
+  height: 50px;
+  position: relative;
+  bottom: 0;
+  left: 0;
+}
+
+#workflow {
+  margin-top: 5vh;
+  margin-bottom: 3vh;
+  margin-left: 5vw;
+  margin-right: 5vw;
+}
+
 legend {
   font-size: 1.2rem;
-  margin: 1.3em 0;
   padding: 0.5rem;
+  margin: 1.3em 0;
 }
 
 /* used in the accordions */
@@ -467,42 +556,4 @@ https://geekgoddess.com/how-to-resize-the-google-nocaptcha-recaptcha/ */
   height: 70vh;
   margin-top: 77px;
   z-index: 1;
-}
-
-.hero-text {
-  vertical-align: middle;
-  position: relative;
-  text-align: center;
-  color: #f4f4f4;
-  z-index: 2;
-  margin-top: 30%;
-}
-
-ul#impact {
-
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  justify-content: center;
-  align-items: middle;
-  place-items: center;
-  height: 30vh;
-}
-
-#upsell {
-  background-color: #11a1a8;
-  color: #f4f4f4;
-  font-family: 'Montserrat', sans-serif;
-  text-transform: uppercase;
-  font-size: 0.9em;
-}
-
-span.upsell-logo {
-  width: 100px;
-  height: 50px;
-  position: relative;
-  bottom: 0;
-  left: 0;
 }

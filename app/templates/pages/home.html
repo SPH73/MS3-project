@@ -1,52 +1,22 @@
 {% extends 'layout/base.html' %}
 {% block content %}
-<div id="home">
+
+<section id="home-page">
     <section class="hero">
         <div class="container">
             <div class="hero-text">
-                <h2>
-                    Bridging the gap.
-                </h2>
-                <p class="lead">You don't have to be great to start... <br>...but you have to start to be great. -
-                    Zig
-                    Ziglar
-                </p>
+                <blockquote>
+                    <p>
+                        You don't have to be great to <span
+                            class="block-span"><strong><em>start</strong></em></span>...<br>...but you have to
+                        start to be
+                        <span class="block-span"><strong>great</strong></span>.
+                    </p>
+                    - Zig Ziglar
+                </blockquote>
             </div>
         </div>
         <div class="overlay"></div>
-    </section>
-    <section id="workflow">
-        <div class="container-fluid">
-            <div class="carousel">
-                <div id="home-projects" class="row projects">
-                    <h3>Bring your projects to life.</h3>
-                    <p class="lead"> Present ideas - establish interest...</p>
-                    <p>...track the entire workflow</p>
-                </div>
-                <div id="home-profiles" class="row profiles">
-                    <h3>Get ready to collaborate.</h3>
-                    <p class="lead"> Write a Bio - get noticed...</p>
-                    <p>...let your Code Flow</p>
-                </div>
-                <div id="home-blog" class="row blog">
-                    <h3>Share your knowledge.</h3>
-                    <p class="lead">Create articles - inspire readers...</p>
-                    <p>...watch your reputation grow</p>
-                </div>
-                <div id="home-dashboard" class="row dashboard">
-                    <h3>Personal Dashboard.</h3>
-                    <p class="lead">All about you - in one place...</p>
-                    <p>...easily manage your content</p>
-
-                </div>
-                <div id="home-messages" class="row messages">
-                    <h3>Direct messages.</h3>
-                    <p class="lead">Send messages - receive messages...</p>
-                    <p>...it's all about commuication.</p>
-                </div>
-            </div>
-        </div>
-
     </section>
     <section id="upsell">
         <div class="container-fluid">
@@ -55,17 +25,51 @@
                 <!-- parallax effect -->
                 <div class="impact-text">
                     <ul id="impact">
-                        <li class="scroll" data-rateX="-1" data-rateY="3">Communicate<span><i>.</i></span></li>
-                        <li class="scroll" data-rateX="0" data-rateY="2">Collaborate<span><i>.</i></span></li>
-                        <li class="scroll" data-rateX="-3" data-rateY="1">Congratulate<span><i>.</i></span></li>
+                        <li class="scroll dot" data-rateX="-1" data-rateY="3">Communicate</li>
+                        <li class="scroll dot" data-rateX="0" data-rateY="2">Collaborate</li>
+                        <li class="scroll dot" data-rateX="-3" data-rateY="1">Congratulate</li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
+    <section id="workflow">
+        <div class="container-fluid">
+            <div class="carousel">
+                <div id="home-projects" class="row projects">
+                    <h4>Bring your projects to life.</h4>
+                    <p class="lead"> Present ideas - establish interest...</p>
+                    <p>...track the entire workflow</p>
+                </div>
+                <div id="home-profiles" class="row profiles">
+                    <h4>Get ready to collaborate.</h4>
+                    <p class="lead"> Write a Bio - get noticed...</p>
+                    <p>...let your Code Flow</p>
+                </div>
+                <div id="home-blog" class="row blog">
+                    <h4>Share your knowledge.</h4>
+                    <p class="lead">Create articles - inspire readers...</p>
+                    <p>...watch your reputation grow</p>
+                </div>
+                <div id="home-dashboard" class="row dashboard">
+                    <h4>Personal Dashboard.</h4>
+                    <p class="lead">All about you - in one place...</p>
+                    <p>...easily manage your content</p>
+
+                </div>
+                <div id="home-messages" class="row messages">
+                    <h4>Direct messages.</h4>
+                    <p class="lead">Send messages - receive messages...</p>
+                    <p>...it's all about commuication.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="bottom"></div>
 
 
-</div>
+
+</section>
 
 {% endblock content %}
 {% block scripts %}

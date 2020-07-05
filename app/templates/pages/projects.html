@@ -1,8 +1,8 @@
 {% extends 'layout/base.html' %}
 {% block content %}
 
-<div class="container mt-3">
-    <section class="section-content">
+<div class="container">
+    <section id="projects-page" class="section-content">
         <legend class="text-center legend-border mb-4">Current Projects</legend>
         <div class="accordion">
             {% for project in projects %}
@@ -89,6 +89,7 @@
             {% endfor %}
         </div>
     </section>
+    <div class="bottom"></div>
 </div>
 
 {% endblock content %}
