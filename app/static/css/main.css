@@ -540,6 +540,7 @@ span.upsell-logo {
 
 .project-card,
 .profiles-card,
+.pieces-card,
 .blog-card,
 .dashboard-card,
 .messages-card {
@@ -558,6 +559,15 @@ span.upsell-logo {
 
 .profiles-card::before {
   content: url("../images/cf-icon-profiles.svg");
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  align-self: center;
+  top: -30px;
+}
+
+.pieces-card::before {
+  content: url("../images/cf-icon-pieces.svg");
   width: 100px;
   height: 100px;
   position: absolute;
