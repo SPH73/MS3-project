@@ -1,18 +1,17 @@
 {% extends 'layout/base.html' %}
 {% block content %}
 
-<section id="home-page">
+<div id="home-page">
     <section class="hero">
         <div class="container">
             <div class="hero-text">
                 <blockquote>
                     <p>
                         You don't have to be great to <span
-                            class="block-span"><strong><em>start</strong></em></span>...<br>...but you have to
+                            class="block-span"><strong><em>start</strong></em>,</span><br>but you have to
                         start to be
-                        <span class="block-span"><strong>great</strong></span>.
-                    </p>
-                    - Zig Ziglar
+                        <span class="block-span"><strong>great</strong>.</span>
+                    </p>- Zig Ziglar
                 </blockquote>
             </div>
         </div>
@@ -35,59 +34,60 @@
     </section>
     <section id="workflow">
         <div class="container-fluid">
-            <div class="carousel">
-                <div class="row row-cols-1 row-cols-md-2 text-center">
-                    <div class="col mb-4 mt-4">
-                        <div id="projects-card" class="card bg-transparent project-card" style="width: 24rem;">
-                            <div class="card-body mt-2">
-                                <h5 class="card-title text-center">Bring your projects to life</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Present ideas - establish interest...</h6>
-                                <p class="card-text">...create pieces and track the entire workflow</p>
-                            </div>
+            <div class="row row-cols-1 row-cols-md-2 text-center">
+                <div class="col mb-4 mt-4">
+                    <div id="projects-card" class="card bg-transparent project-card d-flex" style="width: auto;">
+                        <div class="card-body mt-2">
+                            <h5 class="card-title text-center">Bring your projects to life</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Present ideas - establish
+                                interest...</h6>
+                            <p class="card-text">...create pieces and track the entire workflow</p>
                         </div>
                     </div>
-                    <div class="col mb-4 mt-4">
-                        <div id="profiles-card" class="card bg-transparent profiles-card" style="width: 24rem;">
-                            <div class="card-body mt-2">
-                                <h5 class="card-title text-center">Get ready to collaborate.</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Write a Bio - get noticed...</h6>
-                                <p class="card-text">...let your code flow</p>
-                            </div>
+                </div>
+                <div class="col mb-4 mt-4">
+                    <div id="profiles-card" class="card bg-transparent profiles-card d-flex" style="width: auto;">
+                        <div class="card-body mt-2">
+                            <h5 class="card-title text-center">Get ready to collaborate.</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Write a Bio - get noticed...</h6>
+                            <p class="card-text">...let your code flow</p>
                         </div>
                     </div>
-                    <div class="col mb-4 mt-4">
-                        <div id="blog-card" class="card bg-transparent blog-card" style="width: 24rem;">
-                            <div class="card-body mt-2">
-                                <h5 class="card-title text-center">Share your knowledge</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Be an ambassador - inspire readers...</h6>
-                                <p class="card-text">...let your experience be your guide</p>
-                            </div>
+                </div>
+                <div class="col mb-4 mt-4">
+                    <div id="blog-card" class="card bg-transparent blog-card d-flex" style="width: auto;">
+                        <div class="card-body mt-2">
+                            <h5 class="card-title text-center">Share your knowledge</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Be an ambassador - inspire
+                                readers...</h6>
+                            <p class="card-text">...let your experience be your guide</p>
                         </div>
                     </div>
-                    <div class="col mb-4 mt-4">
-                        <div id="dashboard-card" class="card bg-transparent dashboard-card" style="width: 24rem;">
-                            <div class="card-body mt-2">
-                                <h5 class="card-title text-center">A unified view</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">All about you - in one place...</h6>
-                                <p class="card-text">...stay current and manage your content</p>
-                            </div>
+                </div>
+                <div class="col mb-4 mt-4">
+                    <div id="dashboard-card" class="card bg-transparent dashboard-card d-flex" style="width: auto;">
+                        <div class="card-body mt-2">
+                            <h5 class="card-title text-center">A unified view</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">All about you - in one place...
+                            </h6>
+                            <p class="card-text">...stay current and manage your content</p>
                         </div>
                     </div>
-                    <div class="col mb-4 mt-4">
-                        <div id="messages-card" class="card bg-transparent messages-card" style="width: 24rem;">
-                            <div class="card-body mt-2">
-                                <h5 class="card-title text-center">It's all about communication</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Peer to peer...</h6>
-                                <p class="card-text">...private and personal</p>
-                            </div>
+                </div>
+                <div class="col mb-4 mt-4">
+                    <div id="messages-card" class="card bg-transparent messages-card d-flex" style="width: auto;">
+                        <div class="card-body mt-2">
+                            <h5 class="card-title text-center">It's all about communication</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Peer to peer...</h6>
+                            <p class="card-text">...private and personal</p>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
     <div class="bottom"></div>
-</section>
-
+</div>
 {% endblock content %}
 {% block scripts %}
 <!-- <script>
