@@ -70,34 +70,30 @@ label {
   letter-spacing: 0.03em;
 }
 
+
 .hero-text {
   position: relative;
   text-align: center;
   color: #f4f4f4;
   z-index: 2;
-  margin-top: 20%;
 }
 
 blockquote {
-  font-size: 1.5em;
   font-weight: 300;
+  font-size: 1.3em;
   font-family: 'Lato', sans-serif;
   letter-spacing: 0.09em;
   word-wrap: break-word;
+  margin-top: 15vh;
 }
-
 
 
 blockquote>p::before {
   content: open-quote;
-  font-size: 2em;
-  color: #11a1a8;
 }
 
 blockquote>p::after {
   content: close-quote;
-  font-size: 1em;
-  color: #11a1a8;
 }
 
 .block-span {
@@ -106,48 +102,7 @@ blockquote>p::after {
   outline-color: black;
 }
 
-ul#impact {
 
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  justify-content: center;
-  align-items: middle;
-  place-items: center;
-  height: 50vh;
-}
-
-#upsell {
-  background-color: #11a1a8;
-  color: #f4f4f4;
-  font-family: 'Montserrat', sans-serif;
-  text-transform: uppercase;
-  font-size: 1.1em;
-
-}
-
-.dot::after {
-  content: ".";
-  background-color: #352721;
-
-}
-
-span.upsell-logo {
-  width: 100px;
-  height: 50px;
-  position: relative;
-  bottom: 0;
-  left: 0;
-}
-
-#workflow {
-  margin-top: 5vh;
-  margin-bottom: 3vh;
-  margin-left: 5vw;
-  margin-right: 5vw;
-}
 
 legend {
   font-size: 1.2rem;
@@ -501,6 +456,83 @@ button:focus {
 
 /* Home page */
 
+
+/* home page */
+/* parallax */
+#home {
+  padding: 0;
+}
+
+.hero {
+  width: 100vw;
+  height: 70vh;
+  margin: 0;
+  background-color: #352721;
+  background: url('../images/hero.jpg') no-repeat center;
+  background-size: cover;
+  background-attachment: fixed;
+  padding: 1.5em;
+  z-index: -1;
+  overflow-x: hidden;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 70vh;
+  margin-top: 77px;
+  z-index: 1;
+}
+
+
+
+ul#impact {
+
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: center;
+  align-items: middle;
+  place-items: center;
+  height: 50vh;
+}
+
+#upsell {
+  background-color: #11a1a8;
+  color: #f4f4f4;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+
+}
+
+.dot::after {
+  content: ".";
+  background-color: #352721;
+
+}
+
+span.upsell-logo {
+  width: 100px;
+  height: 50px;
+  position: relative;
+  bottom: 0;
+  left: 0;
+}
+
+#workflow {
+  margin-top: 5vh;
+  margin-bottom: 3vh;
+  margin-left: 5vw;
+  margin-right: 5vw;
+}
+
 .card-title {
   text-transform: capitalize;
 }
@@ -559,7 +591,6 @@ button:focus {
   top: -30px;
 }
 
-
 /* Footer */
 footer {
   background-color: #5d5d5c;
@@ -586,36 +617,4 @@ https://geekgoddess.com/how-to-resize-the-google-nocaptcha-recaptcha/ */
     transform-origin: 0 0;
     -webkit-transform-origin: 0 0;
   }
-}
-
-/* home page */
-/* parallax */
-#home {
-  padding: 0;
-}
-
-.hero {
-  width: 100vw;
-  height: 70vh;
-  margin: 0;
-  background-color: #352721;
-  background: url('../images/hero.jpg') no-repeat center;
-  background-size: cover;
-  background-attachment: fixed;
-  font-size: 24px;
-  padding: 25px;
-  z-index: -1;
-  overflow-x: auto;
-}
-
-.overlay {
-  background-color: rgba(0, 0, 0, 0.5);
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 70vh;
-  margin-top: 77px;
-  z-index: 1;
 }
