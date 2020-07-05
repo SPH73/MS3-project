@@ -15,6 +15,7 @@ body {
   height: 100%;
   width: 100%;
   margin: 0;
+  padding: 0;
   overscroll-behavior: none;
 }
 
@@ -61,7 +62,7 @@ h6 {
 }
 
 small {
-  color: #8d8d8d;
+  color: #352721;
 }
 
 legend,
@@ -470,9 +471,9 @@ button:focus {
   background-color: #352721;
   background: url('../images/hero.jpg') no-repeat;
   background-size: cover;
-  background-position: center center;
+  display: flex;
+  flex-direction: column;
   background-attachment: fixed;
-  padding: 1.5em;
   z-index: -1;
   overflow-x: hidden;
 }
