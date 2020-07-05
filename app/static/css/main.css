@@ -499,6 +499,68 @@ button:focus {
   overflow: scroll;
 }
 
+/* Home page */
+
+.card-title {
+  text-transform: capitalize;
+}
+
+.project-card,
+.profiles-card,
+.blog-card,
+.dashboard-card,
+.messages-card {
+  position: relative;
+}
+
+
+.project-card::before {
+  content: url("../images/cf-icon-project-ideas.svg");
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  align-self: center;
+  top: -30px;
+}
+
+.profiles-card::before {
+  content: url("../images/cf-icon-profiles.svg");
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  align-self: center;
+  top: -30px;
+}
+
+.blog-card::before {
+  content: url("../images/cf-icon-blog.svg");
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  align-self: center;
+  top: -30px;
+}
+
+.dashboard-card::before {
+  content: url("../images/cf-icon-dashboard.svg");
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  align-self: center;
+  top: -30px;
+}
+
+.messages-card::before {
+  content: url("../images/cf-icon-messages.svg");
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  align-self: center;
+  top: -30px;
+}
+
+
+/* Footer */
 footer {
   background-color: #5d5d5c;
   color: #afbdb8;
