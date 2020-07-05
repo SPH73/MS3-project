@@ -468,7 +468,10 @@ button:focus {
   height: 70vh;
   margin: 0;
   background-color: #352721;
-  background: url('../images/hero.jpg') no-repeat center center cover fixed;
+  background: url('../images/hero.jpg') no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
   padding: 1.5em;
   z-index: -1;
   overflow-x: hidden;
