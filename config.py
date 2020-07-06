@@ -23,4 +23,8 @@ class Config(object):
     IMAGE_UPLOADS = os.environ.get('IMAGE_UPLOADS')
    
     FILE_UPLOADS = os.environ.get('FILE_UPLOADS')
-   
+
+
+S3_BUCKET = os.environ.get('S3_BUCKET') 
+S3_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
+S3_SECRET = os.environ.get('AWS_SECRET_ACCESS_KEY')

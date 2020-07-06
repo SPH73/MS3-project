@@ -7,7 +7,18 @@ from bson.objectid import ObjectId
 from datetime import datetime
 from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, AccountImageForm, UploadForm
 from werkzeug.utils import secure_filename
-from PIL import Image
+import boto3
+from config import S3_BUCKET, S3_KEY, S3_SECRET
+
+s3 = boto3.resource('s3')
+
+@app.route('/files')
+def files():
+    s3_resource = boto3.resource('s3')
+    bucket = s3_resource.Bucket(S3_BUCKET)
+    summaries = bucket.objects.all()
+    
+    return render_template('pages/files.html', title='Codeflow S3 Object List', bucket=bucket, files=summaries)
 
 
 @app.route('/')

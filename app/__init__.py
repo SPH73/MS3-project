@@ -5,10 +5,8 @@ from flask_pymongo import PyMongo
 from flask_ckeditor import CKEditor
 
 
-
 app = Flask(__name__)
 app.config.from_object(Config)
-
 ALLOWED_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg']
 ALLOWED_FILE_EXTENSIONS = ['txt']
 MAX_IMAGE_SIZE = 5 * 1024 ** 2
