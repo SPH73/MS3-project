@@ -589,7 +589,8 @@
                                             <p><span>{{ value }} &emsp;</span>
                                                 <a href="{{ url_for('get_piece_file', filename=file.filename) }}"
                                                     id="get-piece-btn{{ loop.index }}" type="button"
-                                                    class="btn btn-outline-secondary btn-sm mb-1">Download</a></p>
+                                                    class="btn btn-outline-secondary btn-sm mb-1"><i
+                                                        class="fa fa-download" aria-hidden="true"></i></a></p>
                                         </li>
                                         {% endfor %}
                                         {% endfor %}
@@ -598,10 +599,17 @@
                                 </div>
                                 <a href="{{ url_for('edit_snt_piece', piece_id=piece._id) }}"
                                     id="update-piece-btn{{ loop.index }}" type="button"
-                                    class="btn btn-outline-primary btn-sm mb-1">Update Status</a>
+                                    class="btn btn-outline-primary btn-sm mb-1">
+                                    <i class="fa fa-cogs" aria-hidden="true"></i>
+                                </a>
                                 <a href="{{ url_for('close_piece', piece_id=piece._id) }}"
                                     id="close-piece-btn{{ loop.index }}" type="button"
-                                    class="btn btn-outline-primary btn-sm mb-1">Accept Piece</a>
+                                    class="btn btn-outline-success btn-sm mb-1"><i class="fa fa-check"
+                                        aria-hidden="true"></i></a>
+                                <a href="" id="close-piece-btn{{ loop.index }}" type="button"
+                                    class="btn btn-danger btn-sm mb-1"><i class="fa fa-trash-o"
+                                        aria-hidden="true"></i></a>
+
                                 {% if not loop.last %}
                                 <hr>
                                 {% endif %}
@@ -703,7 +711,8 @@
                                 </p>
                                 <a href="{{ url_for('accept_piece', piece_id=piece._id) }}"
                                     id="accept-piece-btn{{ loop.index }}" type="button"
-                                    class="btn btn-outline-primary btn-sm mb-1">Accept Now</a>
+                                    class="btn btn-outline-primary btn-sm mb-1"><i class="fa fa-check"
+                                        aria-hidden="true"></i></a>
                                 <div><small class="text-muted">
                                         <i><a class="ml-2" href="">Ask {{ piece.owner }} a question?</a></i>
                                     </small></div>
@@ -742,7 +751,9 @@
 
                                 <a href="{{ url_for('submit_piece', piece_id=piece._id) }}"
                                     id="submit-piece-btn{{ loop.index }}" type="button"
-                                    class="btn btn-outline-primary btn-sm mb-1">Submit Now</a>
+                                    class="btn btn-outline-primary btn-sm mb-1"><i class="fa fa-upload"
+                                        aria-hidden="true"></i>
+                                </a>
                                 <div><small class="text-muted">
                                         <i><a class="ml-2" href="">Ask
                                                 {{ piece.owner }} a question about this piece?</a></i></small></div>
