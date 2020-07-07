@@ -2,7 +2,7 @@ import os
 import pymongo
 import bcrypt
 from app import app, mongo, ckeditor, ALLOWED_IMAGE_EXTENSIONS, MAX_IMAGE_SIZE, ALLOWED_FILE_EXTENSIONS
-from flask import render_template, url_for, flash, redirect, request, session, send_from_directory
+from flask import render_template, url_for, flash, redirect, request, session, Response
 from bson.objectid import ObjectId
 from datetime import datetime
 from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, AccountImageForm, UploadForm
@@ -672,16 +672,44 @@ def submit_piece(piece_id):
     return redirect(url_for('login'))
 
 
-@app.route('/get_piece_file/<filename>')
+@app.route('/get_piece_file/<filename>', methods=['GET','POST'])
 def get_piece_file(filename):
-    """Uses the filename stored in the database to find the file in the uploads/files directory.
+    # TODO amend to retrieve from s3
+    """Uses the filename stored in the database to find the file and download it as an attachment from the s3 bucket.
     """
     
-    if 'username' in session:
-        return send_from_directory(app.config['FILE_UPLOADS'], 
-                                   filename=filename, as_attachment=True
+    if 'username'in session:
+                
+        s3_resource = boto3.resource('s3')
+        bucket = s3_resource.Bucket(S3_BUCKET)
+        
+        file_obj = bucket.Object(filename).get()
+        
+        return Response(file_obj['Body'].read(),
+                        mimetype='text/plain',
+                        headers={'Content-Disposition': f'attachment;filename={filename}'}
         )
+            
     flash('You need to be logged in to download files.', 'info')
+    return redirect(url_for('login'))
+
+@app.route('/delete_piece_file/<filename>', methods=['POST'])
+def delete_piece_file(filename):
+    #TODO 
+    """Delete piece from the database.
+    """
+    if 'username' in session:
+        
+        username = session['username']
+        
+        s3_resource = boto3.resource('s3')
+        bucket = s3_resource.Bucket(S3_BUCKET)
+        bucket.Object(filename).delete()
+        
+        flash(f'Thanks for tidying up the file storage, {username}!', 'success')
+        return redirect(url_for('dashboard'))
+    
+    flash('This action requires you to be logged in', 'info')
     return redirect(url_for('login'))
 
 @app.route('/close_piece/<piece_id>')
@@ -691,6 +719,7 @@ def close_piece(piece_id):
     
     if 'username' in session:
         username = session['username']
+        
         piece = mongo.db.project_pieces.find_one_or_404({'_id': ObjectId(piece_id)})
         project_title = piece['project_title']
         task = piece['task']         
@@ -702,7 +731,7 @@ def close_piece(piece_id):
                                             }
         )
 
-        flash(f'{username}, you have accepted the piece, "{task}", for the project " {project_title}" and chnaged the status.', 'success'
+        flash(f'{username}, you have accepted the piece, "{task}", for the project " {project_title}" and chnaged the status to closed.', 'success'
         )
         return redirect(url_for('dashboard'))
     
