@@ -41,7 +41,7 @@ def register():
         return redirect(url_for('dashboard'))
         
     form = RegistrationForm()
-    default_image = 'gear-avatar.png'
+    default_image = 'gear-avatar.jpg'
     
     if request.method == 'POST':
         if form.validate_on_submit():            
@@ -275,7 +275,7 @@ def dashboard():
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
         
-        image_file = 'https://codeflow-app-assets.s3-eu-west-1.amazonaws.com/uploads/accountimages/'+ user['profile_image']
+        image_file = 'https://codeflow-app-assets.s3-eu-west-1.amazonaws.com/'+ user['profile_image']
        
         
         # created content
