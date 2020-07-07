@@ -210,7 +210,7 @@
                     {% if profile %}
                     <div class="row">
                         <div class="col-12 text-center mt-2">
-                            <p><span class="field">Bio:</span> {{ profile.date.strftime('%d, %B %Y') }}</p>
+                            <p><span class="field">Last Modified: </span> {{ profile.date.strftime('%d, %B %Y') }}</p>
                         </div>
                     </div>
                     <div class="row">
@@ -229,6 +229,13 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-4">
+                            <ul><span class="field">Stack:</span>
+                                {% for item in profile.stack %}
+                                <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-sm-4">
                             <ul><span class="field">Languages:</span>
                                 {% for lang in profile.languages %}
                                 <li>{{ lang }}</li>
@@ -243,18 +250,15 @@
                             </ul>
                         </div>
                         <div class="col-sm-4">
-                            <ul><span class="field">Links:</span>:
-                                {% for link in profile.links %}
-                                {% for key, value in link.items() %}
-                                <li><span class="field">{{ key }}:</span> {{ value }}</li>
-                                {% endfor %}
-                                {% endfor %}
+                            <ul><span class="field">Public Profiles:</span>
+                                <li><span class="field">GitHub:</span><br>{{ profile.github }}</li>
+                                <li><span class="field">LinkedIn: </span><br>{{ profile.linkedin }}</li>
                             </ul>
                         </div>
                     </div>
                     {% else %}
                     <div class="col-sm-12 text-center">
-                        <p>You can and you should introduce yourself, good things happen to those who hustle.</p>
+                        <p>Introduce yourself, good things happen to those who hustle.</p>
                         {% endif %}
                     </div>
                 </div>

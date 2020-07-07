@@ -44,38 +44,60 @@
                     </div>
                 </div>
                 {% endif %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul><span class="field">Bio:</span>
+                            <li>{{ profile.bio|safe }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <ul><span class="field">Stack:</span>
+                            {% for item in profile.stack %}
+                            <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-sm-4">
+                        <ul><span class="field">Languages:</span>
+                            {% for lang in profile.languages %}
+                            <li>{{ lang }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-sm-4">
+                        <ul><span class="field">Frameworks:</span>
+                            {% for item in profile.frameworks %}
+                            <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
 
-                <p>Bio: <br>
-                    {{ profile.bio|safe }}</p>
-                <ul>
-                    <li>
-                        Languages: <br>
-                        {% for lang in profile.languages %}
-                        {{ lang }},
-                        {% endfor %}
-                    </li> <br>
-                    <li>
-                        Frameworks: <br>
-                        {% for item in frameworks %}
-                        {{ item }},
-                        {% endfor %}
-                    </li>
-                </ul>
-                <p>Stack preference: {{ profile.stack }}</p>
-                <p>Experience: {{ profile.xp }} years</p>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul><span class="field">Experience:</span>
+                            <li>{{ profile.xp }} years</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul><span class="field">Project Interests:</span>
+                            <li>{{ profile.interests }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul><span class="field">Public Profiles:</span>
+                            <li><span class="field">GitHub:</span><br>{{ profile.github }}</li>
+                            <li><span class="field">LinkedIn: </span><br>{{ profile.linkedin }}</li>
+                        </ul>
+                    </div>
+                </div>
 
-                <p>Projects: <br> {{ profile.interests }}</p>
-
-                <ul>My personal links:
-                    {% for link in profile.links %}
-                    {% for key, value in link.items() %}
-                    <li>{{ key }}: {{ value }} </li>
-                    {% endfor %}
-                    {% endfor %}
-                </ul>
-                {% if profile.file_upload %}
-                <p>Files: {{ profile.file_upload }}</p>
-                {% endif %}
                 {% if not profile.username == session['username'] %}
                 <!-- Profile Message form  -->
                 <div>

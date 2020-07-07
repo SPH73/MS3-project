@@ -176,7 +176,7 @@ The [logo](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/desig
 3. Pagination:  
    Again, this is a feature that would be useful to have when enough content has been created and is easily implemented.
 4. User ratings (votes) - to build up a reputation for collaborators:  
-   This feature will be very beneficial to users and also to Hiring managers and project owners when looking at the profiles page.
+   This feature will be very beneficial to the student user type as it would serve as a verification/reference of collaboration and also to Hiring managers and the owner user type when considering requests for pieces while viewing profiles.
 5. Messsage notifications:  
    This feature would be great to implement as it would help users know that they have recveived messages when they log in and perhaps be a motivator for users to log in if notications are sent via email.
 6. Email authentication:  
@@ -218,6 +218,8 @@ Testing was also done by family and friends in different regions using various d
 [bridge top](Photo by Joshua Sortino on Unsplash)
 [CSS code for Recaptach resizing for mobile screens by GeekGodess](https://geekgoddess.com/how-to-resize-the-google-nocaptcha-recaptcha/)
 
+The script and function to get the file size before upload was taken from [pythonise.com](https://pythonise.com/series/learning-flask/flask-uploading-files) as I had been unsuccessful in consistently getting the filesize before saving the file. Some browsers do not send content.length information and this was a better solution.
+
 ## Acknowledgements
 
 Special thanks to the following individuals for without their help I might still be struggling along:  
@@ -248,5 +250,9 @@ This is list of resources I used for the project development. It is by no means 
 [Favicon-generator](https://www.favicon-generator.org/)
 [TextEditor](https://flask-ckeditor.readthedocs.io/en/latest/basic.html)
 [Date Picker Widget](https://api.jqueryui.com/datepicker/#method-widget)
+[Python Pillow Package](https://pillow.readthedocs.io/en/stable/)
+[Flask Project Structure Best Pactices](https://exploreflask.com/en/latest/organizing.html)
+[boto3](https://buildmedia.readthedocs.org/media/pdf/boto3/latest/boto3.pdf)
+[jinja filters](https://docs.exponea.com/docs/filters)
 
 I updated the project structure by turning the application into a package with `__init__.py` and moving the routes to `routes.py`. to avoid confusion I renamed `app.py` to `run.py` to be different from the package name. At the same time I created a `requirements.txt` to be inclusive of choice for other developers, deployment and the assessors.

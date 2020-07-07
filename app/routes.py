@@ -1,7 +1,7 @@
 import os
 import pymongo
 import bcrypt
-from app import app, mongo, ckeditor, APP_ROOT, ALLOWED_IMAGE_EXTENSIONS, MAX_IMAGE_SIZE, ALLOWED_FILE_EXTENSIONS
+from app import app, mongo, ckeditor, ALLOWED_IMAGE_EXTENSIONS, MAX_IMAGE_SIZE, ALLOWED_FILE_EXTENSIONS
 from flask import render_template, url_for, flash, redirect, request, session, send_from_directory
 from bson.objectid import ObjectId
 from datetime import datetime
@@ -239,11 +239,12 @@ def insert_account_image():
                     return redirect(url_for('add_account_image'))
                 else:
                     filename = secure_filename(image.filename)
-                  
-                    target = os.path.join(APP_ROOT, 'static/uploads/accountimages')
                     username = session['username']
-                    url = "/".join([target, f'{username}.jpg'])
-                    image.save(url)
+                    filename = f'{username}.jpg'
+                    
+                    s3_resource = boto3.resource('s3')
+                    bucket = s3_resource.Bucket(S3_BUCKET)
+                    bucket.Object(filename).put(Body=filename)
                     
                     profile_image = f'{username}.jpg'
                    
@@ -274,7 +275,8 @@ def dashboard():
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
         
-        image_file = url_for('static', filename='uploads/accountimages/'+ user['profile_image'])
+        image_file = 'https://codeflow-app-assets.s3-eu-west-1.amazonaws.com/uploads/accountimages/'+ user['profile_image']
+       
         
         # created content
         articles = list(mongo.db.articles.find({'user_id': user['_id']}).sort('date',pymongo.DESCENDING))
@@ -639,9 +641,11 @@ def submit_piece(piece_id):
                 if not allowed_file(file.filename):
                     flash('Sorry, only plain text files are supported for piece uploads; upload unsuccessful', 'warning')
                     return redirect(request.url)
-                target = os.path.join(APP_ROOT, 'static/uploads/files')
+                
                 filename = secure_filename(file.filename)
-                file.save(os.path.join(target, filename))
+                s3_resource = boto3.resource('s3')
+                bucket = s3_resource.Bucket(S3_BUCKET)
+                bucket.Object(filename).put(Body=filename)
                 
                 username = session['username']
                 status = 'submitted'
@@ -761,10 +765,7 @@ def add_profile():
     """Checks if a logged in user has an exisiting profile before rendering the form. When the form is validated first retrieves the user_id to include it with the form data to insert into the database collection with the current date and time.
     """
     
-    form=ProfileForm()
-    
-    form.lanaguages = [list(mongo.db.languages.find())]
-    
+    form=ProfileForm()    
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
         pro = mongo.db.profiles.find_one({'user_id': user['_id']})
@@ -772,24 +773,27 @@ def add_profile():
             flash('Sorry, only one profile per user permitted. You can update your profile on your dashboard under the profile tab.', 'info')
             return redirect(url_for('dashboard'))
         
-        
-        
         if request.method == 'POST':
-            if form.validate_on_submit():                    
-                mongo.db.profiles.insert_one({'headline': form.headline.data,
+            if form.validate_on_submit():
+          
+                mongo.db.profiles.insert_one({'user_id': user['_id'],
+                                              'headline': form.headline.data,
                                               'bio': form.bio.data,
                                               'username': session['username'],
                                               'date': datetime.utcnow(),
                                               'xp': form.xp.data,
                                               'interests': form.interests.data,
                                               'stack': form.stack.data,
-                                              
-                                              'user_id': user['_id']})
+                                              'languages': form.languages.data,
+                                              'frameworks': form.frameworks.data,
+                                              'github': form.github.data,
+                                              'linkedin': form.linkedin.data
+                                             })
                 flash('Your profile has been created.', 'success')
                 return redirect('profiles')
             
         return render_template('pages/addprofile.html', title='Post',
-                               form=form,  legend='Create your profile')
+                               form=form, legend='Create your profile')
         
     flash('You need to be logged in to post any content.', 'info')
     return redirect(url_for('login'))
@@ -820,13 +824,17 @@ def edit_profile(profile_id):
     if chck:                
         profile = mongo.db.profiles.find_one(
             {'_id': ObjectId(profile_id)})
-               
+                    
         form=ProfileForm()
         form.headline.data = profile['headline']
         form.bio.data = profile['bio']
         form.xp.data = profile['xp']
         form.interests.data = profile['interests']
         form.stack.data = profile['stack']
+        form.languages.data = profile['languages']
+        form.frameworks.data = profile['frameworks']
+        form.github.data = profile['github']
+        form.linkedin.data = profile['linkedin']
         
     return render_template('pages/editprofile.html', form=form, profile=profile, legend='Edit your Profile')
     
@@ -845,7 +853,8 @@ def update_profile(profile_id):
                                           'stack': request.form.get('stack'),
                                           'languages': request.form.get('languages'),
                                           'frameworks': request.form.get('frameworks'),
-                                          'links': request.form.get('links')
+                                          'github': request.form.get('github'),
+                                          'linkedin': request.form.get('linkedin')
                                           }
                                  }
     )

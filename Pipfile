@@ -24,6 +24,7 @@ bleach = "*"
 werkzeug = "*"
 pillow = "*"
 boto3 = "*"
+arrow = "*"
 
 [requires]
 python_version = "3.7"
