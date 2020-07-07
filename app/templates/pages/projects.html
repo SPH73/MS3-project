@@ -8,7 +8,7 @@
             {% for project in projects %}
             <div id="project-accordion" class="accordion-label"><span class="title">
                     {{ project.title }}</span><br>
-                <span secondary-title>{{ project.username }} - Post date:
+                <span class="secondary-title">{{ project.username }} - Post date:
                     {{ project.date.strftime('%d %B, %Y') }}</span>
             </div>
             <div class="accordion-content">
@@ -45,18 +45,25 @@
                     </div>
                 </div>
                 {% endif %}
-                <p>Current Status: {{ project.status }}
-                </p>
-                <p>Project deadline: {{ project.deadline.strftime('%d %B, %Y') }}
-                </p>
-                <p>Project files:
-                    {% if project.file_upload %}
-                    {{ project.file_upload }}
-                    {% else %}
-                    No File uploads for this project.</p>
-                {% endif %}
-                <p>Project Description: {{ project.brief|safe }}
-                </p>
+                <div>
+                    <p><span class="field">Current Status: </span> {{ project.status }}</p>
+                </div>
+                <div>
+                    <p><span class="field">Project deadline: </span>
+                        {{ project.deadline.strftime('%d %B, %Y') }}</p>
+                </div>
+                <div>
+                    <p><span class="field"> Project files: </span>
+                        {% if project.file_upload %}
+                        {{ project.file_upload }}
+                        {% else %}
+                        No File uploads for this project.
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <span class="field">Project description: </span>{{ project.brief|safe }}
+                </div>
                 {% if not project.username == session['username'] %}
                 <!-- Project Message form  -->
                 <div>
