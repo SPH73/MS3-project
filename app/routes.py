@@ -508,7 +508,7 @@ def update_project(project_id):
                                 {'$set':
                                     {'title': request.form.get('title'),
                                      'status': request.form.get('status'),
-                                     'deadline': datetime.strptime(request.form.get('deadline'), '%m/%d/%Y'),
+                                     'deadline': datetime.strptime(request.form.get('deadline'), '%d/%m/%Y'),
                                      'brief': request.form.get('brief')}})
     return redirect(url_for('projects'))
 
