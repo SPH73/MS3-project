@@ -28,3 +28,5 @@ class Config(object):
 S3_BUCKET = os.environ.get('S3_BUCKET') 
 S3_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
 S3_SECRET = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
