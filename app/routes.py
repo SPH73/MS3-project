@@ -215,8 +215,7 @@ def allowed_image_filesize(filesize):
 
 @app.route('/insert_account_image', methods=['GET', 'POST'])
 def insert_account_image():
-    #TODO AMEND DOCSTRING ONCE THE FILES READ BACK FROM S3 BUCKET PROPERLY 
-    """Takes a users uploaded images, checks the file extension and sanitizes the file. Converts the filename to match the users username and saves it to the accountimage folder and updates the user profile image in the user collection.
+    """Takes a users uploaded images, checks the file extension and sanitizes the file. Converts the filename to match the users username and saves it to the s3 bucket and updates the user profile image in the user collection document.
     """
    
     if 'username' in session:
@@ -497,6 +496,7 @@ def edit_project(project_id):
         form.status.data = project['status']
         form.deadline.data = project['deadline'].strftime('%d/%m/%Y')
         form.brief.data = project['brief']
+        form.note.data = project['note']
         return render_template('pages/editproject.html', form=form, project=project, legend='Edit your project')
 
 @app.route('/update_project<project_id>', methods=['POST'])
@@ -510,6 +510,7 @@ def update_project(project_id):
                                     {'title': request.form.get('title'),
                                      'status': request.form.get('status'),
                                      'deadline': datetime.strptime(request.form.get('deadline'), '%d/%m/%Y'),
+                                     'note': request.form.get('note'),
                                      'brief': request.form.get('brief')}})
     return redirect(url_for('projects'))
 

@@ -72,7 +72,7 @@ class PieceForm(FlaskForm):
         
 class ProjectForm(FlaskForm):
     title = StringField('Title *', validators=[DataRequired()])
-    status = SelectField('Status *', choices=[('open', 'closed')], validators=[DataRequired()] )
+    status = SelectField('Status *', default='open', choices=[('open', 'closed')], validators=[DataRequired()] )
     deadline = StringField('Set deadline', validators=[DataRequired()])
     brief = CKEditorField('Project description *', validators=[DataRequired()])
     note = StringField('Add a personal note (only visible on your dashboard)', validators=[Length(max=250, message='Must be a maximum of %d characters long (approximately 40 words).' % (250))])
