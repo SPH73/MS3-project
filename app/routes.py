@@ -647,7 +647,7 @@ def submit_piece(piece_id):
                 filename = secure_filename(file.filename)
                 s3_resource = boto3.resource('s3')
                 bucket = s3_resource.Bucket(S3_BUCKET)
-                bucket.Object(filename).put(Body=filename)
+                bucket.Object(filename).put(Body=file)
                 
                 username = session['username']
                 status = 'submitted'
