@@ -215,6 +215,7 @@ def allowed_image_filesize(filesize):
 
 @app.route('/insert_account_image', methods=['GET', 'POST'])
 def insert_account_image():
+    #TODO AMEND DOCSTRING ONCE THE FILES READ BACK FROM S3 BUCKET PROPERLY 
     """Takes a users uploaded images, checks the file extension and sanitizes the file. Converts the filename to match the users username and saves it to the accountimage folder and updates the user profile image in the user collection.
     """
    
@@ -244,7 +245,7 @@ def insert_account_image():
                     
                     s3_resource = boto3.resource('s3')
                     bucket = s3_resource.Bucket(S3_BUCKET)
-                    bucket.Object(filename).put(Body=filename)
+                    bucket.Object(filename).put(Body=image)
                     
                     profile_image = f'{username}.jpg'
                    
@@ -257,7 +258,7 @@ def insert_account_image():
                                         }
                                     }
                     )
-                    flash(f'Your profile image has been updated to {filename}.', 'success')
+                    flash(f'Your profile image has been updated to {image.filename}.', 'success')
                     return redirect(url_for('dashboard'))
                 
             flash('Something has gone wrong, please try again when you next login', 'info')
@@ -275,7 +276,7 @@ def dashboard():
     if 'username' in session:
         user = mongo.db.user.find_one({'username': session['username']})
         
-        image_file = 'https://codeflow-app-assets.s3-eu-west-1.amazonaws.com/'+ user['profile_image']
+        image_file = 'https://codeflow-app.s3-eu-west-1.amazonaws.com/'+ user['profile_image']
        
         
         # created content
@@ -455,7 +456,7 @@ def add_project():
                                     'title': form.title.data,
                                     'deadline': datetime.strptime(form.deadline.data, "%d/%m/%Y"),
                                     'brief': form.brief.data,
-                                    'status': form.status.data,
+                                    'status': "open",
                                     'note': form.note.data,
                                     'user_id': user['_id']
                 })
@@ -494,7 +495,7 @@ def edit_project(project_id):
         form=ProjectForm()
         form.title.data = project['title']
         form.status.data = project['status']
-        form.deadline.data = project['deadline']
+        form.deadline.data = project['deadline'].strftime('%d/%m/%Y')
         form.brief.data = project['brief']
         return render_template('pages/editproject.html', form=form, project=project, legend='Edit your project')
 
