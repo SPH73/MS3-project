@@ -483,7 +483,7 @@ def projects():
     return redirect(url_for('login'))
 
             
-@app.route('/edit_project<project_id>')
+@app.route('/edit_project<project_id>', methods=['POST'])
 def edit_project(project_id):
     """First checks that the user is logged in then renders the form with the data from the collection document. (Edit button only appears if there is a match with the user id in the database for the particular document id and the users session data).
     """
