@@ -210,7 +210,7 @@
                     {% if profile %}
                     <div class="row">
                         <div class="col-12 text-center mt-2">
-                            <p><span class="field">Last Modified: </span> {{ profile.date.strftime('%d, %B %Y') }}</p>
+                            <p><span class="field">Last Modified: </span> {{ profile.date | datetimeformat }}</p>
                         </div>
                     </div>
                     <div class="row">
@@ -364,11 +364,11 @@
                                 <p><span class="field">Current Status: </span> {{ project.status }}</p>
                             </div>
                             <div>
-                                <p><span class="field">Project deadline: </span>
+                                <p><span class="field">Project Deadline: </span>
                                     {{ project.deadline.strftime('%d %B, %Y') }}</p>
                             </div>
                             <div>
-                                <span class="field">Project description: </span>{{ project.brief|safe }}
+                                <span class="field">Project Description: </span>{{ project.brief|safe }}
                             </div>
                             <div>
                                 <p><span class="field"> Notes: </span>
@@ -380,13 +380,26 @@
                                 </p>
                             </div>
                             <div>
-                                <p><span class="field"> Project files: </span>
+                                <p><span class="field"> Project Files: </span>
                                     {% if project.file_upload %}
                                     {{ project.file_upload }}
                                     {% else %}
                                     No File uploads for this project.
                                     {% endif %}
                                 </p>
+                            </div>
+                            <div>
+                                <p><span class="field"> Project Pieces: </span></p>
+                                {% if project.pieces %}
+                                {% for piece in project.pieces%}
+                                <p><span class="field"> Task: </span>{{ piece.task | capitalize }}
+                                    </span>&emsp;<span class="field">Created:
+                                    </span>{{ piece.date | datetimeformat }}&emsp;
+                                    <span class="field"> Collaborator: </span>{{ piece.username | capitalize }}</p>
+                                {% endfor %}
+                                {% else %}
+                                <p>No pieces created yet for this project.</p>
+                                {% endif %}
                             </div>
                         </div>
                         {% if not loop.last %}
