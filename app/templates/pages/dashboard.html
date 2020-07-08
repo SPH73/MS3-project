@@ -550,8 +550,9 @@
                     <div class="text-center mt-3 mb-2">
                         <h5>Pieces submitted for approval</h5>
                         <p><small><em>All good things must come to an end. If you are satisfied, change the status to
-                                    'closed' or revert the status to
-                                    'accepted' and update the brief; a bumpy road can still be travelled.</em></small>
+                                    'closed' (click the tick) or revert the status to
+                                    'accepted' (click the cogs) and update the brief; a bumpy road can still be
+                                    travelled.</em></small>
                         </p>
                     </div>
                     <hr>
@@ -606,9 +607,7 @@
                                     id="close-piece-btn{{ loop.index }}" type="button"
                                     class="btn btn-outline-success btn-sm mb-1"><i class="fa fa-check"
                                         aria-hidden="true"></i></a>
-                                <a href="" id="close-piece-btn{{ loop.index }}" type="button"
-                                    class="btn btn-danger btn-sm mb-1"><i class="fa fa-trash-o"
-                                        aria-hidden="true"></i></a>
+
 
                                 {% if not loop.last %}
                                 <hr>
@@ -651,6 +650,31 @@
                                     {{ piece.comment }}
                                 </p>
                                 {% endif %}
+                                <div>
+                                    {% if piece.file_uploads %}
+                                    <ul>
+                                        <span class='field'>Piece File Uploads: </span>
+                                        {%  for file in piece.file_uploads %}
+                                        {% for key, value in file.items() %}
+                                        <li>
+                                            <p><span>{{ value }} &emsp;</span>
+                                                <a href="{{ url_for('get_piece_file', filename=file.filename) }}"
+                                                    id="get-piece-btn{{ loop.index }}" type="button"
+                                                    class="btn btn-outline-secondary btn-sm mb-1"><i
+                                                        class="fa fa-download" aria-hidden="true"></i></a></p>
+                                            <p>When you are ready, please hit the delete button to delete the project
+                                                piece. You can download the file again if necessary, first.</p>
+                                            <a href="{{ url_for('delete_piece', piece_id=piece._id, filename=file.filename) }}"
+                                                id="close-piece-btn{{ loop.index }}" type="button"
+                                                class="btn btn-danger btn-sm mb-1"><i class="fa fa-trash-o"
+                                                    aria-hidden="true"></i></a>
+                                        </li>
+                                        {% endfor %}
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}
+                                </div>
+
 
                                 <div><small class="text-muted">
                                         <i><a class="ml-2" href="#">Send feedback to {{ piece.assignee }}
@@ -693,7 +717,7 @@
                         <h5>New Pieces</h5>
                         <p><small><em>Strike while the iron is hot! Acceptance is an indicatation of commitment to
                                     complete and
-                                    submit the piece by the due date; but you knew that of course!</em></small></p>
+                                    submit the piece by the due date; but you knew that, of course!</em></small></p>
                     </div>
                     <hr>
                     <div class="mb-2 border-bottom">

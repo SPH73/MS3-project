@@ -695,10 +695,10 @@ def get_piece_file(filename):
     flash('You need to be logged in to download files.', 'info')
     return redirect(url_for('login'))
 
-@app.route('/delete_piece_file/<filename>', methods=['POST'])
-def delete_piece_file(filename):
+@app.route('/delete_piece/<filename>/<piece_id>', methods=['GET','POST'])
+def delete_piece(filename, piece_id):
     #TODO 
-    """Delete piece from the database.
+    """Deletes the piece file from s3 bucket
     """
     if 'username' in session:
         
@@ -708,15 +708,18 @@ def delete_piece_file(filename):
         bucket = s3_resource.Bucket(S3_BUCKET)
         bucket.Object(filename).delete()
         
+        pieces = mongo.db.project_pieces
+        pieces.delete_one({'_id': ObjectId(piece_id)})
+        
         flash(f'Thanks for tidying up the file storage, {username}!', 'success')
         return redirect(url_for('dashboard'))
     
     flash('This action requires you to be logged in', 'info')
     return redirect(url_for('login'))
 
-@app.route('/close_piece/<piece_id>')
+@app.route('/close_piece/<piece_id>', methods=['GET','POST'])
 def close_piece(piece_id):
-    """Finds the project piece in the database and updates the status field to closed and sends feedback to the user if successful otherwise redirects them to login.
+    """Finds the project piece in the database and updates the status field to closed and sends feedback to the user if successful, otherwise redirects them to login if no session is open.
     """
     
     if 'username' in session:
@@ -742,6 +745,8 @@ def close_piece(piece_id):
 
 @app.route('/edit_snt_piece/<piece_id>')
 def edit_snt_piece(piece_id):
+    """Gets the data from the document in database using the document id to populate the form for the user to edit if the user is logged in otherwise the user is redirected to the login form.
+    """
     
     if 'username' in session:
         
@@ -940,7 +945,6 @@ def profile_msg(profile_id):
 
 @app.route('/project_msg/<project_id>', methods=['GET', 'POST'])
 def project_msg(project_id):
-    
     """Adds a subdocument in the relevant document to messages field and creates a reference document in the project_msgs collection for user dashboards.
     """
 
