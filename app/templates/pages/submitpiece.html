@@ -8,9 +8,12 @@
 <div class="container mt-3">
     <section class="section-content">
         <legend class="text-center legend-border mb-4">{{ legend }}</legend>
-        <p>{{ username }}, you are submitting files for '{{ piece.task }}' of '{{ piece.project_title }}'</p>
-        <p>Please name your files appropriately (i.e. {{ piece.task }}-1 and so on) and export your files to .txt format
-            before uploading.</p>
+        <p>Great, {{ username }}, congratulations on being ready to submit your project piece, <span
+                class="title">'{{ piece.task }}'</span> of the project <span
+                class="title">'{{ piece.project_title }}'</span></p>
+        <p>Its a good idea to name your files appropriately so they can easily identified as being part of a
+            particular project (i.e. {{ piece.task }}-1 and so on). Before you upload, please export your files to .txt
+            format.</p>
         <form action="{{ url_for('submit_piece', piece_id=piece._id) }}" method="POST" enctype="multipart/form-data"
             accept=".txt" id="upload-piece-files" novalidate>
             {{ form.hidden_tag() }}
