@@ -8,6 +8,13 @@
 <div class="container mt-3">
     <section class="section-content neu">
         <legend class="text-center legend-border mb-4">{{ legend }}</legend>
+        <div class="text-center">
+            <p class="suggest-text">"The most beautiful thing you can wear is confidence." — Blake Lively
+            </p>
+            <p>Take a few minutes to think about who you are; what you have accomplaished, your
+                goals, your passions and
+                ambitions. <br> Get creative - your headline will get you noticed!</p>
+        </div>
         <form action="{{ url_for('add_profile') }}" method="post" novalidate>
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
