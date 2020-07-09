@@ -13,9 +13,11 @@
     {{ field_name(class="form-control form-control-lg", **kwargs)|safe }}
     {% endif %}
 </div>
+
 {% endmacro %}
 
 {% macro render_file_field(file_field_name) %}
+
 <div class="form-group">
     {% if file_field_name.errors %}
     {{ file_field_name(class="form-control-file is-invalid") }}
@@ -29,9 +31,11 @@
     {{ file_field_name.label(class="form-control-label") }}
     {% endif %}
 </div>
+
 {% endmacro %}
 
 {% macro render_select_field(select_field_name) %}
+
 <div class="form-group">
     {{ select_field_name.label(class="form-control-label") }}
     {% if select_field_name.errors %}
@@ -41,8 +45,13 @@
         <span>{{ error }}</span>
         {% endfor %}
     </div>
-    {% else %}
     {{ select_field_name(class="form-control form-control-lg", **kwargs)|safe }}
+
+    {% else %}
+
+    {{ select_field_name(class="form-control form-control-lg", **kwargs)|safe }}
+
     {% endif %}
 </div>
+
 {% endmacro %}

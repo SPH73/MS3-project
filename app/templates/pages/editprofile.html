@@ -1,29 +1,32 @@
 {% extends 'layout/base.html' %}
 
 {% from 'pages/_formhelpers.html' import render_field %}
+{% from 'pages/_formhelpers.html' import render_select_field %}
 
 {% block content %}
 
 <div class="container mt-3">
     <section class="section-content neu">
         <legend class="text-center legend-border mb-4">{{ legend }}</legend>
-        <form action="{{ url_for('update_profile', profile_id=profile._id) }}" method="post" novalidate>
+        <form action="{{ url_for('add_profile') }}" method="post" novalidate>
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 {{ render_field(form.headline, autofocus=true) }}
                 {{ render_field(form.bio) }}
                 {{ render_field(form.xp) }}
                 {{ render_field(form.interests) }}
-                {{ render_field(form.stack) }}
-                {{ render_field(form.languages) }}
-                {{ render_field(form.frameworks) }}
+            </fieldset>
+            <fieldset class="form-group">
+                {{ render_select_field(form.stack, multiple=true) }}
+                {{ render_select_field(form.languages, multiple=true) }}
+                {{ render_select_field(form.frameworks, multiple=true) }}
+            </fieldset>
+            <fieldset class="form-group">
                 {{ render_field(form.github) }}
                 {{ render_field(form.linkedin) }}
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-primary btn-sm") }}
-                <a type="button" class="btn btn-outline-danger btn-sm" id="cancel-password"
-                    href="{{ url_for('dashboard') }}">Cancel</a>
             </div>
         </form>
     </section>
@@ -31,4 +34,5 @@
 
 {{ ckeditor.load() }}
 {{ ckeditor.config(name='bio') }}
+
 {% endblock %}
