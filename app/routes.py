@@ -5,7 +5,7 @@ from app import app, mongo, ckeditor, ALLOWED_IMAGE_EXTENSIONS, MAX_IMAGE_SIZE, 
 from flask import render_template, url_for, flash, redirect, request, session, Response
 from bson.objectid import ObjectId
 from datetime import datetime
-from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, AccountImageForm, UploadForm
+from app.forms import RegistrationForm, LoginForm, BlogForm, ProjectForm, ProfileForm, ResetPasswordForm, ForgotPasswordForm, PieceForm, PasswordForm, AccountImageForm, UploadForm, FeedbackForm
 from werkzeug.utils import secure_filename
 import boto3
 from config import S3_BUCKET, S3_KEY, S3_SECRET
@@ -676,8 +676,7 @@ def submit_piece(piece_id):
 
 @app.route('/get_piece_file/<filename>', methods=['GET','POST'])
 def get_piece_file(filename):
-    # TODO amend to retrieve from s3
-    """Uses the filename stored in the database to find the file and download it as an attachment from the s3 bucket.
+    """Uses the filename to find the file and download it as an attachment from the s3 bucket.
     """
     
     if 'username'in session:
@@ -736,7 +735,7 @@ def close_piece(piece_id):
                                             }
         )
 
-        flash(f'{username}, you have accepted the piece, "{task}", for the project " {project_title}" and chnaged the status to closed.', 'success'
+        flash(f'{username}, you have accepted the piece, "{task}", for the project " {project_title}" and changed the status to closed.', 'success'
         )
         return redirect(url_for('dashboard'))
     
@@ -758,7 +757,7 @@ def edit_snt_piece(piece_id):
         form.due_date.data = piece['due_date'].strftime('%d/%m/%Y')
         form.description.data = piece['description']
         
-        return render_template('pages/updatepiece.html', form=form, piece=piece, legend='Edit your project')    
+        return render_template('pages/updatepiece.html', form=form, piece=piece, legend='Edit your project piece')    
     
 
 @app.route('/update_piece/<piece_id>', methods=['POST'])
@@ -767,7 +766,7 @@ def update_snt_piece(piece_id):
     """
     
     if 'username' in session and request.method == 'POST':
-       
+        
         username = session['username']
         task = request.form.get('task')
         status = request.form.get('status')
@@ -792,6 +791,53 @@ def update_snt_piece(piece_id):
         return redirect(url_for('dashboard'))
     
     flash('You need to be logged in to update your pieces.', 'info')
+    return redirect(url_for('login'))
+
+@app.route('/send_feedback/<piece_id>', methods=['GET', 'POST'])
+def send_feedback(piece_id):
+    """Adds a feedback field to a users profile document when the form is sent by a project owner from the snt_pieces > Completed Pieces tab
+    """
+    
+    if 'username' in session:
+        form = FeedbackForm()
+        piece = mongo.db.prpject_pieces.find_one_or_404({'_id': ObjectId(piece_id)})
+        
+        return render_template('pages/feedback.html', form=form, piece=piece, legend='Send feedback')
+    
+    flash('You need to login first.', 'info')
+    return redirect(url_for('login'))
+
+
+@app.route('/post_feedback/<piece_id>', methods=['GET', 'POST'])
+def post_feedback(piece_id):
+    """Adds a feedback field to a users profile document when the form is sent by a project owner from the snt_pieces > Completed Pieces tab
+    """
+    
+    if 'username' in session:
+        form = FeedbackForm()
+        piece = mongo.db.prpject_pieces.find_one_or_404({'_id': ObjectId(piece_id)})
+        
+        if request.method == 'POST' and form.validate_on_submit():
+           
+            mongo.db.user.find_one_or_404({'username': session['username']})
+            mongo.db.profiles.find_one_and_update({'username': piece['assignee']},
+                                                  {'$push':
+                                                      {'feedback':
+                                                          {'from': session['username'],
+                                                           'project': piece['project_title'],
+                                                           'piece': piece['task'],
+                                                           'date': datetime.utcnow(),
+                                                           'feedback': request.form.get('feedback'),
+                                                           'file': request.form.get('upload')
+                                                 }
+                                            }
+                                        })
+            flash('Your feedback has been sent!', 'success')
+            return redirect(url_for('dashboard'))
+        
+        return render_template('pages/feedback.html', form=form, piece=piece, legend='Send feedback')
+    
+    flash('You need to login first.', 'info')
     return redirect(url_for('login'))
 
 # PROFILE VIEWS
@@ -943,6 +989,62 @@ def profile_msg(profile_id):
     flash('Please login to message users.', 'info')
     return redirect(url_for('login'))
 
+@app.route('/reply_profile_msg/<message_id>', methods=['POST'])
+def reply_profile_msg(message_id):
+    
+    if 'username' in session:
+        
+        user = mongo.db.user.find_one_or_404({'username': session['username']})
+        message = mongo.db.profile_msgs.find_one_or_404({'_id': ObjectId(message_id)})
+        
+        if request.method == 'POST':
+            
+            if user['username'] == message['from_user'] or user['username'] == message['to_user']:
+            
+                messages = mongo.db.profile_msgs
+                messages.find_one_and_update({'_id': ObjectId(message_id) },
+                                                    {'$push':
+                                                        {'thread':
+                                                            {'from': session['username'],
+                                                            'date': datetime.utcnow(),
+                                                            'reply': request.form.get('reply')
+                                                            }
+                                                        }
+                                                    })
+                
+                flash('Your reply was sent. ', 'success')
+                return redirect(url_for('dashboard'))
+    
+    flash('Please login to reply', 'info')
+    return redirect(url_for('login'))
+
+
+
+@app.route('/delete_profile_msg/<message_id>', methods=['POST'])
+def delete_profile_msg(message_id):
+    """If the user is logged in and their user id matches the document user_id the document is removed from the database collection.
+    """
+    if 'username' in session:
+        
+        user = mongo.db.user.find_one_or_404({'username': session['username']})
+        message = mongo.db.profile_msgs.find_one_or_404({'_id': ObjectId(message_id)})
+        
+        if request.method == 'POST':
+            if user['username'] == message['from_user'] or user['username'] == message['to_user']:
+                messages = mongo.db.profile_msgs
+                messages.find_one_and_delete({'_id': ObjectId(message_id) })
+                flash(f'{user.username}, your conversation has been deleted with {message.to_user}. ', 'success')
+                return redirect(url_for('dashboard'))
+            elif user['username'] == message['to_user']:
+                messages = mongo.db.profile_msgs
+                messages.find_one_and_delete({'_id': ObjectId(message_id) })
+                flash('Your conversation has been deleted. ', 'success')
+                return redirect(url_for('dashboard'))
+                
+    flash('You need to be logged in delete messages.', 'info')
+    return redirect(url_for('login'))
+ 
+
 @app.route('/project_msg/<project_id>', methods=['GET', 'POST'])
 def project_msg(project_id):
     """Adds a subdocument in the relevant document to messages field and creates a reference document in the project_msgs collection for user dashboards.
@@ -975,6 +1077,55 @@ def project_msg(project_id):
             flash('Your message has been sent.', 'success')
             return redirect(url_for('dashboard'))
         
-    flash('Please login to message users.', 'info')
+@app.route('/reply_project_msg/<message_id>', methods=['POST'])
+def reply_project_msg(message_id):
+    
+    if 'username' in session:
+        
+        user = mongo.db.user.find_one_or_404({'username': session['username']})
+        message = mongo.db.project_msgs.find_one_or_404({'_id': ObjectId(message_id)})
+        
+        if request.method == 'POST':
+            
+            if user['username'] == message['from_user'] or user['username'] == message['to_user']:
+            
+                messages = mongo.db.project_msgs
+                messages.find_one_and_update({'_id': ObjectId(message_id) },
+                                                    {'$push':
+                                                        {'thread':
+                                                            {'from': session['username'],
+                                                            'date': datetime.utcnow(),
+                                                            'reply': request.form.get('reply')
+                                                            }
+                                                        }
+                                                    })
+                
+                flash('Your reply was sent. ', 'success')
+                return redirect(url_for('dashboard'))
+    
+    flash('Please login to reply', 'info')
     return redirect(url_for('login'))
 
+@app.route('/delete_project_msg/<message_id>', methods=['POST'])
+def delete_project_msg(message_id):
+    """If the user is logged in and their user id matches the document user_id the document is removed from the database collection.
+    """
+    if 'username' in session:
+        
+        user = mongo.db.user.find_one_or_404({'username': session['username']})
+        message = mongo.db.project_msgs.find_one_or_404({'_id': ObjectId(message_id)})
+        
+        if request.method == 'POST':
+            if user['username'] == message['from_user']:
+                messages = mongo.db.project_msgs
+                messages.find_one_and_delete({'_id': ObjectId(message_id) })
+                flash('Your conversation has been deleted. ', 'success')
+                return redirect(url_for('dashboard'))
+            elif user['username'] == message['to_user']:
+                messages = mongo.db.project_msgs
+                messages.find_one_and_delete({'_id': ObjectId(message_id) })
+                flash('Your conversation has been deleted.', 'success')
+                return redirect(url_for('dashboard'))
+                
+    flash('You need to be logged in delete messages.', 'info')
+    return redirect(url_for('login'))
