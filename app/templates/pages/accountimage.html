@@ -10,13 +10,13 @@
         <form action="{{url_for('insert_account_image', user_id=user_id)}}" method="POST" enctype="multipart/form-data"
             accept="image/*" id="upload-image" novalidate>
             {{ form.hidden_tag() }}
-            <fieldset class="input-group">
+            <fieldset class="form-group">
                 {{ render_file_field(form.image, oninput="filesize(this)") }}
             </fieldset>
-            <div class="input-group mt-2">
+            <div class="form-group mt-2">
                 {{ form.recaptcha }}
             </div>
-            <div class="input-group mt-2">
+            <div class="form-group mt-2">
                 {{ form.submit(class="btn btn-outline-primary btn-sm") }}
                 <a type="button" class="btn btn-outline-danger btn-sm ml-2" id="cancel-image"
                     href="{{ url_for('dashboard') }}">Cancel</a>
