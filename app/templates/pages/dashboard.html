@@ -452,13 +452,13 @@
                                 </p>
                             </div>
                             <div>
-                                <p><span class="field"> Project Pieces: </span></p>
+                                <p><span class="field"> Pieces for this project at a glance: </span></p>
                                 {% if project.pieces %}
                                 {% for piece in project.pieces%}
                                 <p><span class="field"> Task: </span>{{ piece.task | capitalize }}
                                     </span>&emsp;<span class="field">Created:
-                                    </span>{{ piece.date | datetimeformat }}&emsp;
-                                    <span class="field"> Collaborator: </span>{{ piece.username | capitalize }}</p>
+                                    </span>{{ piece.date | datetimeformat }}
+                                </p>
                                 {% endfor %}
                                 {% else %}
                                 <p>No pieces created yet for this project.</p>
