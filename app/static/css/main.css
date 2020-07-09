@@ -61,9 +61,14 @@ main {
   font-size: 0.8rem;
 }
 
+h1,
+h2,
+h3,
+h4,
 h5,
 h6 {
   color: #089b93;
+  line-height: 1.7;
 }
 
 small {
