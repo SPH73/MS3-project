@@ -45,6 +45,7 @@ class PasswordForm(FlaskForm):
 
 class AccountImageForm(FlaskForm):
     image = FileField('Select image', validators=[FileRequired(), FileAllowed(['jpg', 'jpeg', 'png'])])
+    recaptcha = RecaptchaField()
     submit = SubmitField('Upload') 
 
 class CommentForm(FlaskForm):
@@ -57,6 +58,7 @@ class BlogForm(FlaskForm):
 
 class UploadForm(FlaskForm):
     piece_files = MultipleFileField('Select files to upload', validators=[FileAllowed(['txt']), FileRequired()])
+    recaptcha = RecaptchaField()
     submit = SubmitField('Upload') 
     
     
@@ -67,7 +69,7 @@ class PieceForm(FlaskForm):
     username = StringField('Username for whom the piece has been created *', validators=[DataRequired()])
     due_date = StringField('Due date *', validators=[DataRequired()])
     comment = StringField('Add a comment for your reference (recommended)')
-    add_piece = SubmitField('Submit')
+    submit = SubmitField('Submit')
   
         
 class ProjectForm(FlaskForm):
@@ -98,3 +100,9 @@ class ProfileForm(FlaskForm):
     github = StringField('GitHub', default='https://github.com/<myusername>' , validators=[URL(require_tld=True)], description='Add your username or delete the link')
     linkedin = StringField('LinkedIn', default='https://linkedin.com/in/<myusername>' , validators=[URL(require_tld=True)], description='Add your username or delete the link')
     submit = SubmitField('Submit')
+    
+class FeedbackForm(FlaskForm):
+    feedback = TextAreaField('Feedback', validators=[DataRequired(), Length(max=500)])
+    upload = FileField('Upload a reference document', validators=[FileAllowed(['pdf'])])
+    recaptcha = RecaptchaField()
+    submit = SubmitField('Send') 

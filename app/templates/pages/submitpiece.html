@@ -18,8 +18,11 @@
                 {{ render_file_field(form.piece_files, autocomplete="off", multiple="true") }}
             </fieldset>
             <div class="input-group mt-2">
+                {{ form.recaptcha }}
+            </div>
+            <div class="input-group mt-2">
                 {{ form.submit(class="btn btn-outline-primary btn-sm") }}
-                <a type="button" class="btn btn-outline-danger btn-sm ml-2" id="cancel-image"
+                <a type="button" class="btn btn-outline-danger btn-sm ml-2" id="cancel-upload"
                     href="{{ url_for('dashboard') }}">Cancel</a>
             </div>
         </form>

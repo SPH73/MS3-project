@@ -14,6 +14,9 @@
                 {{ render_file_field(form.image, oninput="filesize(this)") }}
             </fieldset>
             <div class="input-group mt-2">
+                {{ form.recaptcha }}
+            </div>
+            <div class="input-group mt-2">
                 {{ form.submit(class="btn btn-outline-primary btn-sm") }}
                 <a type="button" class="btn btn-outline-danger btn-sm ml-2" id="cancel-image"
                     href="{{ url_for('dashboard') }}">Cancel</a>
