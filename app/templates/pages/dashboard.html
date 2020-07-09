@@ -224,764 +224,765 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-md-4">
                             <ul><span class="field">Stack:</span>
                                 {% for item in profile.stack %}
                                 <li>{{ item }}</li>
                                 {% endfor %}
                             </ul>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-md-4">
                             <ul><span class="field">Languages:</span>
                                 {% for lang in profile.languages %}
                                 <li>{{ lang }}</li>
                                 {% endfor %}
                             </ul>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-md-4">
                             <ul><span class="field">Frameworks:</span>
                                 {% for item in profile.frameworks %}
                                 <li>{{ item }}</li>
                                 {% endfor %}
                             </ul>
                         </div>
-                        <div class="col-sm-4">
-                            <ul><span class="field">Public Profiles:</span>
-                                <li><span class="field">GitHub:</span><br>{{ profile.github }}</li>
-                                <li><span class="field">LinkedIn: </span><br>{{ profile.linkedin }}</li>
-                            </ul>
-                        </div>
                     </div>
-                    <div id="'feedback'">
+                    <div class="">
+                        <ul><span class="field">Public Profiles:</span>
+                            <li><span class="field">GitHub:</span><br>{{ profile.github }}</li>
+                            <li><span class="field">LinkedIn: </span><br>{{ profile.linkedin }}</li>
+                        </ul>
+                    </div>
+                    <div class="mb-2 border-bottom">
+                        <div class="text-center mt-3 mb-2">
+                            <h5>Feedback</h5>
+                            <p><small><em>All feedback is food for continuous improvement.</em></small></p>
+                        </div>
+                        <hr>
                         {% if profile.feedback %}
-                        <ul><span class="field">Feedback on pieces you have submitted</span>
-                            {% for feedback in profile.feedback %}
-                            <li><span class="field">From:</span>{{ feedback.from }}</li>
-                            <li><span class="field">Project Title: </span><br>{{ feedback.project_title }}</li>
-                            <li><span class="field">Task Name: </span><br>{{ feedback.task }}</li>
-                            <li><span class="field">Sent: </span><br>{{ feedback.date | datetimeformat }}</li>
-                            {% if feedback.file %}
-                            <li><span class="field">File: </span><br>{{ feedback.file | datetimeformat }}</li>
-                            {% endif %}
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                    </div>
-                    {% else %}
-                    <div class="col-sm-12 text-center">
-                        <p>Introduce yourself, good things happen to those who hustle.</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            <!-- End of Profile -->
-
-            <!-- Received Profile Messages -->
-            <div id="rcvd_profile_msgs" class="tabcontent">
-                <div class="container">
-                    <h4 class="border-bottom mb-2">Your Sent Profile Messages</h4>
-                    {% if rcvd_profile_msgs %}
-                    {% for message in rcvd_profile_msgs %}
-                    <p>Message ID: {{ message._id }}</p>
-                    <ul>
-                        <li>{{ message.date | datetimeformat }}, {{ message.from_user }} wrote: <br>
-                            {{ message.text }}
-                        </li>
-                        <form action="" method="post">
-                            <input class="form-control mt-2" type="hidden" name="Object_id" value="{{ message._id }}">
-                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"
-                                    aria-hidden="true"></i></button>
-                        </form>
-                        <ul class="thread">Message Thread:
-                            {% if message.thread %}
-                            {% for reply in message.thread %}
-                            <li>
-                                <ul class="thread">
-                                    <li>{{ reply.date | datetimeformat }}</li>
-                                    <li>
-                                        {{ reply.from }}: {{ reply.reply }}</li>
-                                </ul>
+                        {% for feedback in profile.feedback %}
+                        <ul>{{ loop.index }}.
+                            <li>{{ feedback.from }} sent you feedback {{ feedback.date | datetimeformat }}</li>
+                            <li><span class="field">Project Title: </span>{{ feedback.project_title }}</li>
+                            <li><span class="field">Piece Task: </span>{{ feedback.piece_task }}</li>
+                            <li><span class="field">Feedback Message: </span><br>{{ feedback.feedback_text }}</li>
+                            {% if feedback.feedback_file %}
+                            <li><span class="field">Feedback File: </span><br>{{ feedback.feedback_file }}
+                                <p><span>{{ value }} &emsp;</span>
+                                    <a href="{{ url_for('get_feedback_file', filename=feedback.feedback_file) }}"
+                                        id="get-feedback-btn{{ loop.index }}" type="button"
+                                        class="btn btn-outline-secondary btn-sm mb-1"><i class="fa fa-download"
+                                            aria-hidden="true"></i></a></p>
                             </li>
-                            {% endfor %}
-                            {% else %}
-                            <p>No replies on this message yet.</p>
+                            {% endif %}
+                            {% if not loop.last %}
+                            <hr>
                             {% endif %}
                         </ul>
-                        <form action="{{ url_for('reply_profile_msg', message_id= message._id) }}" method="post"
-                            id="reply_rcvd_prof_msg{{ loop.index }}">
-                            <textarea name="reply" id="rcvd_reply{{ loop.index }}"></textarea><br>
-                            <button type="submit" class="btn btn-outline-primary btn-sm"><i class="fa fa-reply"
-                                    aria-hidden="true"></i></i></button>
-                        </form>
-                        {% if not loop.last %}
-                        <hr>
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-center">You haven't receoved any feedback yet. When your project pieces are
+                            accepted and the task has
+                            been closed, be sure to ask for feedback if you haven't received anything.
+                        </p>
                         {% endif %}
-                    </ul>
-                    {% endfor %}
-                    {% else %}
-                    <p class="text-center">No messages yet</p>
-                    {% endif %}
-                </div>
-            </div>
-            <!-- Sent Profile Messages -->
-            <div id="snt_profile_msgs" class="tabcontent">
-                <div class="container">
-                    <h4 class="border-bottom mb-2">Your Sent Profile Messages</h4>
-                    {% if snt_profile_msgs %}
-                    {% for message in snt_profile_msgs %}
-                    <p>Message ID: {{ message._id }}</p>
-                    <ul>
-                        <li>{{ message.date | datetimeformat }}, you wrote to {{ message.to_user }}: <br>
-                            {{ message.text }}
-                        </li>
-                        <form action="" method="post">
-                            <input class="form-control mt-2" type="hidden" name="Object_id" value="{{ message._id }}">
-                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"
-                                    aria-hidden="true"></i></button>
-                        </form>
-                        <ul class="thread">Message Thread:
-                            {% if message.thread %}
-                            {% for reply in message.thread %}
-                            <li>
-                                <ul class="thread">
-                                    <li>{{ reply.date | datetimeformat }}</li>
-                                    <li>
-                                        {{ reply.from }}: {{ reply.reply }}</li>
-                                </ul>
-                            </li>
-                            {% endfor %}
-                            {% else %}
-                            <p>No replies on this message yet.</p>
+                        {% else %}
+                        <div class="col-sm-12 text-center">
+                            <p>Introduce yourself, good things happen to those who hustle.</p>
                             {% endif %}
-                        </ul>
-                        <form action="{{ url_for('reply_profile_msg', message_id=message._id) }}" method="post"
-                            id="reply_snt_prof_msg{{ loop.index }}">
-                            <textarea name="reply" id="snt_reply{{ loop.index }}"></textarea><br>
-                            <button type="submit" class="btn btn-outline-primary btn-sm"><i class="fa fa-reply"
-                                    aria-hidden="true"></i></i></button>
-                        </form>
-                        {% if not loop.last %}
-                        <hr>
-                        {% endif %}
-                    </ul>
-                    {% endfor %}
-                    {% else %}
-                    <p class="text-center">You haven't sent any profile messages yet.</p>
-                    {% endif %}
-                </div>
-            </div>
-            <!-- /End of Sent Profile Messages -->
-            <!-- /END OF PROFILE MESSAGES -->
-            <!-- /END OF PROFILE TAB CONTENT -->
-
-            <!-- PROJECT TAB CONTENT -->
-            <!-- Projects  -->
-            <div id="projects" class="tabcontent">
-                <div class="container">
-                    <h4 class="border-bottom mb-2">Your Projects</h4>
-                    {% if  projects %}
-                    {% for project in projects %}
-                    <div class="accordion">
-                        <div id="project-accordion" class="accordion-label"><span class="title">
-                                {{ project.title }}</span><br>
-                            <span secondary-title>Post date:
-                                {{ project.date.strftime('%d %B, %Y') }}</span>
                         </div>
-                        <div class="accordion-content">
-                            <a href="{{ url_for('add_piece', project_id=project._id) }}" id="project-btn-piece"
-                                type="button" class="btn btn-outline-info btn-sm mb-1">Add piece</a>
-                            <a href="{{ url_for('edit_project', project_id=project._id) }}"
-                                id="project-btn-edit{{ loop.index }}" type="button"
-                                class="btn btn-outline-primary btn-sm mb-1">Edit</a>
-                            <button class="btn btn-outline-danger btn-sm mb-1" type="button"
-                                id="delete-project-modal{{ loop.index }}" data-toggle="modal"
-                                data-target="#deleteProject">Delete
-                            </button>
-                            <!-- Modal to Delete Project -->
-                            <div class="modal fade" id="deleteProject{{ loop.index }}" role="dialog">
-                                <div class="modal-dialog">
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title" style="color:red;">WARNING</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>This process is immediate and cannot be undone. Are you sure?</p>
-                                            <!-- Button to confirm delete project -->
-                                            <form action="{{ url_for('delete_project', project_id=project._id) }}"
-                                                method="post">
-                                                <input id="delete-project-btn{{ loop.index }}"
-                                                    class="btn btn-outline-success btn-sm" type="submit"
-                                                    value="Confirm Delete">
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-danger btn-sm"
-                                                data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+                <!-- End of Profile -->
+
+                <!-- Received Profile Messages -->
+                <div id="rcvd_profile_msgs" class="tabcontent">
+                    <div class="container">
+                        <h4 class="border-bottom mb-2">Your Sent Profile Messages</h4>
+                        {% if rcvd_profile_msgs %}
+                        {% for message in rcvd_profile_msgs %}
+                        <p>Message ID: {{ message._id }}</p>
+                        <ul>
+                            <li>{{ message.date | datetimeformat }}, {{ message.from_user }} wrote: <br>
+                                {{ message.text }}
+                            </li>
+                            <form action="" method="post">
+                                <input class="form-control mt-2" type="hidden" name="Object_id"
+                                    value="{{ message._id }}">
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"
+                                        aria-hidden="true"></i></button>
+                            </form>
+                            <ul class="thread">Message Thread:
+                                {% if message.thread %}
+                                {% for reply in message.thread %}
+                                <li>
+                                    <ul class="thread">
+                                        <li>{{ reply.date | datetimeformat }}</li>
+                                        <li>
+                                            {{ reply.from }}: {{ reply.reply }}</li>
+                                    </ul>
+                                </li>
+                                {% endfor %}
+                                {% else %}
+                                <p>No replies on this message yet.</p>
+                                {% endif %}
+                            </ul>
+                            <form action="{{ url_for('reply_profile_msg', message_id= message._id) }}" method="post"
+                                id="reply_rcvd_prof_msg{{ loop.index }}">
+                                <textarea name="reply" id="rcvd_reply{{ loop.index }}"></textarea><br>
+                                <button type="submit" class="btn btn-outline-primary btn-sm"><i class="fa fa-reply"
+                                        aria-hidden="true"></i></i></button>
+                            </form>
+                            {% if not loop.last %}
+                            <hr>
+                            {% endif %}
+                        </ul>
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-center">No messages yet</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- /End of Sent Profile Messages -->
+
+                <!-- Sent Profile Messages -->
+                <div id="snt_profile_msgs" class="tabcontent">
+                    <div class="container">
+                        <h4 class="border-bottom mb-2">Your Sent Profile Messages</h4>
+                        {% if snt_profile_msgs %}
+                        {% for message in snt_profile_msgs %}
+                        <p>Message ID: {{ message._id }}</p>
+                        <ul>
+                            <li>{{ message.date | datetimeformat }}, you wrote to {{ message.to_user }}: <br>
+                                {{ message.text }}
+                            </li>
+                            <form action="" method="post">
+                                <input class="form-control mt-2" type="hidden" name="Object_id"
+                                    value="{{ message._id }}">
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"
+                                        aria-hidden="true"></i></button>
+                            </form>
+                            <ul class="thread">Message Thread:
+                                {% if message.thread %}
+                                {% for reply in message.thread %}
+                                <li>
+                                    <ul class="thread">
+                                        <li>{{ reply.date | datetimeformat }}</li>
+                                        <li>
+                                            {{ reply.from }}: {{ reply.reply }}</li>
+                                    </ul>
+                                </li>
+                                {% endfor %}
+                                {% else %}
+                                <p>No replies on this message yet.</p>
+                                {% endif %}
+                            </ul>
+                            <form action="{{ url_for('reply_profile_msg', message_id=message._id) }}" method="post"
+                                id="reply_snt_prof_msg{{ loop.index }}">
+                                <textarea name="reply" id="snt_reply{{ loop.index }}"></textarea><br>
+                                <button type="submit" class="btn btn-outline-primary btn-sm"><i class="fa fa-reply"
+                                        aria-hidden="true"></i></i></button>
+                            </form>
+                            {% if not loop.last %}
+                            <hr>
+                            {% endif %}
+                        </ul>
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-center">You haven't sent any profile messages yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- /End of Sent Profile Messages -->
+                <!-- /End of Profile Messages -->
+                <!-- /END OF PROFILE TAB CONTENT -->
+
+                <!-- PROJECT TAB CONTENT -->
+                <!-- Projects  -->
+                <div id="projects" class="tabcontent">
+                    <div class="container">
+                        <h4 class="border-bottom mb-2">Your Projects</h4>
+                        {% if  projects %}
+                        {% for project in projects %}
+                        <div class="accordion">
+                            <div id="project-accordion" class="accordion-label"><span class="title">
+                                    {{ project.title }}</span><br>
+                                <span secondary-title>Post date:
+                                    {{ project.date.strftime('%d %B, %Y') }}</span>
+                            </div>
+                            <div class="accordion-content">
+                                <a href="{{ url_for('add_piece', project_id=project._id) }}" id="project-btn-piece"
+                                    type="button" class="btn btn-outline-info btn-sm mb-1">Add piece</a>
+                                <a href="{{ url_for('edit_project', project_id=project._id) }}"
+                                    id="project-btn-edit{{ loop.index }}" type="button"
+                                    class="btn btn-outline-primary btn-sm mb-1">Edit</a>
+                                <button class="btn btn-outline-danger btn-sm mb-1" type="button"
+                                    id="delete-project-modal{{ loop.index }}" data-toggle="modal"
+                                    data-target="#deleteProject">Delete
+                                </button>
+                                <!-- Modal to Delete Project -->
+                                <div class="modal fade" id="deleteProject{{ loop.index }}" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close"
+                                                    data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title" style="color:red;">WARNING</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>This process is immediate and cannot be undone. Are you sure?</p>
+                                                <!-- Button to confirm delete project -->
+                                                <form action="{{ url_for('delete_project', project_id=project._id) }}"
+                                                    method="post">
+                                                    <input id="delete-project-btn{{ loop.index }}"
+                                                        class="btn btn-outline-success btn-sm" type="submit"
+                                                        value="Confirm Delete">
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-danger btn-sm"
+                                                    data-dismiss="modal">Cancel</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div>
-                                <p><span class="field">Current Status: </span> {{ project.status }}</p>
-                            </div>
-                            <div>
-                                <p><span class="field">Project Deadline: </span>
-                                    {{ project.deadline.strftime('%d %B, %Y') }}</p>
-                            </div>
-                            <div>
-                                <span class="field">Project Description: </span>{{ project.brief|safe }}
-                            </div>
-                            <div>
-                                <p><span class="field"> Notes: </span>
-                                    {% if project.note %}
-                                    {{ project.note }}
-                                    {% else %}
-                                    No notes included with this project.
-                                    {% endif %}
-                                </p>
-                            </div>
-                            <div>
-                                <p><span class="field"> Project Files: </span>
-                                    {% if project.file_upload %}
-                                    {{ project.file_upload }}
-                                    {% else %}
-                                    No File uploads for this project.
-                                    {% endif %}
-                                </p>
-                            </div>
-                            <div>
-                                <p><span class="field"> Pieces for this project at a glance: </span></p>
-                                {% if project.pieces %}
-                                {% for piece in project.pieces%}
-                                <p><span class="field"> Task: </span>{{ piece.task | capitalize }}
-                                    </span>&emsp;<span class="field">Created:
-                                    </span>{{ piece.date | datetimeformat }}
-                                </p>
-                                {% endfor %}
-                                {% else %}
-                                <p>No pieces created yet for this project.</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                        {% if not loop.last %}
-                        <hr>
-                        {% endif %}
-                        {% endfor %}
-                        {% else %}
-                        <div class="col-sm-12 text-center">
-                            <p>All your project pieces will appear here when you create them.</p>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-                <!-- End of Projects -->
-            </div>
-
-
-            <!-- Project Messages -->
-            <!-- Received Project Messages -->
-            <div id="rcvd_project_msgs" class="tabcontent">
-                <div class="container">
-                    <h4 class="border-bottom mb-2">Your Received Project Messages</h4>
-                    {% if rcvd_project_msgs %}
-                    {% for message in rcvd_project_msgs %}
-                    <p>Message ID: {{ message._id }}</p>
-                    <ul>
-                        <li>{{ message.date | datetimeformat }}, {{ message.from_user }} wrote: <br>
-                            {{ message.text }}
-                        </li>
-                        <form action="{{ url_for('delete_project_msg', message_id= message._id) }}" method="post">
-                            <input class="form-control mt-2" type="hidden" name="message_id" value="{{ message._id }}">
-                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"
-                                    aria-hidden="true"></i></button>
-                        </form>
-                        <ul class="thread">Message Thread:
-                            {% if message.thread %}
-                            {% for reply in message.thread %}
-                            <li>
-                                <ul class="thread">
-                                    <li>{{ reply.date | datetimeformat }}</li>
-                                    <li>
-                                        {{ reply.from }}: {{ reply.reply }}</li>
-                                </ul>
-                            </li>
-                            {% endfor %}
-                            {% else %}
-                            <p>No replies on this message yet.</p>
-                            {% endif %}
-                        </ul>
-                        <form action="{{ url_for('reply_project_msg', message_id=message._id) }}" method="post"
-                            id="reply_rcvd_proj_msg{{ loop.index }}">
-                            <textarea name="reply" id="rcvd_proj_msg_reply{{ loop.index }}"></textarea><br>
-                            <button type="submit" class="btn btn-outline-primary btn-sm"><i class="fa fa-reply"
-                                    aria-hidden="true"></i></i></button>
-                        </form>
-                        {% if not loop.last %}
-                        <hr>
-                        {% endif %}
-                    </ul>
-                    {% endfor %}
-                    {% else %}
-                    <p class="text-center">No messages yet</p>
-                    {% endif %}
-                </div>
-            </div>
-            <!-- /End Received Project Messages -->
-
-
-            <!-- Sent Project Messages -->
-            <div id="snt_project_msgs" class="tabcontent">
-                <div class="container">
-                    <h4 class="border-bottom mb-2">Your Sent Project Messages</h4>
-                    {% if snt_project_msgs %}
-                    {% for message in snt_project_msgs %}
-                    <p>Message ID: {{ message._id }}</p>
-                    <ul>
-                        <li>{{ message.date | datetimeformat }}, you wrote to {{ message.to_user }}: <br>
-                            {{ message.text }}
-                        </li>
-                        <form action="{{ url_for('delete_project_msg', message_id=message._id) }}" method="post">
-                            <input class="form-control mt-2" type="hidden" name="message_id" value="{{ message._id }}">
-                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"
-                                    aria-hidden="true"></i></button>
-                        </form>
-                        <ul class="thread">Message Thread:
-                            {% if message.thread %}
-                            {% for reply in message.thread %}
-                            <li>
-                                <ul class="thread">
-                                    <li>{{ reply.date | datetimeformat }}</li>
-                                    <li>
-                                        {{ reply.from }}: {{ reply.reply }}</li>
-                                </ul>
-                            </li>
-                            {% endfor %}
-                            {% else %}
-                            <p>No replies on this message yet.</p>
-                            {% endif %}
-                        </ul>
-                        <form action="{{ url_for('reply_project_msg', message_id=message._id) }}" method="post"
-                            id="reply_snt_proj_msg{{ loop.index }}">
-                            <textarea name="reply" id="snt_proj_msg_reply{{ loop.index }}"></textarea><br>
-                            <button type="submit" class="btn btn-outline-primary btn-sm"><i class="fa fa-reply"
-                                    aria-hidden="true"></i></i></button>
-                        </form>
-                        {% if not loop.last %}
-                        <hr>
-                        {% endif %}
-                    </ul>
-                    {% endfor %}
-                    {% else %}
-                    <p class="text-center">You haven't sent any project messages yet.</p>
-                    {% endif %}
-                </div>
-            </div>
-            <!-- /End of Sent Project Messages -->
-            <!-- /End of Project Messages -->
-
-            <!-- PROJECT PIECES -->
-            <!-- Sent Pieces -->
-            <div id="snt_pieces" class="tabcontent">
-                <div class="container">
-                    <h4 class="border-bottom mb-2">Your Project Pieces</h4>
-                    {% if snt_pieces %}
-                    <!-- sent new not yet accepted -->
-                    <div class="text-center mt-3">
-                        <h5>New Pieces</h5>
-                        <p><small><em>Ready and waiting</em></small></p>
-                    </div>
-                    <hr>
-
-                    <div class="mb-2 border-bottom">
-                        {% for piece in snt_pieces if piece.status == 'pending acceptance' %} {# outer for loop #}
-                        <ul> {{ loop.index }}.
-                            <li>
-                                <p>You assigned this project piece to {{ piece.assignee }}, on
-                                    {{ piece.date.strftime('%d %B, %Y') }}.</p>
-                                <p><span class='field'>'{{ piece.project_title }}'</span></p>
-                                <p><span class='field'>Task name:</span> {{ piece.task }}</p>
-                                <p><span class="field">Due date:</span> {{ piece.due_date.strftime('%d %B, %Y') }}
-                                </p>
-                                <p><span class='field'>Task Brief: </span> <br>
-                                    You provided the following brief and information regarding your
-                                    expectations for this piece:<br>
-                                    {{ piece.description }}
-                                </p>
-                                {% if piece.comment %}
-                                <p><span class='field'>Personal Note: </span> <br>
-                                    {{ piece.comment }}
-                                </p>
-                                {% endif %}
-
-                                <div><small class="text-muted">
-                                        <i><a class="ml-2" href="#">Do you want to send a message to
-                                                {{ piece.assignee }}?</a></i>
-                                    </small></div>
-                                {% if not loop.last %}
-                                <hr>
-                                {% endif %}
-                            </li>
-                        </ul>
-                        {% else %}
-                        <p class="text-center">Nothing here. Get your next project ready for take-off!</p>
-                        {%- endfor %}
-                    </div>
-
-                    <!-- sent and accepted -->
-                    <div class=" text-center mt-3 mb-2">
-                        <h5>Accepted Pieces</h5>
-                        <p><small><em>Be happy in anticipation of what is coming!</em></small>
-                        </p>
-                    </div>
-                    <hr>
-
-                    <div class="mb-2 border-bottom">
-                        {% for piece in snt_pieces if piece.status == 'accepted' %}
-
-                        <ul>{{ loop.index }}.
-                            <li>
-                                <p>{{ piece.assignee }} has accepted this project piece assigned on
-                                    {{ piece.date.strftime('%d %B, %Y') }}</p>
-                                </p>
-                                <p><span class="field">'{{ piece.project_title }}'</span></p>
-                                <p><span class='field'>Due date:
-                                    </span>{{ piece.due_date.strftime('%d %B, %Y') }}
-                                </p>
-                                <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
-                                <p><span class='field'>Task Brief: </span>As a reminder, here is the brief and
-                                    information you provided:<br>
-                                    {{ piece.description }}</p>
-                                {% if piece.comment %}
-                                <p><span class='field'>Your Personal Note: </span> <br>
-                                    {{ piece.comment }}
-                                </p>
-                                {% endif %}
                                 <div>
-                                    <small class="text-muted">
-                                        <i><a class="ml-2" href="#">Do you want to send a message to
-                                                {{ piece.assignee }}?</a></i></small>
+                                    <p><span class="field">Current Status: </span> {{ project.status }}</p>
                                 </div>
-                                {% if not loop.last %}
-                                <hr>
-                                {% endif %}
-                            </li>
-                        </ul>
-                        {% else %}
-                        <p class="text-center">Currently, you don't have any accepted pieces, but it is what it is,
-                            you just have to accept it.</p>
-                        {%- endfor %}
-                    </div>
-
-
-                    <!-- sent submitted -->
-                    <div class="text-center mt-3 mb-2">
-                        <h5>Pieces submitted for approval</h5>
-                        <p><small><em>All good things must come to an end. If you are satisfied, change the status to
-                                    'closed' (click the tick) or revert the status to
-                                    'accepted' (click the cogs) and update the brief; a bumpy road can still be
-                                    travelled.</em></small>
-                        </p>
-                    </div>
-                    <hr>
-
-                    <div class="mb-2 border-bottom">
-                        {% for piece in snt_pieces if piece.status == 'submitted' %}
-                        <ul>{{ loop.index }}.
-                            <li>
-                                <p>{{ piece.assignee }} has submitted this project piece.</p>
-                                <p><span class="field">'{{ piece.project_title }}'</span></p>
-                                <p><span class='field'>Due date:
-                                    </span>{{ piece.due_date.strftime('%d %B, %Y') }}
-                                </p>
-                                <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
-                                {% if piece.submit_date %}
-                                <p><span class='field'>Submitted on:
-                                    </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
-                                {% endif %}
-                                <p><span class='field'>Task Brief: </span><br>
-                                    As a reminder, here is the brief and
-                                    information you provided:<br>
-                                    {{ piece.description }}</p>
-                                {% if piece.comment %}
-                                <p><span class='field'>Personal Note: </span> <br>
-                                    {{ piece.comment }}
-                                </p>
-                                {% endif %}
                                 <div>
-                                    {% if piece.file_uploads %}
-                                    <ul>
-                                        <span class='field'>Piece Uploads: </span>
-                                        {%  for file in piece.file_uploads %}
-                                        {% for key, value in file.items() %}
-                                        <li>
-                                            <p><span>{{ value }} &emsp;</span>
-                                                <a href="{{ url_for('get_piece_file', filename=file.filename) }}"
-                                                    id="get-piece-btn{{ loop.index }}" type="button"
-                                                    class="btn btn-outline-secondary btn-sm mb-1"><i
-                                                        class="fa fa-download" aria-hidden="true"></i></a></p>
-                                        </li>
-                                        {% endfor %}
-                                        {% endfor %}
-                                    </ul>
-                                    {% endif %}
+                                    <p><span class="field">Project Deadline: </span>
+                                        {{ project.deadline.strftime('%d %B, %Y') }}</p>
                                 </div>
-                                <a href="{{ url_for('edit_snt_piece', piece_id=piece._id) }}"
-                                    id="update-piece-btn{{ loop.index }}" type="button"
-                                    class="btn btn-outline-primary btn-sm mb-1">
-                                    <i class="fa fa-cogs" aria-hidden="true"></i>
-                                </a>
-                                <a href="{{ url_for('close_piece', piece_id=piece._id) }}"
-                                    id="close-piece-btn{{ loop.index }}" type="button"
-                                    class="btn btn-outline-success btn-sm mb-1"><i class="fa fa-check"
-                                        aria-hidden="true"></i></a>
-
-
-                                {% if not loop.last %}
-                                <hr>
-                                {% endif %}
-                            </li>
-                        </ul>
-                        {% else %}
-                        <p class="text-center">Nothing at the moment but details matter, it's worth waiting to get it
-                            right.</p>
-                        {%- endfor %}
-                    </div>
-
-
-                    <!-- sent closed -->
-                    <div class="text-center mt-3 mb-2">
-                        <h5>Completed Pieces </h5>
-                        <p><small><em>It's always the small pieces that make the big picture and feedback is the
-                                    breakfast of champions.</em></small></p>
-                    </div>
-                    <hr>
-
-                    <div class="mb-2 border-bottom">
-                        {% for piece in snt_pieces if piece.status == 'closed' %}
-                        <ul>{{ loop.index }}.
-                            <li>
-                                <p>You have accepted this piece from {{ piece.assignee }} that was assigned on
-                                    {{ piece.date.strftime('%d %B, %Y') }}</p>
-                                <p><span class="field">'{{ piece.project_title }}'</span></p>
-                                <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
-                                {% if piece.submit_date %}
-                                <p><span class='field'>Date Submitted:
-                                    </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
-                                {% endif %}
-                                <p><span class='field'>Task Brief: </span><br>
-                                    As a reminder, here is the brief and
-                                    information you provided:<br>
-                                    {{ piece.description }}</p>
-                                {% if piece.comment %}
-                                <p><span class='field'>Personal Note: </span> <br>
-                                    {{ piece.comment }}
-                                </p>
-                                {% endif %}
                                 <div>
-                                    <p>When you are ready, please hit the delete button to delete the project
-                                        piece. You can download the file again if necessary, first.</p>
-                                    <p><a href="{{ url_for('send_feedback', piece_id=piece._id) }}">Send
-                                            feedback to {{ piece.assignee }}
-                                            about their work on this piece.&emsp;<i class="fa fa-paper-plane-o"
-                                                aria-hidden="true"></i></a>
+                                    <span class="field">Project Description: </span>{{ project.brief|safe }}
+                                </div>
+                                <div>
+                                    <p><span class="field"> Notes: </span>
+                                        {% if project.note %}
+                                        {{ project.note }}
+                                        {% else %}
+                                        No notes included with this project.
+                                        {% endif %}
                                     </p>
                                 </div>
                                 <div>
-
-                                    {% if piece.file_uploads %}
-                                    <ul>
-                                        {%  for file in piece.file_uploads %}
-                                        {% for key, value in file.items() %}
-                                        <li>
-                                            <p>{{ value }} &emsp;
-                                                <a href="{{ url_for('get_piece_file', filename=file.filename) }}"
-                                                    id="get-piece-btn{{ loop.index }}" type="button"
-                                                    class="btn btn-outline-secondary btn-sm mb-1"><i
-                                                        class="fa fa-download" aria-hidden="true"></i></a>
-                                                <a href="{{ url_for('delete_piece', piece_id=piece._id, filename=file.filename) }}"
-                                                    id="close-piece-btn{{ loop.index }}" type="button"
-                                                    class="btn btn-danger btn-sm mb-1"><i class="fa fa-trash-o"
-                                                        aria-hidden="true"></i></a></p>
-                                        </li>
-
-                                        {% endfor %}
-                                        {% endfor %}
-                                    </ul>
+                                    <p><span class="field"> Project Files: </span>
+                                        {% if project.file_upload %}
+                                        {{ project.file_upload }}
+                                        {% else %}
+                                        No File uploads for this project.
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p><span class="field"> Pieces for this project at a glance: </span></p>
+                                    {% if project.pieces %}
+                                    {% for piece in project.pieces%}
+                                    <p><span class="field"> Task: </span>{{ piece.task | capitalize }}
+                                        </span>&emsp;<span class="field">Created:
+                                        </span>{{ piece.date | datetimeformat }}
+                                    </p>
+                                    {% endfor %}
+                                    {% else %}
+                                    <p>No pieces created yet for this project.</p>
                                     {% endif %}
                                 </div>
-                                {% if not loop.last %}
-                                <hr>
-                                {% endif %}
-                            </li>
-                        </ul>
-                        {% else %}
-                        <p class="text-center">Nothing at the moment but things are happening, little by little, day by
-                            day.</p>
-                        {% endfor %}
+                            </div>
+                            {% if not loop.last %}
+                            <hr>
+                            {% endif %}
+                            {% endfor %}
+                            {% else %}
+                            <div class="col-sm-12 text-center">
+                                <p>All your project pieces will appear here when you create them.</p>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
-                    {% else %}
-                    <div class="mb-2">
-                        <p class="text-center">A good idea becomes a great idea when it's shared; the fun is doubled,
-                            the challenge is halved! Post your projects so that collaborators looking for opportunities
-                            can see them. Direct messages will be saved in your Recieved Project Messages tab.</p>
-                    </div>
-                    {% endif %}
+                    <!-- End of Projects -->
                 </div>
-            </div>
+                <!-- /End of Projects  -->
 
-            <!-- /END OF SENT PIECES TAB-->
-
-
-            <!-- RECEIVED PIECES TAB -->
-            <div id="rcvd_pieces" class="tabcontent">
-                <div class="container">
-                    <h4 class="border-bottom mb-2">Your Project Pieces</h4>
-                    {% if rcvd_pieces %}
-                    <div class="text-center mb-3 border-bottom">
-                        <h5>Woohoo! You have project pieces!</h5>
-                    </div>
-
-                    <!-- received new not yet accepted -->
-
-                    <div class="text-center mt-3 mb-2">
-                        <h5>New Pieces</h5>
-                        <p><small><em>Strike while the iron is hot! Acceptance is an indicatation of commitment to
-                                    complete and
-                                    submit the piece by the due date; but you knew that, of course!</em></small></p>
-                    </div>
-                    <hr>
-                    <div class="mb-2 border-bottom">
-                        {% for piece in rcvd_pieces if piece.status == "pending acceptance" %}
-                        <ul>{{ loop.index }}.
-                            <li>
-                                <p>{{ piece.owner }} sent you this piece on {{ piece.date.strftime('%d %B, %Y') }}</p>
-                                <p><span class='field'>'{{ piece.project_title }}'</span></p>
-                                <p><span class='field'>Task Name:</span> {{ piece.task }}</p>
-                                <p><span class="field">Due date:</span> {{ piece.due_date.strftime('%d %B, %Y') }}</p>
-                                <p><span class='field'>Task Brief: </span> <br>
-                                    {{ piece.owner }} has provided the following brief and information regarding
-                                    their expectations for this piece: <br>
-                                    {{ piece.description }}
-                                </p>
-                                <a href="{{ url_for('accept_piece', piece_id=piece._id) }}"
-                                    id="accept-piece-btn{{ loop.index }}" type="button"
-                                    class="btn btn-outline-primary btn-sm mb-1"><i class="fa fa-check"
-                                        aria-hidden="true"></i></a>
-                                <div><small class="text-muted">
-                                        <i><a class="ml-2" href="">Ask {{ piece.owner }} a question?</a></i>
-                                    </small></div>
-                                {% if not loop.last %}
-                                <hr>
-                                {% endif %}
+                <!-- Project Messages -->
+                <!-- Received Project Messages -->
+                <div id="rcvd_project_msgs" class="tabcontent">
+                    <div class="container">
+                        <h4 class="border-bottom mb-2">Your Received Project Messages</h4>
+                        {% if rcvd_project_msgs %}
+                        {% for message in rcvd_project_msgs %}
+                        <p>Message ID: {{ message._id }}</p>
+                        <ul>
+                            <li>{{ message.date | datetimeformat }}, {{ message.from_user }} wrote: <br>
+                                {{ message.text }}
                             </li>
-                        </ul>
-                        {% else %}
-                        <p class="text-center">Currently, you don't have any pieces to accept. Come back soon to check!
-                        </p>
-                        {% endfor %}
-                    </div>
-
-                    <!-- received accepted -->
-                    <div class="text-center mt-3 mb-2">
-                        <h5>Accepted Pieces</h5>
-                        <p><small><em>Hit the submit button below, its the opposite of snooze!</em></small></p>
-                    </div>
-                    <hr>
-
-                    <div class="mb-2 border-bottom">
-                        {% for piece in rcvd_pieces if piece.status == 'accepted' %}
-                        <ul>{{ loop.index }}.
-                            <li>
-                                <p>You accepted this piece from {{ piece.owner }}.</p>
-                                <p><span class='field'>'{{ piece.project_title }}'</span></p>
-                                <p><span class='field'>Task Name:</span> {{ piece.task }}</p>
-                                <p><span class="field">Due date:</span> {{ piece.due_date.strftime('%d %B, %Y') }}
-                                </p>
-                                <p><span class='field'>Task Brief: </span> </p>
-                                <p>As a reminder, here is the brief and information provided for
-                                    the piece: <br>
-                                    {{ piece.description }}
-                                </p>
-
-                                <a href="{{ url_for('submit_piece', piece_id=piece._id) }}"
-                                    id="submit-piece-btn{{ loop.index }}" type="button"
-                                    class="btn btn-outline-primary btn-sm mb-1"><i class="fa fa-upload"
-                                        aria-hidden="true"></i>
-                                </a>
-                                <div><small class="text-muted">
-                                        <i><a class="ml-2" href="">Ask
-                                                {{ piece.owner }} a question about this piece?</a></i></small></div>
-                                {% if not loop.last %}
-                                <hr>
-                                {% endif %}
-                            </li>
-                        </ul>
-                        {% else %}
-                        <p class="text-center">Currently, you don't have any accepted pieces, but that's ok, keep
-                            searching for your next piece!</p>
-                        {% endfor %}
-                    </div>
-
-
-                    <!-- received and submitted -->
-                    <div class="text-center mt-3 mb-2">
-                        <h5>Pieces submitted for approval</h5>
-                        <p><small><em>Success doesn't happen overnight, keep an eye out for a status change.
-                                </em></small></p>
-                    </div>
-                    <hr>
-
-                    <div class="mb-2 border-bottom">
-                        {% for piece in rcvd_pieces if piece.status == 'submitted' %}
-                        <ul>{{ loop.index }}.
-                            <li>
-                                <p>You have submitted this piece to {{ piece.owner }} for approval.</p>
-                                <p><span class="field">'{{ piece.project_title }}'</span></p>
-                                <p><span class='field'>Due date:
-                                    </span>{{ piece.due_date.strftime('%d %B, %Y') }}
-                                </p>
-                                <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
-                                <p><span class='field'>Submitted on:
-                                    </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
-                                <p><span class='field'>Task Brief: </span><br>
-                                    As a reminder, here is the brief and
-                                    information that was provided:<br>
-                                    {{ piece.description }}</p>
-
-                                <div><small class="text-muted">
-                                        <i><a class="ml-2" href="">Do you have
-                                                a question for {{ piece.owner }} about
-                                                this piece?</a></i></small></div>
-                                {% if not loop.last %}
-                                <hr>
-                                {% endif %}
-                            </li>
-                        </ul>
-                        {% else %}
-                        <p class="text-center">Currently, you don't have any submitted pieces, but there are no
-                            shortcuts to any place worth going, so keep going!</p>
-                        {% endfor %}
-                    </div>
-
-
-                    <!-- received and closed -->
-                    <div class="text-center mt-3 mb-2">
-                        <h5>Completed Pieces </h5>
-                        <p><small><em>Oh Yeah! Can I get a whoop! whoop! over here, please?
-                                </em></small></p>
-                    </div>
-                    <hr>
-                    <div class="mb-2 border-bottom">
-                        {% for piece in rcvd_pieces if piece.status == 'closed' %} {# outer for loop #}
-                        <ul>{{ loop.index }}.
-                            <ul>
+                            <form action="{{ url_for('delete_project_msg', message_id= message._id) }}" method="post">
+                                <input class="form-control mt-2" type="hidden" name="message_id"
+                                    value="{{ message._id }}">
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"
+                                        aria-hidden="true"></i></button>
+                            </form>
+                            <ul class="thread">Message Thread:
+                                {% if message.thread %}
+                                {% for reply in message.thread %}
                                 <li>
-                                    <p>{{ piece.owner }} has accepted this piece!</p>
+                                    <ul class="thread">
+                                        <li>{{ reply.date | datetimeformat }}</li>
+                                        <li>
+                                            {{ reply.from }}: {{ reply.reply }}</li>
+                                    </ul>
+                                </li>
+                                {% endfor %}
+                                {% else %}
+                                <p>No replies on this message yet.</p>
+                                {% endif %}
+                            </ul>
+                            <form action="{{ url_for('reply_project_msg', message_id=message._id) }}" method="post"
+                                id="reply_rcvd_proj_msg{{ loop.index }}">
+                                <textarea name="reply" id="rcvd_proj_msg_reply{{ loop.index }}"></textarea><br>
+                                <button type="submit" class="btn btn-outline-primary btn-sm"><i class="fa fa-reply"
+                                        aria-hidden="true"></i></i></button>
+                            </form>
+                            {% if not loop.last %}
+                            <hr>
+                            {% endif %}
+                        </ul>
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-center">No messages yet</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- /End Received Project Messages -->
+
+                <!-- Sent Project Messages -->
+                <div id="snt_project_msgs" class="tabcontent">
+                    <div class="container">
+                        <h4 class="border-bottom mb-2">Your Sent Project Messages</h4>
+                        {% if snt_project_msgs %}
+                        {% for message in snt_project_msgs %}
+                        <p>Message ID: {{ message._id }}</p>
+                        <ul>
+                            <li>{{ message.date | datetimeformat }}, you wrote to {{ message.to_user }}: <br>
+                                {{ message.text }}
+                            </li>
+                            <form action="{{ url_for('delete_project_msg', message_id=message._id) }}" method="post">
+                                <input class="form-control mt-2" type="hidden" name="message_id"
+                                    value="{{ message._id }}">
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"
+                                        aria-hidden="true"></i></button>
+                            </form>
+                            <ul class="thread">Message Thread:
+                                {% if message.thread %}
+                                {% for reply in message.thread %}
+                                <li>
+                                    <ul class="thread">
+                                        <li>{{ reply.date | datetimeformat }}</li>
+                                        <li>
+                                            {{ reply.from }}: {{ reply.reply }}</li>
+                                    </ul>
+                                </li>
+                                {% endfor %}
+                                {% else %}
+                                <p>No replies on this message yet.</p>
+                                {% endif %}
+                            </ul>
+                            <form action="{{ url_for('reply_project_msg', message_id=message._id) }}" method="post"
+                                id="reply_snt_proj_msg{{ loop.index }}">
+                                <textarea name="reply" id="snt_proj_msg_reply{{ loop.index }}"></textarea><br>
+                                <button type="submit" class="btn btn-outline-primary btn-sm"><i class="fa fa-reply"
+                                        aria-hidden="true"></i></i></button>
+                            </form>
+                            {% if not loop.last %}
+                            <hr>
+                            {% endif %}
+                        </ul>
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-center">You haven't sent any project messages yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- /End of Sent Project Messages -->
+                <!-- /End of Project Messages -->
+
+                <!-- PROJECT PIECES -->
+                <!-- Sent Pieces -->
+                <div id="snt_pieces" class="tabcontent">
+                    <div class="container">
+                        <h4 class="border-bottom mb-2">Your Project Pieces</h4>
+                        {% if snt_pieces %}
+                        <!-- sent new not yet accepted -->
+                        <div class="text-center mt-3">
+                            <h5>New Pieces</h5>
+                            <p><small><em>Ready and waiting</em></small></p>
+                        </div>
+                        <hr>
+
+                        <div class="mb-2 border-bottom">
+                            {% for piece in snt_pieces if piece.status == 'pending acceptance' %}
+                            {# outer for loop #}
+                            <ul> {{ loop.index }}.
+                                <li>
+                                    <p>You assigned this project piece to {{ piece.assignee }}, on
+                                        {{ piece.date.strftime('%d %B, %Y') }}.</p>
+                                    <p><span class='field'>'{{ piece.project_title }}'</span></p>
+                                    <p><span class='field'>Task name:</span> {{ piece.task }}</p>
+                                    <p><span class="field">Due date:</span>
+                                        {{ piece.due_date.strftime('%d %B, %Y') }}
+                                    </p>
+                                    <p><span class='field'>Task Brief: </span> <br>
+                                        You provided the following brief and information regarding your
+                                        expectations for this piece:<br>
+                                        {{ piece.description }}
+                                    </p>
+                                    {% if piece.comment %}
+                                    <p><span class='field'>Personal Note: </span> <br>
+                                        {{ piece.comment }}
+                                    </p>
+                                    {% endif %}
+
+                                    <div><small class="text-muted">
+                                            <i><a class="ml-2" href="#">Do you want to send a message to
+                                                    {{ piece.assignee }}?</a></i>
+                                        </small></div>
+                                    {% if not loop.last %}
+                                    <hr>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            {% else %}
+                            <p class="text-center">Nothing here. Get your next project ready for take-off!</p>
+                            {%- endfor %}
+                        </div>
+
+                        <!-- sent and accepted -->
+                        <div class=" text-center mt-3 mb-2">
+                            <h5>Accepted Pieces</h5>
+                            <p><small><em>Be happy in anticipation of what is coming!</em></small>
+                            </p>
+                        </div>
+                        <hr>
+
+                        <div class="mb-2 border-bottom">
+                            {% for piece in snt_pieces if piece.status == 'accepted' %}
+
+                            <ul>{{ loop.index }}.
+                                <li>
+                                    <p>{{ piece.assignee }} has accepted this project piece assigned on
+                                        {{ piece.date.strftime('%d %B, %Y') }}</p>
+                                    </p>
                                     <p><span class="field">'{{ piece.project_title }}'</span></p>
-                                    <p><span class='field'>Task name: </span>{{ piece.task }}</p>
-                                    <p><span class='field'>Submitted:
+                                    <p><span class='field'>Due date:
+                                        </span>{{ piece.due_date.strftime('%d %B, %Y') }}
+                                    </p>
+                                    <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
+                                    <p><span class='field'>Task Brief: </span>As a reminder, here is the brief and
+                                        information you provided:<br>
+                                        {{ piece.description }}</p>
+                                    {% if piece.comment %}
+                                    <p><span class='field'>Your Personal Note: </span> <br>
+                                        {{ piece.comment }}
+                                    </p>
+                                    {% endif %}
+                                    <div>
+                                        <small class="text-muted">
+                                            <i><a class="ml-2" href="#">Do you want to send a message to
+                                                    {{ piece.assignee }}?</a></i></small>
+                                    </div>
+                                    {% if not loop.last %}
+                                    <hr>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            {% else %}
+                            <p class="text-center">Currently, you don't have any accepted pieces, but it is what it
+                                is,
+                                you just have to accept it.</p>
+                            {%- endfor %}
+                        </div>
+
+
+                        <!-- sent submitted -->
+                        <div class="text-center mt-3 mb-2">
+                            <h5>Pieces submitted for approval</h5>
+                            <p><small><em>All good things must come to an end. If you are satisfied, change the
+                                        status to
+                                        'closed' (click the tick) or revert the status to
+                                        'accepted' (click the cogs) and update the brief; a bumpy road can still be
+                                        travelled.</em></small>
+                            </p>
+                        </div>
+                        <hr>
+
+                        <div class="mb-2 border-bottom">
+                            {% for piece in snt_pieces if piece.status == 'submitted' %}
+                            <ul>{{ loop.index }}.
+                                <li>
+                                    <p>{{ piece.assignee }} has submitted this project piece.</p>
+                                    <p><span class="field">'{{ piece.project_title }}'</span></p>
+                                    <p><span class='field'>Due date:
+                                        </span>{{ piece.due_date.strftime('%d %B, %Y') }}
+                                    </p>
+                                    <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
+                                    {% if piece.submit_date %}
+                                    <p><span class='field'>Submitted on:
+                                        </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
+                                    {% endif %}
+                                    <p><span class='field'>Task Brief: </span><br>
+                                        As a reminder, here is the brief and
+                                        information you provided:<br>
+                                        {{ piece.description }}</p>
+                                    {% if piece.comment %}
+                                    <p><span class='field'>Personal Note: </span> <br>
+                                        {{ piece.comment }}
+                                    </p>
+                                    {% endif %}
+                                    <div>
+                                        {% if piece.file_uploads %}
+                                        <ul>
+                                            <span class='field'>Piece Uploads: </span>
+                                            {%  for file in piece.file_uploads %}
+                                            {% for key, value in file.items() %}
+                                            <li>
+                                                <p><span>{{ value }} &emsp;</span>
+                                                    <a href="{{ url_for('get_piece_file', filename=file.filename) }}"
+                                                        id="get-piece-btn{{ loop.index }}" type="button"
+                                                        class="btn btn-outline-secondary btn-sm mb-1"><i
+                                                            class="fa fa-download" aria-hidden="true"></i></a></p>
+                                            </li>
+                                            {% endfor %}
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{{ url_for('edit_snt_piece', piece_id=piece._id) }}"
+                                        id="update-piece-btn{{ loop.index }}" type="button"
+                                        class="btn btn-outline-primary btn-sm mb-1">
+                                        <i class="fa fa-cogs" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="{{ url_for('close_piece', piece_id=piece._id) }}"
+                                        id="close-piece-btn{{ loop.index }}" type="button"
+                                        class="btn btn-outline-success btn-sm mb-1"><i class="fa fa-check"
+                                            aria-hidden="true"></i></a>
+
+
+                                    {% if not loop.last %}
+                                    <hr>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            {% else %}
+                            <p class="text-center">Nothing at the moment but details matter, it's worth waiting to
+                                get it
+                                right.</p>
+                            {%- endfor %}
+                        </div>
+
+
+                        <!-- sent closed -->
+                        <div class="text-center mt-3 mb-2">
+                            <h5>Completed Pieces </h5>
+                            <p><small><em>It's always the small pieces that make the big picture and feedback is the
+                                        breakfast of champions.</em></small></p>
+                        </div>
+                        <hr>
+
+                        <div class="mb-2 border-bottom">
+                            {% for piece in snt_pieces if piece.status == 'closed' %}
+                            <ul>{{ loop.index }}.
+                                <li>
+                                    <p>You have accepted this piece from {{ piece.assignee }} that was assigned on
+                                        {{ piece.date.strftime('%d %B, %Y') }}</p>
+                                    <p><span class="field">'{{ piece.project_title }}'</span></p>
+                                    <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
+                                    {% if piece.submit_date %}
+                                    <p><span class='field'>Date Submitted:
+                                        </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
+                                    {% endif %}
+                                    <p><span class='field'>Task Brief: </span><br>
+                                        As a reminder, here is the brief and
+                                        information you provided:<br>
+                                        {{ piece.description }}</p>
+                                    {% if piece.comment %}
+                                    <p><span class='field'>Personal Note: </span> <br>
+                                        {{ piece.comment }}
+                                    </p>
+                                    {% endif %}
+                                    <div>
+                                        <p>When you are ready, please hit the delete button to delete the project
+                                            piece. You can download the file again if necessary, first.</p>
+                                        <p><a href="{{ url_for('send_feedback', piece_id=piece._id) }}">Send
+                                                feedback to {{ piece.assignee }}
+                                                about their work on this piece.&emsp;<i class="fa fa-paper-plane-o"
+                                                    aria-hidden="true"></i></a>
+                                        </p>
+                                    </div>
+                                    <div>
+
+                                        {% if piece.file_uploads %}
+                                        <ul>
+                                            {%  for file in piece.file_uploads %}
+                                            {% for key, value in file.items() %}
+                                            <li>
+                                                <p>{{ value }} &emsp;
+                                                    <a href="{{ url_for('get_piece_file', filename=file.filename) }}"
+                                                        id="get-piece-btn{{ loop.index }}" type="button"
+                                                        class="btn btn-outline-secondary btn-sm mb-1"><i
+                                                            class="fa fa-download" aria-hidden="true"></i></a>
+                                                    <a href="{{ url_for('delete_piece', piece_id=piece._id, filename=file.filename) }}"
+                                                        id="close-piece-btn{{ loop.index }}" type="button"
+                                                        class="btn btn-danger btn-sm mb-1"><i class="fa fa-trash-o"
+                                                            aria-hidden="true"></i></a></p>
+                                            </li>
+
+                                            {% endfor %}
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                    </div>
+                                    {% if not loop.last %}
+                                    <hr>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            {% else %}
+                            <p class="text-center">Nothing at the moment but things are happening, little by little,
+                                day by
+                                day.</p>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="mb-2">
+                            <p class="text-center">A good idea becomes a great idea when it's shared; the fun is
+                                doubled,
+                                the challenge is halved! Post your projects so that collaborators looking for
+                                opportunities
+                                can see them. Direct messages will be saved in your Recieved Project Messages tab.
+                            </p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- /End of Sent Pieces -->
+
+                <!-- Received Pieces -->
+                <div id="rcvd_pieces" class="tabcontent">
+                    <div class="container">
+                        <h4 class="border-bottom mb-2">Your Project Pieces</h4>
+                        {% if rcvd_pieces %}
+                        <div class="text-center mb-3 border-bottom">
+                            <h5>Woohoo! You have project pieces!</h5>
+                        </div>
+
+                        <!-- received new not yet accepted -->
+
+                        <div class="text-center mt-3 mb-2">
+                            <h5>New Pieces</h5>
+                            <p><small><em>Strike while the iron is hot! Acceptance is an indicatation of commitment
+                                        to
+                                        complete and
+                                        submit the piece by the due date; but you knew that, of course!</em></small>
+                            </p>
+                        </div>
+                        <hr>
+                        <div class="mb-2 border-bottom">
+                            {% for piece in rcvd_pieces if piece.status == "pending acceptance" %}
+                            <ul>{{ loop.index }}.
+                                <li>
+                                    <p>{{ piece.owner }} sent you this piece on
+                                        {{ piece.date.strftime('%d %B, %Y') }}</p>
+                                    <p><span class='field'>'{{ piece.project_title }}'</span></p>
+                                    <p><span class='field'>Task Name:</span> {{ piece.task }}</p>
+                                    <p><span class="field">Due date:</span>
+                                        {{ piece.due_date.strftime('%d %B, %Y') }}</p>
+                                    <p><span class='field'>Task Brief: </span> <br>
+                                        {{ piece.owner }} has provided the following brief and information regarding
+                                        their expectations for this piece: <br>
+                                        {{ piece.description }}
+                                    </p>
+                                    <a href="{{ url_for('accept_piece', piece_id=piece._id) }}"
+                                        id="accept-piece-btn{{ loop.index }}" type="button"
+                                        class="btn btn-outline-primary btn-sm mb-1"><i class="fa fa-check"
+                                            aria-hidden="true"></i></a>
+                                    <div><small class="text-muted">
+                                            <i><a class="ml-2" href="">Ask {{ piece.owner }} a question?</a></i>
+                                        </small></div>
+                                    {% if not loop.last %}
+                                    <hr>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            {% else %}
+                            <p class="text-center">Currently, you don't have any pieces to accept. Come back soon to
+                                check!
+                            </p>
+                            {% endfor %}
+                        </div>
+
+                        <!-- received accepted -->
+                        <div class="text-center mt-3 mb-2">
+                            <h5>Accepted Pieces</h5>
+                            <p><small><em>Hit the submit button below, its the opposite of snooze!</em></small></p>
+                        </div>
+                        <hr>
+
+                        <div class="mb-2 border-bottom">
+                            {% for piece in rcvd_pieces if piece.status == 'accepted' %}
+                            <ul>{{ loop.index }}.
+                                <li>
+                                    <p>You accepted this piece from {{ piece.owner }}.</p>
+                                    <p><span class='field'>'{{ piece.project_title }}'</span></p>
+                                    <p><span class='field'>Task Name:</span> {{ piece.task }}</p>
+                                    <p><span class="field">Due date:</span>
+                                        {{ piece.due_date.strftime('%d %B, %Y') }}
+                                    </p>
+                                    <p><span class='field'>Task Brief: </span> </p>
+                                    <p>As a reminder, here is the brief and information provided for
+                                        the piece: <br>
+                                        {{ piece.description }}
+                                    </p>
+
+                                    <a href="{{ url_for('submit_piece', piece_id=piece._id) }}"
+                                        id="submit-piece-btn{{ loop.index }}" type="button"
+                                        class="btn btn-outline-primary btn-sm mb-1"><i class="fa fa-upload"
+                                            aria-hidden="true"></i>
+                                    </a>
+                                    <div><small class="text-muted">
+                                            <i><a class="ml-2" href="">Ask
+                                                    {{ piece.owner }} a question about this piece?</a></i></small>
+                                    </div>
+                                    {% if not loop.last %}
+                                    <hr>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            {% else %}
+                            <p class="text-center">Currently, you don't have any accepted pieces, but that's ok,
+                                keep
+                                searching for your next piece!</p>
+                            {% endfor %}
+                        </div>
+
+
+                        <!-- received and submitted -->
+                        <div class="text-center mt-3 mb-2">
+                            <h5>Pieces submitted for approval</h5>
+                            <p><small><em>Success doesn't happen overnight, keep an eye out for a status change.
+                                    </em></small></p>
+                        </div>
+                        <hr>
+
+                        <div class="mb-2 border-bottom">
+                            {% for piece in rcvd_pieces if piece.status == 'submitted' %}
+                            <ul>{{ loop.index }}.
+                                <li>
+                                    <p>You have submitted this piece to {{ piece.owner }} for approval.</p>
+                                    <p><span class="field">'{{ piece.project_title }}'</span></p>
+                                    <p><span class='field'>Due date:
+                                        </span>{{ piece.due_date.strftime('%d %B, %Y') }}
+                                    </p>
+                                    <p><span class='field'>Task Name: </span>{{ piece.task }}</p>
+                                    <p><span class='field'>Submitted on:
                                         </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
                                     <p><span class='field'>Task Brief: </span><br>
                                         As a reminder, here is the brief and
@@ -989,32 +990,74 @@
                                         {{ piece.description }}</p>
 
                                     <div><small class="text-muted">
-                                            <i><a class="ml-2" href="">You can ask
-                                                    for feedback on your work
-                                                    here.</a></i></small></div>
+                                            <i><a class="ml-2" href="">Do you have
+                                                    a question for {{ piece.owner }} about
+                                                    this piece?</a></i></small></div>
                                     {% if not loop.last %}
                                     <hr>
                                     {% endif %}
                                 </li>
                             </ul>
                             {% else %}
-                            <p class="text-center">Nothing at the moment...keep going, keep growing!</p>
+                            <p class="text-center">Currently, you don't have any submitted pieces, but there are no
+                                shortcuts to any place worth going, so keep going!</p>
                             {% endfor %}
-                    </div>
+                        </div>
 
-                    {% else %}
-                    <div class="text-center">
-                        <p class="text-center">Only those who will risk going too far can possibly find out how far one
-                            can go. Hit the project message button and start your journey - onwards and upwards.</p>
+
+                        <!-- received and closed -->
+                        <div class="text-center mt-3 mb-2">
+                            <h5>Completed Pieces </h5>
+                            <p><small><em>Oh Yeah! Can I get a whoop! whoop! over here, please?
+                                    </em></small></p>
+                        </div>
+                        <hr>
+                        <div class="mb-2 border-bottom">
+                            {% for piece in rcvd_pieces if piece.status == 'closed' %} {# outer for loop #}
+                            <ul>{{ loop.index }}.
+                                <ul>
+                                    <li>
+                                        <p>{{ piece.owner }} has accepted this piece!</p>
+                                        <p><span class="field">'{{ piece.project_title }}'</span></p>
+                                        <p><span class='field'>Task name: </span>{{ piece.task }}</p>
+                                        <p><span class='field'>Submitted:
+                                            </span>{{ piece.submit_date.strftime('%d %B, %Y') }}</p>
+                                        <p><span class='field'>Task Brief: </span><br>
+                                            As a reminder, here is the brief and
+                                            information that was provided:<br>
+                                            {{ piece.description }}</p>
+
+                                        <div><small class="text-muted">
+                                                <i><a class="ml-2" href="">You can ask
+                                                        for feedback on your work
+                                                        here.</a></i></small></div>
+                                        {% if not loop.last %}
+                                        <hr>
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                                {% else %}
+                                <p class="text-center">Nothing at the moment...keep going, keep growing!</p>
+                                {% endfor %}
+                        </div>
+
+                        {% else %}
+                        <div class="text-center">
+                            <p class="text-center">Only those who will risk going too far can possibly find out how
+                                far one
+                                can go. Hit the project message button and start your journey - onwards and upwards.
+                            </p>
+                        </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
                 </div>
+                <!-- /End of Received Pieces -->
+                <!-- /END OF PROJECT PIECES -->
+
+                <!-- /END OF PROJECT TAB CONTENT -->
+
+                <!-- /END TAB CONTENT -->
             </div>
-            <!-- /End of Received Pieces -->
-            <!-- /END OF PIECES -->
-            <!-- /END OF PROJECT TAB CONTENT -->
-            <!-- /END TAB CONTENT -->
-        </div>
     </section>
     <div class="bottom"></div>
 </div>

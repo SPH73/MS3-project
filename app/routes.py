@@ -12,13 +12,13 @@ from config import S3_BUCKET, S3_KEY, S3_SECRET
 
 s3 = boto3.resource('s3')
 
-@app.route('/files')
-def files():
-    s3_resource = boto3.resource('s3')
-    bucket = s3_resource.Bucket(S3_BUCKET)
-    summaries = bucket.objects.all()
+# @app.route('/files')
+# def files():
+#     s3_resource = boto3.resource('s3')
+#     bucket = s3_resource.Bucket(S3_BUCKET)
+#     summaries = bucket.objects.all()
     
-    return render_template('pages/files.html', title='Codeflow S3 Object List', bucket=bucket, files=summaries)
+#     return render_template('pages/files.html', title='Codeflow S3 Object List', bucket=bucket, files=summaries)
 
 
 @app.route('/')
@@ -793,52 +793,50 @@ def update_snt_piece(piece_id):
     flash('You need to be logged in to update your pieces.', 'info')
     return redirect(url_for('login'))
 
-@app.route('/send_feedback/<piece_id>', methods=['GET', 'POST'])
-def send_feedback(piece_id):
-    """Adds a feedback field to a users profile document when the form is sent by a project owner from the snt_pieces > Completed Pieces tab
+@app.route('/send_feedback')
+def send_feedback():
+    """Renders the feedback form when users click on the feedback link on the dashboard sent pieces > completed pieces tab.
+    """
+    form = FeedbackForm()
+   
+    
+    return render_template('pages/feedback.html', form=form, title='Feedback', legend='Send feedback')
+
+@app.route('/insert_feedback/<piece_id>', methods=['POST'])
+def insert_feedback(piece_id):
+    """
+    """
+        
+    if 'username'in session:
+        
+                 
+        flash('Your feedback has been sent!', 'success')
+        return redirect(url_for('dashboard'))
+            
+    flash('You need to be logged in to post any content.', 'info')
+    return redirect(url_for('login'))
+    
+    
+@app.route('/get_feedback_file/<filename>', methods=['GET','POST'])
+def get_feedback_file(filename):
+    """Uses the filename to find the feedback file and download it as an attachment from the s3 bucket.
     """
     
-    if 'username' in session:
-        form = FeedbackForm()
-        piece = mongo.db.prpject_pieces.find_one_or_404({'_id': ObjectId(piece_id)})
+    if 'username'in session:
+                
+        s3_resource = boto3.resource('s3')
+        bucket = s3_resource.Bucket(S3_BUCKET)
         
-        return render_template('pages/feedback.html', form=form, piece=piece, legend='Send feedback')
-    
-    flash('You need to login first.', 'info')
+        file_obj = bucket.Object(filename).get()
+        
+        return Response(file_obj['Body'].read(),
+                        mimetype='text/plain',
+                        headers={'Content-Disposition': f'attachment;filename={filename}'}
+        )
+            
+    flash('You need to be logged in to download files.', 'info')
     return redirect(url_for('login'))
 
-
-@app.route('/post_feedback/<piece_id>', methods=['GET', 'POST'])
-def post_feedback(piece_id):
-    """Adds a feedback field to a users profile document when the form is sent by a project owner from the snt_pieces > Completed Pieces tab
-    """
-    
-    if 'username' in session:
-        form = FeedbackForm()
-        piece = mongo.db.prpject_pieces.find_one_or_404({'_id': ObjectId(piece_id)})
-        
-        if request.method == 'POST' and form.validate_on_submit():
-           
-            mongo.db.user.find_one_or_404({'username': session['username']})
-            mongo.db.profiles.find_one_and_update({'username': piece['assignee']},
-                                                  {'$push':
-                                                      {'feedback':
-                                                          {'from': session['username'],
-                                                           'project': piece['project_title'],
-                                                           'piece': piece['task'],
-                                                           'date': datetime.utcnow(),
-                                                           'feedback': request.form.get('feedback'),
-                                                           'file': request.form.get('upload')
-                                                 }
-                                            }
-                                        })
-            flash('Your feedback has been sent!', 'success')
-            return redirect(url_for('dashboard'))
-        
-        return render_template('pages/feedback.html', form=form, piece=piece, legend='Send feedback')
-    
-    flash('You need to login first.', 'info')
-    return redirect(url_for('login'))
 
 # PROFILE VIEWS
 

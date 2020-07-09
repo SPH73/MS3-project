@@ -27,8 +27,8 @@
         {% endfor %}
     </div>
     {% else %}
-    {{ file_field_name(class="form-control-file", **kwargs)|safe }}
     {{ file_field_name.label(class="form-control-label") }}
+    {{ file_field_name(class="form-control-file", **kwargs)|safe }}
     {% endif %}
 </div>
 
@@ -46,11 +46,8 @@
         {% endfor %}
     </div>
     {{ select_field_name(class="form-control form-control-lg", **kwargs)|safe }}
-
     {% else %}
-
     {{ select_field_name(class="form-control form-control-lg", **kwargs)|safe }}
-
     {% endif %}
 </div>
 

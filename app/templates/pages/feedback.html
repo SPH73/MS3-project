@@ -1,0 +1,28 @@
+{% extends 'layout/base.html' %}
+
+{% from 'pages/_formhelpers.html' import render_field %}
+{% from 'pages/_formhelpers.html' import render_file_field %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <section class="section-content">
+        <legend class="text-center legend-border mb-4">{{ legend }}</legend>
+        <div class="mt-2">
+            <form action="" method="POST" enctype="multipart/form-data" accept=".pdf" id="feedback-form" novalidate>
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    {{ render_field(form.feedback, autofocus=true) }}
+                </fieldset>
+                <fieldset class="form-group">
+                    {{ render_file_field(form.upload) }}
+                </fieldset>
+                <div class="form-group">
+                    {{ form.recaptcha }}
+                    {{ form.submit(class="btn btn-outline-primary btn-sm mt-2") }}
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+{% endblock content %}

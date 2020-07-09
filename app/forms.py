@@ -48,9 +48,6 @@ class AccountImageForm(FlaskForm):
     recaptcha = RecaptchaField()
     submit = SubmitField('Upload') 
 
-class CommentForm(FlaskForm):
-    comment = StringField('Comment')
- 
 class BlogForm(FlaskForm):
     title = StringField('Title *', validators=[DataRequired()])
     content = CKEditorField('Content *', validators=[DataRequired()])
@@ -60,8 +57,7 @@ class UploadForm(FlaskForm):
     piece_files = MultipleFileField('Select files to upload', validators=[FileAllowed(['txt']), FileRequired()])
     recaptcha = RecaptchaField()
     submit = SubmitField('Upload') 
-    
-    
+
 class PieceForm(FlaskForm):
     task = StringField('Task name *',validators=[DataRequired()])
     description = TextAreaField('Describe the task and expectations *', validators=[DataRequired()])
