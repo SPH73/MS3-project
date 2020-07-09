@@ -48,11 +48,17 @@ main {
 }
 
 /* Typography */
+.suggest-text {
+  font-size: 1.1em;
+  font-weight: 300;
+  color: #11a1a8;
+}
+
 .secondary-title {
   color: #0a3235;
   font-weight: 300;
   margin-bottom: 0;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 }
 
 h5,
@@ -102,8 +108,6 @@ blockquote>p::after {
   outline-color: black;
 }
 
-
-
 legend {
   font-size: 1.2rem;
   padding: 0.5rem;
@@ -143,6 +147,10 @@ li {
 li:hover>a {
   cursor: pointer;
   color: #5d5d5c;
+}
+
+.thread>li {
+  margin-left: 0.5em;
 }
 
 .comments {
@@ -470,6 +478,7 @@ button:focus {
   background-color: #352721;
   background: url('../images/hero.jpg') no-repeat;
   background-size: cover;
+  background-position: center;
   display: flex;
   flex-direction: column;
   background-attachment: fixed;
