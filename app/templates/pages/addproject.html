@@ -7,6 +7,13 @@
 <div class="container mt-3">
     <section class="section-content">
         <legend class="text-center legend-border mb-4">{{ legend }}</legend>
+        <div class="text-center">
+            <p class="suggest-text">“Good business leaders create a vision, articulate the vision, passionately own the
+                vision, and relentlessly drive it to completion.” – Jack Welch
+            </p>
+            <p>The more succinctly but vividly an idea or vision is expressed, the more vested in the outcome all
+                parties will be.</p>
+        </div>
         <form action="{{ url_for('add_project') }}" method="post" novalidate>
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
