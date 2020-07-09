@@ -99,6 +99,7 @@
             <!-- ARTICLE TAB CONTENT -->
             <div id="articles" class="tabcontent show active">
                 <div class="container">
+                    <h4 class="border-bottom mb-2">Your Blog Articles</h4>
                     {% if articles %}
                     <div class="accordion">
                         {% for article in articles %}
@@ -201,6 +202,7 @@
             <!-- Profile  -->
             <div id="profile" class="tabcontent">
                 <div class="container">
+                    <h4 class="border-bottom mb-2">Your Profile</h4>
                     {% if profile %}
                     <div class="row">
                         <div class="col-12 text-center mt-2">
@@ -277,9 +279,8 @@
             <!-- Received Profile Messages -->
             <div id="rcvd_profile_msgs" class="tabcontent">
                 <div class="container">
+                    <h4 class="border-bottom mb-2">Your Sent Profile Messages</h4>
                     {% if rcvd_profile_msgs %}
-                    <h5>Received Profile Messages</h5>
-                    <hr>
                     {% for message in rcvd_profile_msgs %}
                     <p>Message ID: {{ message._id }}</p>
                     <ul>
@@ -325,9 +326,8 @@
             <!-- Sent Profile Messages -->
             <div id="snt_profile_msgs" class="tabcontent">
                 <div class="container">
+                    <h4 class="border-bottom mb-2">Your Sent Profile Messages</h4>
                     {% if snt_profile_msgs %}
-                    <h5>Sent Profile Messages</h5>
-                    <hr>
                     {% for message in snt_profile_msgs %}
                     <p>Message ID: {{ message._id }}</p>
                     <ul>
@@ -378,6 +378,7 @@
             <!-- Projects  -->
             <div id="projects" class="tabcontent">
                 <div class="container">
+                    <h4 class="border-bottom mb-2">Your Projects</h4>
                     {% if  projects %}
                     {% for project in projects %}
                     <div class="accordion">
@@ -483,9 +484,8 @@
             <!-- Received Project Messages -->
             <div id="rcvd_project_msgs" class="tabcontent">
                 <div class="container">
+                    <h4 class="border-bottom mb-2">Your Received Project Messages</h4>
                     {% if rcvd_project_msgs %}
-                    <h5>Received Project Messages</h5>
-                    <hr>
                     {% for message in rcvd_project_msgs %}
                     <p>Message ID: {{ message._id }}</p>
                     <ul>
@@ -534,9 +534,8 @@
             <!-- Sent Project Messages -->
             <div id="snt_project_msgs" class="tabcontent">
                 <div class="container">
+                    <h4 class="border-bottom mb-2">Your Sent Project Messages</h4>
                     {% if snt_project_msgs %}
-                    <h5>Sent Project Messages</h5>
-                    <hr>
                     {% for message in snt_project_msgs %}
                     <p>Message ID: {{ message._id }}</p>
                     <ul>
@@ -585,10 +584,9 @@
             <!-- PROJECT PIECES -->
             <!-- Sent Pieces -->
             <div id="snt_pieces" class="tabcontent">
-                <div class="container mt-2">
-                    {% if snt_pieces %}{# outer if else collection not empty check #}
-                    <h5 class="text-center mb-2">Your current project pieces with collaborators</h5>
-
+                <div class="container">
+                    <h4 class="border-bottom mb-2">Your Project Pieces</h4>
+                    {% if snt_pieces %}
                     <!-- sent new not yet accepted -->
                     <div class="text-center mt-3">
                         <h5>New Pieces</h5>
@@ -825,8 +823,8 @@
                     </div>
                     {% else %}
                     <div class="mb-2">
-                        <p class="text-center">A good idea becomes a great idea when it's shared; the fun is doubled
-                            the challenge is halved. Post your projects so that collaborators looking for opportunities
+                        <p class="text-center">A good idea becomes a great idea when it's shared; the fun is doubled,
+                            the challenge is halved! Post your projects so that collaborators looking for opportunities
                             can see them. Direct messages will be saved in your Recieved Project Messages tab.</p>
                     </div>
                     {% endif %}
@@ -839,6 +837,7 @@
             <!-- RECEIVED PIECES TAB -->
             <div id="rcvd_pieces" class="tabcontent">
                 <div class="container">
+                    <h4 class="border-bottom mb-2">Your Project Pieces</h4>
                     {% if rcvd_pieces %}
                     <div class="text-center mb-3 border-bottom">
                         <h5>Woohoo! You have project pieces!</h5>
