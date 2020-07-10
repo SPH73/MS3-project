@@ -1,2 +1,0 @@
-
-db.createCollection( 'category', {validator: {$jsonSchema: {bsonType: 'object',required: [         'category_id',          'post_category'],properties: {category_id: {bsonType: 'int'},post_category: {bsonType: 'string'}}         }      }});  

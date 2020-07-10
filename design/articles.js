@@ -1,2 +1,0 @@
-
-db.createCollection( 'articles', {validator: {$jsonSchema: {bsonType: 'object',required: [         'username',          'title',          'content',          'post_date',          'user',          'category'],properties: {author: {bsonType: 'string'},username: {bsonType: 'string'},title: {bsonType: 'string'},content: {bsonType: 'string'},post_date: {bsonType: 'date'},user: {bsonType: 'objectId'},category: {bsonType: 'objectId'}}         }      }});  
