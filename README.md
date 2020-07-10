@@ -215,7 +215,10 @@ Colour palette from the ![hero image using colormind](design/bridge-colour-palet
 
 I entered all the colour codes generated from the above into Adobe Color CC and used the 'color wheel' tab to find complementary colours and based my choices on my findings but not on the actual colour themes that were generated.
 
-The ![logo](design/codeflow-tq-gears-buttons.png "Title") I created with Adobe Illustrator as well as the ![default user profile image](static/images/gear-avatar.png "Title") and home page feature card icons.
+I used Adobe Illustrator to create the Logo, default user image, and feature card icons for the home page.
+![logo](design/codeflow-tq-gears-buttons.png "Title")  
+![default user profile image](../images/gear-avatar.png "Title")
+![Feaature Card Blog icon](../images/cf-icon-blog.svg "Title")
 
 ## Features
 
