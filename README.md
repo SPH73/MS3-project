@@ -178,9 +178,10 @@ The Database Schema was the first task I started upon for the project which took
 
 As I was a implementing RWD methodology, I only created mockups for Desktop as, with the Bootstrap framework, a lot of the responsiveness is taken care of already. I decided during the development process how to structure elements for what I felt was the most optimal user view and experience across all screen sizes with the minimum of changes necessary. I based this decision on that fact that I believe that this application would be predominently accessed on a Desktop, when considering the User Types.
 
-![logged-in](design/codeflow-mockups/Dashboard-view.png "Title")  
-![logged-out](design/codeflow-mockups/Logged-out-view.png "Title")  
 ![Dashboard](design/codeflow-mockups/Dashboard-view.png "Title")
+![Logged In View](design/codeflow-mockups-logged-in-view.png "Title")
+
+(Unable to display other mockups as they have been deleted accidentally)
 
 ### Database Design
 
@@ -206,19 +207,21 @@ Collections list
 
 The colour scheme was derived from colours taken from the landing page image. I used a combination of [colormind.io](http://colormind.io/), [Adobe Color CC](https://color.adobe.com/) and [palettegenerator.com](https://palettegenerator.com/) to come up with a colour palette that I felt was complimentary to the app and the hero image.
 
-Colour palette from the ![logo using palletegnerator.com](design/tq-logo-palette-2.png "Title")
+![Colour palette from logo using palletegnerator.com](design/tq-logo-palette-2.png "Title")
 
-Colour palette from the ![logo using colormind](design/colormind-tq-logo-palette.png "Title")
+![Colour palette from logo using colormind](design/colormind-tq-logo-palette.png "Title")
 
-Colour palette from the ![hero image with palette generator](design/colour-palette-hero-image.png "Title")
-Colour palette from the ![hero image using colormind](design/bridge-colour-palette.png "Title")
+![Color palette from hero image with palette generator](design/colour-palette-hero-image.png "Title")
+![Colour Palette from hero image using colormind](design/bridge-colour-palette.png "Title")
 
 I entered all the colour codes generated from the above into Adobe Color CC and used the 'color wheel' tab to find complementary colours and based my choices on my findings but not on the actual colour themes that were generated.
 
-I used Adobe Illustrator to create the Logo, default user image, and feature card icons for the home page.
+I used Adobe Illustrator to create the logo, default user image, and feature card icons for the home page.
 ![logo](design/codeflow-tq-gears-buttons.png "Title")  
-![default user profile image](../images/gear-avatar.png "Title")
-![Feaature Card Blog icon](../images/cf-icon-blog.svg "Title")
+![default user profile image](design/gear-avatar.jpg "Title")  
+![Feaature Card icon Example](design/cf-icon-blog.svg "Title")  
+![Feaature Card icon blog](design/cf-icon-blog.svg "Title")  
+![Feaature Card icon blog](design/cf-icon-blog.svg "Title")
 
 ## Features
 
