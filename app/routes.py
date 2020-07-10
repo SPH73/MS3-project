@@ -819,7 +819,7 @@ def insert_feedback(piece_id):
                                                  'from': session['username'],
                                                  'piece_task': piece['task'],
                                                  'piece': piece['project_title'],
-                                                 'feedback': request.form.get('feedback'),
+                                                 'feedback_text': request.form.get('feedback'),
                                                  'feedback_file': request.form.get('feedback_file')
                                                  
                                                  }
