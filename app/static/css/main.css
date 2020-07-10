@@ -481,7 +481,7 @@ button:focus {
   height: 70vh;
   margin: 0;
   background-color: #352721;
-  background: url('../images/hero-web-export.png') no-repeat;
+  background: url('../images/hero-web-export.jpg') no-repeat;
   background-size: cover;
   background-position: center;
   display: flex;
