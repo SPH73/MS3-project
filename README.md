@@ -2,25 +2,92 @@
 
 ## Introduction
 
-[CodeFlow](http://codeflow-app.herokuapp.com) was created to help bridge the gap to employed status for students. Based on the idea of the seasonal Hackathons held by Code Institute, where a brief is given and students collaborate to create finished projects, similarly developers (or anyone with an idea) can upload projects that require full or partial contribution, called 'Piece projects' (derived from the term ['Piece work'](https://en.wikipedia.org/wiki/Piece_work)). The idea is that the more experience a student developer gains from working in a team or from developing code snippets for real-world projects, the more skilled they become at breaking down project parts into smaller more manageable pieces or problems; thus resulting in a more confident developer who is naturally more appealing in the talent pool to employers.
+[CodeFlow](http://codeflow-app.herokuapp.com) was created to help bridge the gap to employed status for students. Based on the idea of the seasonal Hackathons held by Code Institute, where a brief is given and students collaborate to create finished projects, similarly, developers (or anyone with an idea) can upload projects that require full or partial contribution, called 'Piece projects' (derived from the term ['Piece work'](https://en.wikipedia.org/wiki/Piece_work)). The idea is that the more experience a student developer gains by collaborating in a team or from developing code snippets for real-world projects, the more skilled they become at breaking down project parts into smaller more manageable pieces or problems; thus resulting in a more confident developer who is naturally more appealing in the talent pool.
 
 As a student, I find that describing and realising the whole-parts or 'pieces' of my projects is a challenging task and leaves me questioning how long it will take for me to become suitably experienced and/or skilled enough for employment within the industry of software developement. I would like exposure to others' projects and an opportunity to offer pieces of code I have written according to a brief to help me improve my skillset, increase speed and boost my confidence. I am certain that I am not alone and that the majority of software developer students, whether they are studying through an institution or self-teaching will find value in the same.
 
 CodeFlow aims to provide a platform that makes it easy to keep track of the projects that any person/entity with a project or idea, be it project manager, developer, student or whomever, who would like to share it in part or whole with collaborators.
 
-All 'noobs' are blessed when we can stand on the shoulders of giants and learn from our more experienced counterparts. The CodeFlow Blog page is an area of the app that invites the community to post articles that impart knowledge or learning based on experience, interesting articles about new technologies or absolutely anything of relevance that benefits the readers.
+All 'noobs' are blessed when we can stand on the shoulders of giants and learn from more experienced developers/programmers. The CodeFlow Blog page is an area of the app that invites the community to post articles that impart knowledge or learning based on experience, interesting articles about new technologies, events, recommended books or courses or absolutely anything of relevance that benefits the readers.
 
 ## Table of Contents
 
 1. [UX](#ux)
+
    - [Goals](#goals)
+
      - [Current Goals](#current-goals)
      - [Future Goals](#future-goals)
+     - [Target Audience](#target-audience)
+     - [User Goals](#user-goals)
+     - [Future Goals](#future-goals)
+
    - [User Stories](#user-stories)
+
      - [Visitor Stories](#visitor-stories)
      - [User Stories by Type](#user-stories-by-type)
-   - [Wireframes](#wireframes)
-   - [Database Design](#database-design)
+     - [Student](#student-also-referred-to-as-collaborator)
+     - [Project Owner / Project Manager](#project-owner-or-project-manager-referred-to-as-project-owner)
+     - [Mentor](#mentor)
+
+   - [Design](#design)
+
+     - [Wireframes](#wireframes)
+       - [Desktop](#Ddesktop)
+     - [Database Design](#database-design)
+     - [User Interface](#user-interface)
+
+2. [Features](#features)
+
+   - [Exiting Features](#exisiting-features)
+
+     - [Blog Page](#blog-page)
+     - [Profiles Page](#profiles-page)
+     - [Projects Page](#projects-page)
+     - [User Dashboard](#user-dashboard)
+     - [Direct Messages](#direct-messages)
+     - [Piece Projects](#piece-projects)
+     - [File Uploads](#file-uploads)
+     - [ReCaptcha](#recaptcha)
+
+   - [Future Features](#future-features)
+
+     - [Keyword Search](#keyword-search)
+     - [User Feedback Survey](#user-feedback-survey)
+     - [Pagination](#pagination)
+     - [User Ratings](#user-ratings)
+     - [Message Notifications](#message-notifications)
+     - [Email Authentication](#email-authentication)
+     - [Task Automation](#automation-of-tasks)
+     - [Database Housekeeping](#database-housekeeping)
+     - [Slack Integration](#integration-with-slack)
+
+3. [Technologies Used](#technologies-used)
+
+   - [Languages](#languages)
+   - [Frameworks/libraries](#frameworks/libraries)
+   - [Database](#database)
+   - [Devleopment and Hosting](#development-and-hosting)
+
+4. [Testing](#testing)
+
+5. [Deployment](#deployment)
+
+   - [Local](#local-setup)
+     - [Installation](#installation)
+     - [Procedure](#procedure)
+   - [Heroku](#deployment-on-heroku)
+     - [Requirements](#requirements)
+
+6. [Credits](#credits)
+
+7. [Acknowledgements](#acknowledgements)
+
+8. [Project Helpers](#project-helpers)
+
+9. [Other Notes](#other-notes)
+
+10. [Personal Takeways](#personal-takeawys)
 
 ## UX
 
@@ -38,7 +105,7 @@ Learn additional material and develop a deeper understanding of the material alr
 Produce a project that meets all the requirements of the MileStone Project criteria.
 Produce a project that I am proud of.
 
-##### Target Audience
+#### Target Audience
 
 Software Development Students (Bootcamp, College/University or self-teaching).  
 Project Managers.  
@@ -46,7 +113,7 @@ Developers.
 Mentors.
 Anyone/entity with a coding project.
 
-##### User Goals
+#### User Goals
 
 Have a community platform to:  
 Post or find projects open for collaboration.  
@@ -207,7 +274,7 @@ The [logo](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/desig
 
 ### Frameworks/Libraries
 
-1. [Bootstrap v4.5](https://getbootstrap.com/) -
+1. [Bootstrap v4.5](https://getbootstrap.com/)
 2. [Flask](https://palletsprojects.com/p/flask/)
 3. [jQuery](https://jquery.com/)
 4. [jQUery UI](https://jqueryui.com/)
@@ -347,6 +414,10 @@ This is a list of resources I used for the project. It is by no means exhaustive
 [boto3](https://buildmedia.readthedocs.org/media/pdf/boto3/latest/boto3.pdf)
 [jinja filters](https://docs.exponea.com/docs/filters)
 
-# Other Notes
+#### Other Notes
 
-I updated the project structure by turning the application into a package with `__init__.py` and moving the routes to `routes.py`. to avoid confusion I renamed `app.py` to `run.py` to be different from the package name. At the same time I created a `requirements.txt` to be inclusive of choice/preference for other developers, deployment and the assessors.
+I updated the project structure by turning the application into a package with `__init__.py` and moving the routes to `routes.py`. To avoid confusion I renamed `app.py` to `run.py` to be different from the package name. At the same time I created a `requirements.txt` to be inclusive of choice/preference for other developers, deployment and the assessors.
+
+#### Personal Takeaways
+
+Throughout developement, I noticed that I regularly jumped around instead of completing each part before tackling another. As a goal for my next project, I want to work on this area. I believe it will actually help me to take less time to complete projects and make fewer mistakes.
