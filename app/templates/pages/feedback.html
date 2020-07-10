@@ -9,7 +9,8 @@
     <section class="section-content">
         <legend class="text-center legend-border mb-4">{{ legend }}</legend>
         <div class="mt-2">
-            <form action="" method="POST" enctype="multipart/form-data" accept=".pdf" id="feedback-form" novalidate>
+            <form action="{{ url_for('insert_feedback', piece_id=piece._id) }}" method="POST"
+                enctype="multipart/form-data" accept=".pdf" id="feedback-form" novalidate>
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
                     {{ render_field(form.feedback, autofocus=true) }}
