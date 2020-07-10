@@ -12,13 +12,6 @@ from config import S3_BUCKET, S3_KEY, S3_SECRET
 
 s3 = boto3.resource('s3')
 
-# @app.route('/files')
-# def files():
-#     s3_resource = boto3.resource('s3')
-#     bucket = s3_resource.Bucket(S3_BUCKET)
-#     summaries = bucket.objects.all()
-    
-#     return render_template('pages/files.html', title='Codeflow S3 Object List', bucket=bucket, files=summaries)
 
 
 @app.route('/')

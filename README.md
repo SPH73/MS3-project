@@ -405,6 +405,8 @@ Bridge Top - Photo by Joshua Sortino on Unsplash
 [CSS code for Recaptach resizing for mobile screens by GeekGodess](https://geekgoddess.com/how-to-resize-the-google-nocaptcha-recaptcha/)
 
 The script and function to get the file size before upload was taken from [pythonise.com](https://pythonise.com/series/learning-flask/flask-uploading-files) as I had been unsuccessful in consistently getting the filesize before saving the file. Some browsers do not send content.length information and this was a better solution.
+jinja datetimefilter and partial code to upload to Amazon S3 taken from the Flask with Amazon S3 Tutorial.
+Corey Shafer Full Featured Flask Blog Tutorial was used to get started with building the app particularly the wtforms section, although there is no copied code the idea for the nav division and logged in and out views was take from the tutorial.
 
 ## Acknowledgements
 

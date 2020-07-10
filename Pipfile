@@ -22,10 +22,8 @@ bcrypt = "*"
 flask-ckeditor = "*"
 bleach = "*"
 werkzeug = "*"
-pillow = "*"
 boto3 = "*"
 arrow = "*"
-flask-storage = "*"
 
 [requires]
 python_version = "3.7"
