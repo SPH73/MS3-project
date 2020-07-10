@@ -300,7 +300,7 @@
                         <h4 class="border-bottom mb-2">Your Sent Profile Messages</h4>
                         {% if rcvd_profile_msgs %}
                         {% for message in rcvd_profile_msgs %}
-                        
+
                         <ul>
                             <li>{{ message.date | datetimeformat }}, {{ message.from_user }} wrote: <br>
                                 {{ message.text }}
@@ -350,7 +350,7 @@
                         <h4 class="border-bottom mb-2">Your Sent Profile Messages</h4>
                         {% if snt_profile_msgs %}
                         {% for message in snt_profile_msgs %}
-                        
+
                         <ul>
                             <li>{{ message.date | datetimeformat }}, you wrote to {{ message.to_user }}: <br>
                                 {{ message.text }}
@@ -560,7 +560,7 @@
                         <h4 class="border-bottom mb-2">Your Sent Project Messages</h4>
                         {% if snt_project_msgs %}
                         {% for message in snt_project_msgs %}
-                        
+
                         <ul>
                             <li>{{ message.date | datetimeformat }}, you wrote to {{ message.to_user }}: <br>
                                 {{ message.text }}
@@ -640,11 +640,6 @@
                                         {{ piece.comment }}
                                     </p>
                                     {% endif %}
-
-                                    <div><small class="text-muted">
-                                            <i><a class="ml-2" href="#">Do you want to send a message to
-                                                    {{ piece.assignee }}?</a></i>
-                                        </small></div>
                                     {% if not loop.last %}
                                     <hr>
                                     {% endif %}
@@ -684,11 +679,6 @@
                                         {{ piece.comment }}
                                     </p>
                                     {% endif %}
-                                    <div>
-                                        <small class="text-muted">
-                                            <i><a class="ml-2" href="#">Do you want to send a message to
-                                                    {{ piece.assignee }}?</a></i></small>
-                                    </div>
                                     {% if not loop.last %}
                                     <hr>
                                     {% endif %}
@@ -809,7 +799,7 @@
                                     </p>
                                     {% endif %}
                                     <div>
-                                        
+
                                         <p>When you are ready, please hit the delete button to delete the project
                                             piece. You can download the file again if necessary, first.</p>
                                         <p><a href="{{ url_for('send_feedback', piece_id=piece._id) }}">Send
@@ -901,13 +891,11 @@
                                         their expectations for this piece: <br>
                                         {{ piece.description }}
                                     </p>
-                                    <a href="{{ url_for('accept_piece', piece_id=piece._id) }}"
-                                        id="accept-piece-btn{{ loop.index }}" type="button"
-                                        class="btn btn-outline-primary btn-sm mb-1"><i class="fa fa-check"
-                                            aria-hidden="true"></i></a>
-                                    <div><small class="text-muted">
-                                            <i><a class="ml-2" href="">Ask {{ piece.owner }} a question?</a></i>
-                                        </small></div>
+                                    <p class="text-secondary">Ready to accept?
+                                        <a href="{{ url_for('accept_piece', piece_id=piece._id) }}"
+                                            id="accept-piece-btn{{ loop.index }}" type="button"
+                                            class="btn btn-outline-primary btn-sm mb-1"><i class="fa fa-check"
+                                                aria-hidden="true"></i></a></p>
                                     {% if not loop.last %}
                                     <hr>
                                     {% endif %}
@@ -942,16 +930,12 @@
                                         the piece: <br>
                                         {{ piece.description }}
                                     </p>
-
-                                    <a href="{{ url_for('submit_piece', piece_id=piece._id) }}"
-                                        id="submit-piece-btn{{ loop.index }}" type="button"
-                                        class="btn btn-outline-primary btn-sm mb-1"><i class="fa fa-upload"
-                                            aria-hidden="true"></i>
-                                    </a>
-                                    <div><small class="text-muted">
-                                            <i><a class="ml-2" href="">Ask
-                                                    {{ piece.owner }} a question about this piece?</a></i></small>
-                                    </div>
+                                    <p class="text-secondary">Ready to submit?
+                                        <a href="{{ url_for('submit_piece', piece_id=piece._id) }}"
+                                            id="submit-piece-btn{{ loop.index }}" type="button"
+                                            class="btn btn-outline-primary btn-sm mb-1"><i class="fa fa-upload"
+                                                aria-hidden="true"></i>
+                                        </a></p>
                                     {% if not loop.last %}
                                     <hr>
                                     {% endif %}
@@ -989,11 +973,6 @@
                                         As a reminder, here is the brief and
                                         information that was provided:<br>
                                         {{ piece.description }}</p>
-
-                                    <div><small class="text-muted">
-                                            <i><a class="ml-2" href="">Do you have
-                                                    a question for {{ piece.owner }} about
-                                                    this piece?</a></i></small></div>
                                     {% if not loop.last %}
                                     <hr>
                                     {% endif %}
@@ -1027,11 +1006,6 @@
                                             As a reminder, here is the brief and
                                             information that was provided:<br>
                                             {{ piece.description }}</p>
-
-                                        <div><small class="text-muted">
-                                                <i><a class="ml-2" href="">You can ask
-                                                        for feedback on your work
-                                                        here.</a></i></small></div>
                                         {% if not loop.last %}
                                         <hr>
                                         {% endif %}
