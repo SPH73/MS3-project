@@ -184,38 +184,119 @@ The [logo](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/desig
 7. Automation of tasks:  
    For instance, when the status of a particular project piece is changed, the referenced piece in the project document gets updated as well. This is something I will need to figure out and would make for a more user-friendly application requiring less user management required.
 8. Database Housekeeping:  
-   Implementing an expiry on 'closed' project pieces will help to maintain a clean database. This would require much more than I am capable of currently but something that is very necessary. Having the task automated via mongodb would be the most ideal method.
+   Implementing an expiry on 'closed' project pieces will help to maintain a clean database. This would require much more than I am capable of currently but something that is very necessary. Having the task automated via mongodb would be the most ideal method. (Since implementing file uploads to AWS s3, this feature is no longer required as the removal has, to an extent, been passed to the project owners discretion on the dashbaord Sent Pieces 'closed pieces' section, however the bucket objects can have an expiry palced upon them and this is now the intention going forward, instead).
+9. Integration with Slack:
+   Considering the nature of the app, once I can figure out how to make it a useful feature to implement for project owners, I would like to include this a feature.
 
 ## Technologies Used
 
 ### Languages
 
-1. HTML
-2. CSS
-3. JavaScript
-4. Python
+1. [HTML](https://html.spec.whatwg.org/)
+2. [CSS](https://www.w3.org/Style/CSS/Overview.en.html)
+3. [JavaScript](https://www.javascript.com/)
+4. [Python](http://python.org/)
 
-### Frameworks
+### Frameworks/Libraries
 
-1. Bootstrap
-2. Flask
-3. jQuery
+1. [Bootstrap v4.5](https://getbootstrap.com/) -
+2. [Flask](https://palletsprojects.com/p/flask/)
+3. [jQuery](https://jquery.com/)
+4. [jQUery UI](https://jqueryui.com/)
 
 ### Database
 
-MongoDB
+[MongoDB](https://www.mongodb.com/)
+
+### Development Tools and Hosting
+
+1. [Visual Studio Code](https://code.visualstudio.com/download)
+2. [Git](https://git-scm.com/)
+3. [GitHib](https://github.com/)
+4. [Heroku](https://www.heroku.com/)
+5. [AWS S3](https://aws.amazon.com/s3/)
+6. [Google recaptcha v2](https://developers.google.com/recaptcha/docs/display)
 
 ## Testing
 
-Testing has been carried out continuously throughout the development lifecycle. With each feature addition or update, testing and retesting was done from different user accounts that were created for that purpose.
-Testing was also done by family and friends in different regions using various different devices and browsers.
+Testing has been carried out continuously throughout the development lifecycle. With each feature addition or update, testing and retesting was done from different user accounts that were purposefully created testing.
+Usage and feedback was also provided by family and friends in different regions using a variety of devices and browsers at various stages of development.
+Personal Findings:
+Mobile browsers provide a different perspective and the buttons appear differently on each of them and in some cases they are not uniform even on the same browser.
+Checking Chrome devtools for mobile representation is very inacurate and cannot be replied upon.
 
 ## Deployment
 
+### Local setup
+
+To setup this prpoject to run on a local machine the following steps are required:
+
+#### Installation
+
+Ensure the following is installed
+
+1. [Python 3.7](https://www.python.org/downloads/)
+2. [PIP](https://pip.pypa.io/en/stable/installing/)
+3. [PIPENV](https://pypi.org/project/pipenv/) (recommended) or [VENV](https://docs.python.org/3/library/venv.html)
+4. [Git](https://git-scm.com/)
+5. MongoDB Compass; otherwise MongoDB Atlas can be used (an account is required for either). See [MongDB](https://www.mongodb.com/) for documentation, information and to learn about using a Python driver such as Pymongo to connect your app with the database and the commands used to perform operations on the database.
+
+#### Procedure
+
+1. Find the [repository](https://github.com/SPH73/codeflow) on GitHib and either save a copy of the repository locally to your chosen folder in your local file system by clicking the green code download button and choosing 'Download ZIP' and extracting the zip file or using Git to [clone the repository](https://github.com/SPH73/codeflow.git) the link is also found within the same button on the repository page.
+2. Open a terminal either in your code editor or the one installed on your machine to unzip the download or use the command `git clone https://github.com/SPH73/codeflow.git`.
+3. Setup your virtual environment. I recommend using PIPENV but venv otherise refer to the links provided i the installation section on how to use PIPENV and VENV for your operating system.
+4. To use PIPENV to install using the PipFile change into the directory you are using for the application and use the command `pipenv install` or if using pip then use the command `pip -r requirements.txt`. Both methods install all the required modules to run the application.
+5. Run `pipenv shell` to activate the virtual environment,  
+   `exit` to deactivate  
+   `pipenv update --outdated` to find out if there are any changes in the packages or  
+   `pipenv update` to upgrade them all.
+6. Create files to serve environemnt variables for the applciation **_please note that these should NOT be pushed to your repository but stored in a `.gitignore` file_**.
+   Create `.flaskenv` to set the flask environment variables as follows:
+   FLASK_ENV=development
+   FLASK_APP=run.py
+   TESTING=True
+   You will change these for a production environemnt.
+
+   Create `.env` store your own keys as follows:
+   SECRET_KEY = 'yoursecretkey'
+
+If you are using a google recaptcha (link in Technologies section)
+RECAPTCHA_PUBLIC_KEY = 'yoursecretkey'
+RECAPTCHA_PRIVATE_KEY = 'yoursecretkey'
+
+Obtained from your mongodb database connenction string  
+MONGO_URI = "yourconnectionstring"
+
+If you are storing file uploads in an AWS S3 bucket (link in Technologies section)  
+S3_BUCKET=yourbucketname  
+AWS_ACCESS_KEY_ID=yourawsaccesskey  
+AWS_SECRET_ACCESS_KEY=yourawssecretaccesskey
+
+The application should run successfully once the above instructions have been completed.
+
+### Deployment on Heroku
+
+#### Requirements
+
+A Heroku account  
+An app created on Heroku - click on 'New'and 'Create new app' to create an app with a unique name and specify the region.  
+Within the app selct the 'Deploy' tab and select GitHub as the deployment menthod and choose automatic deploys from from master.  
+Under the 'Settings tab, click on 'Reveal Config Vars' and add your environment configuration variables as the KEY and the values as the VALUE.  
+Add in IP: 0.0.0.0 and PORT: 5000 in addition to the variables listed above.
+
+Within your application files Heroku requires:  
+`Pipfile` if using PIPENV - you will need to pin the versions of the package for deployment (please take some time to learn about [PIPENV](https://pipenv-fork.readthedocs.io/en/latest/basics.html)), otherwise a requirements file is needed. Update the requirements file by running the command `pip freeze > requirements.txt`  
+Create a `Procfile` using the command `echo web: python run.py`, which tells Heroku how to run the application.
+
+Completing the above steps should result in your site being deployed successfully.
+
+Inspect the logs if there are any problems that result in a 500 error. Logs are found under Settings and clicking on 'More' then 'View logs' to see where the error is.
+
 ## Credits
 
-[cover image](Photo by Joseph Barrientos on Unsplash)
-[bridge top](Photo by Joshua Sortino on Unsplash)
+Hero image - Photo by Joseph Barrientos on Unsplash
+Bridge Top - Photo by Joshua Sortino on Unsplash
 [CSS code for Recaptach resizing for mobile screens by GeekGodess](https://geekgoddess.com/how-to-resize-the-google-nocaptcha-recaptcha/)
 
 The script and function to get the file size before upload was taken from [pythonise.com](https://pythonise.com/series/learning-flask/flask-uploading-files) as I had been unsuccessful in consistently getting the filesize before saving the file. Some browsers do not send content.length information and this was a better solution.
@@ -223,16 +304,17 @@ The script and function to get the file size before upload was taken from [pytho
 ## Acknowledgements
 
 Special thanks to the following individuals for without their help I might still be struggling along:  
+Brian Macharia - mentor for supporting through this journey and for helping me get the SelectMultipleField option working in my profile form.  
 To Haley Shafer for helping me debug the project messages route function during a screen share session and extra thanks for finding an alternative method of screen share when the slack option wasn't working;  
 to Michael Parks for helping me understand why some content on the dashboard wasn't rendering and suggesting a way to achieve it;  
 to IgorB (data-centric channel lead at the time) for spotting an error on the user 'pieces' loops on the dashboard feature and  
 to Simen (@Eventyret_mentor) for giving me a showing me a method of getting an element ID in a loop.
 
-I am also very grateful to my children and friends for their patience and understanding of my figurative absence while I worked on this project.
+I am also very grateful to my children and friends for their patience and understanding of my absence and lack of time during the developemnt of this project.
 
 ## Project Helpers
 
-This is list of resources I used for the project development. It is by no means exhaustive but added for the benefit of other students and as a personal reference.
+This is list of resources I used for the project development. It is by no means exhaustive but added for the benefit of other students and as a personal reference during development.
 
 [pipenv](https://pypi.org/project/pipenv/) was used to create a virtual environment. It is the recommended python virtual envirinment management according to the official docs.  
 [Python secret key generator](https://docs.python.org/3/library/secrets.html) generated in the python repl using `secrets.token_hex(16)`, which is designed for security and cryptography and returns a random text string in hexadecimal using the os and secrets module.  
