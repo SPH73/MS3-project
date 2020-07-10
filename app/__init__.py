@@ -9,7 +9,7 @@ from filters import datetimeformat
 app = Flask(__name__)
 app.config.from_object(Config)
 ALLOWED_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg']
-ALLOWED_FILE_EXTENSIONS = ['txt']
+ALLOWED_FILE_EXTENSIONS = ['txt', 'pdf']
 MAX_IMAGE_SIZE = 5 * 1024 ** 2
 
 mongo = PyMongo(app)
