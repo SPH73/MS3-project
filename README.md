@@ -87,8 +87,8 @@ All 'noobs' are blessed when we can stand on the shoulders of giants and learn f
 8. [Project Helpers](#project-helpers)
 
 9. [Other Notes](#other-notes)
-
-10. [Personal Takeways](#personal-takeawys)
+   - [Next Steps](#next-steps)
+   - [Personal Takeways](#personal-takeawys)
 
 ## UX
 
@@ -254,6 +254,7 @@ I used Adobe Illustrator to create the logo, default user image, and feature car
 
 7. File uploads  
    File uploads assist both owner and collaborator types with the projects. It helps owner user types the to provide additional information about their project and collaborator user types to submit completed pieces.
+
 8. ReCaptcha:
    A ReCaptcha widget was implemented to help protect the app from spam and other abusive actions and helps prevent bots from being able to register accounts. It is used for registering an account and for updating passwords or uploading profile images and files. This feature helps to provide a measure of comfort for all user types that the content they are accessing has been created by a real person.
 
@@ -286,6 +287,9 @@ I used Adobe Illustrator to create the logo, default user image, and feature car
 9. Integration with Slack:
    Considering the nature of the app, once I can figure out how to make it a useful feature to implement for project owners, I would like to include this a feature.
 
+10. Social Media:
+    Adding social media sharing icons would create more user enagagement.
+
 ## Technologies Used
 
 ### Languages
@@ -314,6 +318,7 @@ I used Adobe Illustrator to create the logo, default user image, and feature car
 4. [Heroku](https://www.heroku.com/)
 5. [AWS S3](https://aws.amazon.com/s3/)
 6. [Google ReCaptcha v2](https://developers.google.com/recaptcha/docs/display)
+7. [JavaScript Syntax checker](https://esprima.org/demo/validate.html)
 
 ## Testing
 
@@ -404,7 +409,7 @@ The script and function to get the file size before upload was taken from [pytho
 ## Acknowledgements
 
 Special thanks to the following individuals for without their help I might still be struggling along:  
-Brian Macharia - mentor for supporting through this journey and for helping me get the SelectMultipleField option working in my profile form.  
+Brian Macharia - my mentor for supporting through this journey and for helping me get the SelectMultipleField option working in my profile form.  
 To Haley Shafer for helping me debug the project messages route function during a screen share session and extra thanks for finding an alternative method of screen share when the slack option wasn't working;  
 to Michael Parks for helping me understand why some content on the dashboard wasn't rendering and suggesting a way to achieve it;  
 to IgorB (data-centric channel lead at the time) for spotting an error on the user 'pieces' loops on the dashboard feature and  
@@ -441,6 +446,12 @@ This is a list of resources I used for the project. It is by no means exhaustive
 
 I updated the project structure by turning the application into a package with `__init__.py` and moving the routes to `routes.py`. To avoid confusion I renamed `app.py` to `run.py` to be different from the package name. At the same time I created a `requirements.txt` to be inclusive of choice/preference for other developers, deployment and the assessors.
 
+#### Next steps
+
+I had wanted to create a scrolling effect on the impact text section of the home page, which is why I used grid columns but as I wanted to ensure the site had functionality above cool design effects, I have left that for the next sprint. I left in the data-rates and the scroll class beacause I intend to fork the project and complete that design aspect immediately after submitting. however I removed the script block as that was incomplete code.
+
+The code, particularly the routes module, needs to be refactored, as there is a lot of repeated code. This is something I will do as a learning exercise when I have forked the project after submission. Also, I have duplicated some data being pushed to the database, which needs to be evaluated for future use in the next sprint and a decision made regarding the original intention and wherther it will be useful or not but as I am not certain it has remained for now, since it is valid code. It felt risky to attempt big changes at this stage given the time I had remaining to complete the project.
+
 #### Personal Takeaways
 
-Throughout developement, I noticed that I regularly jumped around instead of completing each part before tackling another. As a goal for my next project, I want to work on this area. I believe it will actually help me to take less time to complete projects and make fewer mistakes.
+Throughout developement, I noticed that I regularly jumped around instead of completing each part before tackling another. As a goal for my next project, I want to work on this area. I believe it will help me to take less time to complete projects and hopefully mean fewer mistakes are made.
