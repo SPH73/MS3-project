@@ -457,13 +457,13 @@ button:focus {
 /* comment and message forms class toggled with js */
 .hide {
   display: none;
-  transition: display 0.4s ease all;
+  transition: display 0.4s ease-in-out;
 }
 
 .show {
   display: block;
   height: auto;
-  transition: display 0.4s ease all;
+  transition: display 0.4s ease-in-out;
   overflow: scroll;
 }
 
@@ -513,7 +513,7 @@ ul#impact {
   display: grid;
   grid-template-columns: repeat(3, auto);
   justify-content: center;
-  align-items: middle;
+  align-items: center;
   place-items: center;
   height: 50vh;
 }
