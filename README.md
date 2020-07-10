@@ -50,6 +50,7 @@ All 'noobs' are blessed when we can stand on the shoulders of giants and learn f
      - [Piece Projects](#piece-projects)
      - [File Uploads](#file-uploads)
      - [ReCaptcha](#recaptcha)
+     - [CKEditor](#ckeditor)
 
    - [Future Features](#future-features)
 
@@ -258,6 +259,9 @@ I used Adobe Illustrator to create the logo, default user image, and feature car
 8. ReCaptcha:
    A ReCaptcha widget was implemented to help protect the app from spam and other abusive actions and helps prevent bots from being able to register accounts. It is used for registering an account and for updating passwords or uploading profile images and files. This feature helps to provide a measure of comfort for all user types that the content they are accessing has been created by a real person.
 
+9. CkEditor:
+   A text editor with standard configuration has been implemented for text area boxes that could potentially require additional formatting.
+
 ### Future Features
 
 1. Keyword Search:  
@@ -326,9 +330,14 @@ Testing has been carried out continuously throughout the development lifecycle. 
 
 User testing and feedback was also provided by family and friends in different regions using a variety of devices and browsers at various stages of development.
 
+Testing has been done on all major broweser including the brave browser on mobile and desktop and android and iOS of several sizes.
+
 Personal Findings:  
 Mobile browsers provide a different perspective and the buttons appear differently on each of them and in some cases, they are not uniform even on the same browser.  
 Checking Chrome dev tools for mobile rendering provided a very inaccurate representation.
+
+Feedback:
+Final testing between several parties was conducted on completion of the functionality, via users without any undertanding of web development and the feedback was positive; mostly of the nature that the site everything seemed to work and no real difficulty understanding how the site worked, especially after clicking through the navigation. I am not able to accurately identify all that was done by the testers, the content that has been populated and displayed on the site and in the database,is satisfactory and indicates a good deal of testing was done.
 
 ## Deployment
 
