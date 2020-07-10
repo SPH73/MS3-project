@@ -324,7 +324,6 @@ def blog():
     """Retrieves all the documents from the articles collection and dislpay them in order of newest to oldest.
     """
     
-    
     articles = mongo.db.articles.find().sort('date',pymongo.DESCENDING)
     return render_template('pages/blog.html',
                             title='Blog', 
@@ -793,22 +792,44 @@ def update_snt_piece(piece_id):
     flash('You need to be logged in to update your pieces.', 'info')
     return redirect(url_for('login'))
 
-@app.route('/send_feedback')
-def send_feedback():
+@app.route('/send_feedback/<piece_id>', methods=['GET','POST'])
+def send_feedback(piece_id):
     """Renders the feedback form when users click on the feedback link on the dashboard sent pieces > completed pieces tab.
     """
     form = FeedbackForm()
+    piece = mongo.db.project_pieces.find_one_or_404({'_id': ObjectId(piece_id)})
    
-    
-    return render_template('pages/feedback.html', form=form, title='Feedback', legend='Send feedback')
+    return render_template('pages/feedback.html', form=form, piece=piece, title='Feedback', legend='Send feedback')
 
-@app.route('/insert_feedback/<piece_id>', methods=['POST'])
+@app.route('/insert_feedback/<piece_id>', methods=['GET','POST'])
 def insert_feedback(piece_id):
     """
     """
         
     if 'username'in session:
+        pieces = mongo.db.project_pieces
+        piece = pieces.find_one_or_404({'_id': ObjectId(piece_id)})
+        profiles = mongo.db.profiles
+        rating = request.form.get('rating')
         
+        profiles.find_one_and_update({'username': piece['assignee']},
+                                     {'$push':
+                                            {'feedback':
+                                                {'date': datetime.utcnow(),
+                                                 'from': session['username'],
+                                                 'piece_task': piece['task'],
+                                                 'piece': piece['project_title'],
+                                                 'feedback': request.form.get('feedback'),
+                                                 'feedback_file': request.form.get('feedback_file')
+                                                 
+                                                 }
+                                           },
+                                            '$set': {'ratings': rating
+                                                                    },'$currentDate': 
+                                                                    {'ratings_date': True }
+                                                                    }, upsert = True
+                                     )
+                                     
                  
         flash('Your feedback has been sent!', 'success')
         return redirect(url_for('dashboard'))
