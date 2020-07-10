@@ -179,13 +179,13 @@ The Database Schema was the first task I started upon for the project which took
 As I was a implementing RWD methodology, I only created mockups for Desktop as, with the Bootstrap framework, a lot of the responsiveness is taken care of already. I decided during the development process how to structure elements for what I felt was the most optimal user view and experience across all screen sizes with the minimum of changes necessary. I based this decision on that fact that I believe that this application would be predominently accessed on a Desktop, when considering the User Types.
 
 ![Dashboard](design/codeflow-mockups/Dashboard-view.png "Title")
-![Logged In View](design/codeflow-mockups-Logged-in-view.png "Title")
+![Logged In View](design/codeflow-mockups/Logged-in-view.png "Title")
 
 (Unable to display other mockups as they have been deleted accidentally)
 
 ### Database Design
 
-The initial [Database Design](design/codeflow-schema.pdf "Title") was a constant reference point when creating forms and view functions and was invaluable. It would have been more difficult without it. It was worth the amount of time spent on it.
+The initial [Database Design](design/codeflow-white-theme.pdf "Title") was a constant reference point when creating forms and view functions and was invaluable. It would have been more difficult without it. It was worth the amount of time spent on it.
 
 #### Collections
 
@@ -219,9 +219,7 @@ I entered all the colour codes generated from the above into Adobe Color CC and 
 I used Adobe Illustrator to create the logo, default user image, and feature card icons for the home page.
 ![logo](design/codeflow-tq-gears-buttons.png "Title")  
 ![default user profile image](design/gear-avatar.jpg "Title")  
-![Feaature Card icon Example](design/cf-icon-blog.svg "Title")  
-![Feaature Card icon blog](design/cf-icon-blog.svg "Title")  
-![Feaature Card icon blog](design/cf-icon-blog.svg "Title")
+![Feature Card icon Example](design/cf-icon-blog.svg "Title")
 
 ## Features
 
@@ -439,7 +437,7 @@ This is a list of resources I used for the project. It is by no means exhaustive
 [boto3](https://buildmedia.readthedocs.org/media/pdf/boto3/latest/boto3.pdf)
 [jinja filters](https://docs.exponea.com/docs/filters)
 
-#### Other Notes
+### Other Notes
 
 I updated the project structure by turning the application into a package with `__init__.py` and moving the routes to `routes.py`. To avoid confusion I renamed `app.py` to `run.py` to be different from the package name. At the same time I created a `requirements.txt` to be inclusive of choice/preference for other developers, deployment and the assessors.
 
