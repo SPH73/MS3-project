@@ -99,6 +99,6 @@ class ProfileForm(FlaskForm):
     
 class FeedbackForm(FlaskForm):
     feedback = TextAreaField('Feedback', validators=[DataRequired(), Length(max=500)])
-    upload = FileField('Upload a reference document', validators=[FileAllowed(['pdf'])])
+    upload = FileField('Upload a reference document', validators=[FileAllowed(['.pdf'])])
     recaptcha = RecaptchaField()
     submit = SubmitField('Send') 
