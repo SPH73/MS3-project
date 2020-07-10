@@ -523,6 +523,9 @@ def delete_project(project_id):
     flash('Your project has been deleted.', 'success')
     return redirect(url_for('projects'))
 
+
+# PIECES
+
 @app.route('/add_piece/<project_id>', methods=['GET', 'POST'])
 def add_piece(project_id):
     """Gets a users project and adds a subdocument to the pieces field of the document. Then creates a document in the project_pieces collection with a project_id reference . A user must be logged in to access the template.
@@ -805,42 +808,52 @@ def send_feedback(piece_id):
 def insert_feedback(piece_id):
     """
     """
-        
+    
     if 'username'in session:
-        pieces = mongo.db.project_pieces
-        piece = pieces.find_one_or_404({'_id': ObjectId(piece_id)})
-        profiles = mongo.db.profiles
-        rating = request.form.get('rating')
         
-        profiles.find_one_and_update({'username': piece['assignee']},
-                                     {'$push':
-                                            {'feedback':
-                                                {'date': datetime.utcnow(),
-                                                 'from': session['username'],
-                                                 'piece_task': piece['task'],
-                                                 'piece': piece['project_title'],
-                                                 'feedback_text': request.form.get('feedback'),
-                                                 'feedback_file': request.form.get('feedback_file')
-                                                 
-                                                 }
-                                           },
-                                            '$set': {'ratings': rating
-                                                                    },'$currentDate': 
-                                                                    {'ratings_date': True }
-                                                                    }, upsert = True
-                                     )
-                                     
-                 
-        flash('Your feedback has been sent!', 'success')
-        return redirect(url_for('dashboard'))
+        if request.method =='POST':      
+            if 'upload' in request.files:
+                file = request.files['upload']
+                if file.filename == '':
+                    flash('Your file is missing a filename; upload unsuccessful', 'warning')
+                    return redirect(url_for('dashboard'))
+                if not allowed_file(file.filename):
+                    flash('Please export your file to pdf and try again; upload unsuccessful', 'warning')
+                    return redirect(url_for('dashboard'))
+                
+                filename = secure_filename(file.filename)
+                s3_resource = boto3.resource('s3')
+                bucket = s3_resource.Bucket(S3_BUCKET)
+                bucket.Object(filename).put(Body=file)
+            
+            pieces = mongo.db.project_pieces
+            piece = pieces.find_one_or_404({'_id': ObjectId(piece_id)})
+            profiles = mongo.db.profiles
+        
+            profiles.find_one_and_update({'username': piece['assignee']},
+                                        {'$push':
+                                                {'feedback':
+                                                    {'date': datetime.utcnow(),
+                                                    'from': session['username'],
+                                                    'piece_task': piece['task'],
+                                                    'piece': piece['project_title'],
+                                                    'feedback_text': request.form.get('feedback'),
+                                                    'feedback_file': filename
+                                                    
+                                                    }
+                                            }}
+                                        )
+                                    
+                    
+            flash('Your feedback has been sent!', 'success')
+            return redirect(url_for('dashboard'))
             
     flash('You need to be logged in to post any content.', 'info')
-    return redirect(url_for('login'))
-    
-    
+    return redirect(url_for('login'))  
+
 @app.route('/get_feedback_file/<filename>', methods=['GET','POST'])
 def get_feedback_file(filename):
-    """Uses the filename to find the feedback file and download it as an attachment from the s3 bucket.
+    """Uses the filename stored in the users profile feedback subdocument to find the feedback file and download it as an attachment from the s3 bucket.
     """
     
     if 'username'in session:
@@ -857,7 +870,6 @@ def get_feedback_file(filename):
             
     flash('You need to be logged in to download files.', 'info')
     return redirect(url_for('login'))
-
 
 # PROFILE VIEWS
 
