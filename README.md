@@ -175,28 +175,30 @@ The Database Schema was the first task I started upon for the project which took
 
 #### Desktop
 
-[logged-in](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/design/codeflow-mockups/Logged-in-view.png)
-[logged-out](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/design/codeflow-mockups/Logged-out-view.png)
-[Dashboard](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/design/codeflow-mockups/Dashboard-view.png)
+As I was a implementing RWD methodology, I only created mockups for Desktop as, with the Bootstrap framework, a lot of the responsiveness is taken care of already. I decided during the development process how to structure elements for what I felt was the most optimal user view and experience across all screen sizes with the minimum of changes necessary. I based this decision on that fact that I believe that this application would be predominently accessed on a Desktop, when considering the User Types.
+
+![logged-in](/design/codeflow-mockups/Dashboard-view.png)
+![logged-out](/design/codeflow-mockups/Logged-out-view.png)
+![Dashboard](/design/codeflow-mockups/Dashboard-view.png)
 
 ### Database Design
 
-The initial [Database Design](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/design/codeflow-schema.pdf) was a constant reference point when creating forms and view functions and was invaluable. It would have been more difficult without it. It was worth the amount of time spent on it.
+The initial ![Database Design](/design/codeflow-schema.pdf) was a constant reference point when creating forms and view functions and was invaluable. It would have been more difficult without it. It was worth the amount of time spent on it.
 
 ### User Interface
 
 The colour scheme was derived from colours taken from the landing page image. I used a combination of [colormind.io](http://colormind.io/), [Adobe Color CC](https://color.adobe.com/) and [palettegenerator.com](https://palettegenerator.com/) to come up with a colour palette that I felt was complimentary to the app and the hero image.
 
-Colour palette from the [logo using palletegnerator.com](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/design/tq-logo-palette-2.png)
+Colour palette from the ![logo using palletegnerator.com](/design/tq-logo-palette-2.png)
 
-Colour palette from the [logo using colormind](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/design/colormind-tq-logo-palette.png)
+Colour palette from the ![logo using colormind](/design/colormind-tq-logo-palette.png)
 
-Colour palette from the [hero image with palette generator](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/design/colour-palette-hero-image.png)
-Colour palette from the [hero image using colormind](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/design/bridge-colour-palette.png)
+Colour palette from the ![hero image with palette generator](/design/colour-palette-hero-image.png)
+Colour palette from the ![hero image using colormind](/design/bridge-colour-palette.png)
 
-I entered all the colour codes generated from the above into [Adobe Color CC](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/design/Adobe-color-wheel.pages) and used the 'color wheel' tab to find complementary colours and based my choices on my findings but not on the actual colour themes that were generated.
+I entered all the colour codes generated from the above into ![Adobe Color CC](/design/Adobe-color-wheel.pages) and used the 'color wheel' tab to find complementary colours and based my choices on my findings but not on the actual colour themes that were generated.
 
-The [logo](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/design/codeflow-tq-gears-buttons.png) I created with Adobe Illustrator as well as the [default user profile image](/Users/sueholder/Desktop/CodeInstitute/Data-Centric/MS3-project/app/static/uploads/accountimage/gear-avatar.png).
+The ![logo](/design/codeflow-tq-gears-buttons.png) I created with Adobe Illustrator as well as the ![default user profile image](/static/iamges/gear-avatar.png) and home page feature card icons.
 
 ## Features
 
