@@ -408,6 +408,8 @@ The script and function to get the file size before upload was taken from [pytho
 jinja datetimefilter and partial code to upload to Amazon S3 taken from the Flask with Amazon S3 Tutorial.
 Corey Shafer Full Featured Flask Blog Tutorial was used to get started with building the app particularly the wtforms section, although there is no copied code the idea for the nav division and logged in and out views was take from the tutorial.
 
+The dashboard tabs were an adaption from W3Schools how to and modified slightly and the accordions functionality came from various YouTube tutorials, of which I have not able to find again.
+
 ## Acknowledgements
 
 Special thanks to the following individuals for without their help I might still be struggling along:  

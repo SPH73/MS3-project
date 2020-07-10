@@ -1,5 +1,5 @@
 // dynamic accordion for blog/profiles/projects pages
-
+// CREDIT Combination of Youtube tutorials to achieve accordion functionalty. 
 let coll = document.getElementsByClassName("accordion-label");
 let i;
 
@@ -40,7 +40,7 @@ $('#due_date').datepicker({
 $(".comment-btn").click(function (event, target) {
 
     let id = event.target.id;
-    console.log(id, event, target);
+
 
     let btn = this;
 
@@ -51,7 +51,7 @@ $(".comment-btn").click(function (event, target) {
     }
 
     let form = event.target.nextElementSibling;
-    console.log(form, event, target);
+
     $(form).toggleClass('show');
     $(form).toggleClass('hide');
 
@@ -60,7 +60,7 @@ $(".comment-btn").click(function (event, target) {
 $(".msg-btn").click(function (event, target) {
 
     let id = event.target.id;
-    console.log(id, event, target);
+
 
     let btn = this;
 
@@ -71,12 +71,13 @@ $(".msg-btn").click(function (event, target) {
     }
 
     let form = event.target.nextElementSibling;
-    console.log(form, event, target);
+
     $(form).toggleClass('show');
     $(form).toggleClass('hide');
 
 
 })
+// CREDIT -An adaption of W3Schools how to do tabs
 
 function openTab(event, tabName) {
     // Declare all variables
@@ -90,7 +91,7 @@ function openTab(event, tabName) {
 
     // Get all elements with class="tablink" and remove the class "active"
     tablink = document.querySelectorAll(".tablink");
-    console.log(tablink)
+
     for (i = 0; i < tablink.length; i++) {
         tablink[i].className = tablink[i].className.replace(" active", "");
     }
