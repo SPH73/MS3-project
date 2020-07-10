@@ -179,13 +179,13 @@ The Database Schema was the first task I started upon for the project which took
 As I was a implementing RWD methodology, I only created mockups for Desktop as, with the Bootstrap framework, a lot of the responsiveness is taken care of already. I decided during the development process how to structure elements for what I felt was the most optimal user view and experience across all screen sizes with the minimum of changes necessary. I based this decision on that fact that I believe that this application would be predominently accessed on a Desktop, when considering the User Types.
 
 ![Dashboard](design/codeflow-mockups/Dashboard-view.png "Title")
-![Logged In View](design/codeflow-mockups-logged-in-view.png "Title")
+![Logged In View](design/codeflow-mockups-Logged-in-view.png "Title")
 
 (Unable to display other mockups as they have been deleted accidentally)
 
 ### Database Design
 
-The initial ![Database Design](design/codeflow-schema.pdf "Title") was a constant reference point when creating forms and view functions and was invaluable. It would have been more difficult without it. It was worth the amount of time spent on it.
+The initial [Database Design](design/codeflow-schema.pdf "Title") was a constant reference point when creating forms and view functions and was invaluable. It would have been more difficult without it. It was worth the amount of time spent on it.
 
 #### Collections
 
