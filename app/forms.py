@@ -9,7 +9,7 @@ from app import mongo
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email address', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
     confirm_password = PasswordField('Confirm password', validators=[DataRequired(), EqualTo('password')])
     passphrase = StringField("Set a security passphrase", validators=[DataRequired(), Length(min=15, max=50)])
     recaptcha = RecaptchaField()
