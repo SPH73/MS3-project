@@ -134,9 +134,12 @@ def reset_password():
             if user and bcrypt.checkpw(request.form['passphrase'].encode('utf-8'), user['passphrase']):
                 mongo.db.user.find_one_and_update({'username': form.username.data}, {'$set':{'hashed_password':hashed_pw}})
                 
-                flash(f'Password reset was successful, {form.username.data}, pleaselogin again with your new password.','success'
+                flash(f'Password reset was successful, {form.username.data}, please login again with your new password.','success'
             )
                 return redirect(url_for('login'))
+            
+            flash(f'Please check your passphrase entry and try again.','danger')
+            return redirect(url_for('reset_password'))
             
     return render_template('pages/reset.html', title='Forgot Password', form=form)
 
@@ -155,9 +158,14 @@ def update_password():
             if bcrypt.checkpw(request.form['password'].encode('utf-8'), user['hashed_password']):
                 mongo.db.user.find_one_and_update({'username': session['username']}, {'$set':{'hashed_password':hashed_pw}})
                 
+                session.pop('username', None)
+                
                 flash(f'Password reset was successful, please login again.','success')
                 return redirect(url_for('login'))
             
+            flash(f'Current password incorrect, please try again.','danger')
+            return redirect(url_for('update_password'))
+        
     return render_template('pages/settings.html', 
                            title='Password', 
                            form=form
