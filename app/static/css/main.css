@@ -207,11 +207,9 @@ nav.dash-nav {
 
 .dash-tabs>li {
   display: inline-block;
-  /* border-color: rgba(0, 0, 0, .15) rgba(0, 0, 0, .15) rgba(0, 0, 0, .15); */
 }
 
 .dropdown-menu {
-  /* top: 40%; */
   left: 0;
   z-index: 1000;
   display: none;
@@ -476,6 +474,10 @@ button:focus {
   padding: 0;
 }
 
+#hero {
+  position: relative;
+}
+
 .hero {
   width: 100vw;
   height: 70vh;
@@ -503,7 +505,19 @@ button:focus {
   z-index: 1;
 }
 
+#cta {
+  padding: 2rem;
+  background-color: #c3c3c3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.cta {
+  background-color: #11a1a8;
+  color: #f4f4f4;
+  cursor: pointer;
+}
 
 ul#impact {
 
