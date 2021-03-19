@@ -173,7 +173,6 @@ li:hover>a {
 }
 
 .navbar {
-  /* maybe add border-bottom */
   background-color: #f4f4f4;
   border-bottom: 0.5px solid rgba(0, 0, 0, .15);
 }
@@ -465,9 +464,6 @@ button:focus {
   overflow: scroll;
 }
 
-/* Home page */
-
-
 /* home page */
 /* parallax */
 #home {
@@ -642,7 +638,6 @@ footer {
 }
 
 /* media queries */
-/* TODO ADD MEDIA QUERY FOR FLASHED MESSAGES ON MEDIUM SCREENS */
 
 /* set recaptcha widget size for mobile */
 /* taken from 
